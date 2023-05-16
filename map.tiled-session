@@ -16,11 +16,11 @@
             "dynamicWrapping": true
         },
         "day1Map.tmx": {
-            "scale": 2,
+            "scale": 3,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 231.25,
-                "y": 188.75
+                "x": 212.33333333333334,
+                "y": 145.16666666666669
             }
         },
         "day1Map.tmx#sprites": {

@@ -1,0 +1,53 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "day2Map.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "#menu": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1
+        },
+        "day1Map.tmx": {
+            "scale": 3.061111111111111,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 191.59709618874774,
+                "y": 144.22867513611618
+            }
+        },
+        "day1Map.tmx#sprites": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1
+        },
+        "day2Map.tmx": {
+            "scale": 3.061111111111111,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 337.29582577132487,
+                "y": 178.20326678765883
+            }
+        },
+        "day2Map.tmx#k": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1
+        }
+    },
+    "last.imagePath": "C:/Users/jenni/OneDrive/Documents/GitHub/dunlea-diner/assets",
+    "map.height": 9,
+    "map.width": 12,
+    "openFiles": [
+        "day1Map.tmx",
+        "day2Map.tmx"
+    ],
+    "project": "day1.tiled-project",
+    "recentFiles": [
+    ],
+    "tileset.embedInMap": true,
+    "tileset.type": 1
+}
