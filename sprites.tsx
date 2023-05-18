@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.1" name="sprites" tilewidth="96" tileheight="96" tilecount="32" columns="0">
+<tileset version="1.10" tiledversion="1.10.1" name="sprites" tilewidth="96" tileheight="96" tilecount="34" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="25">
   <image width="32" height="32" source="../../DunleasDeli/FloorTile1.png"/>
@@ -96,5 +96,11 @@
  </tile>
  <tile id="60">
   <image width="96" height="96" source="assets/Misc/FerrisWheel.png"/>
+ </tile>
+ <tile id="61">
+  <image width="32" height="32" source="assets/Misc/Fire2.png"/>
+ </tile>
+ <tile id="62">
+  <image width="32" height="32" source="assets/Misc/Fire.png"/>
  </tile>
 </tileset>

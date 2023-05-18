@@ -1,5 +1,9 @@
 {
-    "activeFile": "sprites.tsx",
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "day5Map.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -12,8 +16,8 @@
             "scale": 3.061111111111111,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 191.92377495462796,
-                "y": 144.22867513611618
+                "x": 192.25045372050818,
+                "y": 20.74410163339384
             }
         },
         "day1Map.tmx#sprites": {
@@ -25,7 +29,7 @@
             "scale": 3.061111111111111,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 191.92377495462796,
+                "x": 160.88929219600726,
                 "y": 143.90199637023596
             }
         },
@@ -45,8 +49,8 @@
             "scale": 3,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 240.5,
-                "y": 243.5
+                "x": 208.83333333333334,
+                "y": 118.83333333333334
             }
         },
         "day3Map.tmx#sprites": {
@@ -57,8 +61,16 @@
             "scale": 2,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 241.5,
-                "y": 139.25
+                "x": 191.25,
+                "y": 141.75
+            }
+        },
+        "day5Map.tmx": {
+            "scale": 2,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 102.25,
+                "y": 143.75
             }
         },
         "sprites.tsx": {
@@ -68,12 +80,16 @@
         }
     },
     "last.imagePath": "C:/Users/jenni/OneDrive/Documents/GitHub/dunlea-diner/assets/Misc",
+    "map.height": 9,
+    "map.lastUsedFormat": "tmx",
+    "map.width": 12,
     "openFiles": [
         "day3Map.tmx",
         "day2Map.tmx",
         "day1Map.tmx",
         "day4Map.tmx",
-        "sprites.tsx"
+        "sprites.tsx",
+        "day5Map.tmx"
     ],
     "project": "day1.tiled-project",
     "recentFiles": [
@@ -81,6 +97,7 @@
         "day2Map.tmx",
         "day1Map.tmx",
         "day4Map.tmx",
-        "sprites.tsx"
+        "sprites.tsx",
+        "day5Map.tmx"
     ]
 }
