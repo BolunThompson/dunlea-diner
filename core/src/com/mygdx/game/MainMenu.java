@@ -1,9 +1,10 @@
 package com.mygdx.game;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.ScreenUtils;
 
 class MainMenu implements Screen {
     // protected final Diner game;
@@ -36,12 +37,17 @@ class MainMenu implements Screen {
             dispose();
         }
     }
-    public void show() {
-    }
+
+    public void show() {}
+
     public void hide() {}
+
     public void pause() {}
+
     public void resume() {}
+
     public void resize(int width, int height) {}
+
     public void dispose() {
         // should something be disposed here?
     }
