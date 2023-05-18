@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.Gdx;
 
 public class Diner extends Game {
     static final int LENGTH = 768;
@@ -14,7 +15,7 @@ public class Diner extends Game {
 
     public void create() {
         batch = new SpriteBatch();
-        font = new BitmapFont(new FileHandle("assets/sh-pinscher.fnt"));
+        font = new BitmapFont(Gdx.files.internal("Fonts/sh-pinscher.fnt"));
         this.setScreen(new MainMenu(this));
     }
 
