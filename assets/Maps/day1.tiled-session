@@ -1,8 +1,17 @@
 {
-    "activeFile": "sprites.tsx",
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+<<<<<<< HEAD:day1.tiled-session
+    "activeFile": "day5Map.tmx",
+=======
+    "activeFile": "",
+>>>>>>> 18d2194 (Revert directory hierarchy messup):assets/Maps/day1.tiled-session
     "expandedProjectPaths": [
         "."
     ],
+    "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "": {
             "scaleInDock": 1,
@@ -12,8 +21,8 @@
             "scale": 3.061111111111111,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 191.92377495462796,
-                "y": 144.22867513611618
+                "x": 224.42831215970963,
+                "y": 108.94736842105266
             }
         },
         "day1Map.tmx#sprites": {
@@ -25,8 +34,8 @@
             "scale": 3.061111111111111,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 191.92377495462796,
-                "y": 143.90199637023596
+                "x": 199.1107078039928,
+                "y": 153.04900181488205
             }
         },
         "day2Map.tmx#k": {
@@ -45,8 +54,8 @@
             "scale": 3,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 240.5,
-                "y": 243.5
+                "x": 196.83333333333334,
+                "y": 124.49999999999999
             }
         },
         "day3Map.tmx#sprites": {
@@ -55,32 +64,27 @@
         },
         "day4Map.tmx": {
             "scale": 2,
-            "selectedLayer": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 241.5,
-                "y": 139.25
+                "x": 243,
+                "y": 206.75
             }
         },
         "sprites.tsx": {
-            "dynamicWrapping": false,
-            "scaleInDock": 1,
-            "scaleInEditor": 1
+            "dynamicWrapping": false
         }
     },
-    "last.imagePath": "C:/Users/jenni/OneDrive/Documents/GitHub/dunlea-diner/assets/Misc",
+    "map.height": 9,
+    "map.lastUsedFormat": "tmx",
+    "map.width": 12,
     "openFiles": [
-        "day3Map.tmx",
-        "day2Map.tmx",
-        "day1Map.tmx",
-        "day4Map.tmx",
-        "sprites.tsx"
     ],
     "project": "day1.tiled-project",
     "recentFiles": [
-        "day3Map.tmx",
-        "day2Map.tmx",
         "day1Map.tmx",
-        "day4Map.tmx",
-        "sprites.tsx"
-    ]
+        "day2Map.tmx",
+        "day3Map.tmx"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.type": 1
 }
