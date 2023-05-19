@@ -18,9 +18,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  *
  * Created: May 19, 2023
  * Last Updated:
- *
- * Known Issues:
- * Pls bring back the .tsx file.
  */
 public class Day1Screen implements Screen {
     final Diner game;
@@ -44,7 +41,7 @@ public class Day1Screen implements Screen {
         tiledMap = new TmxMapLoader().load("Maps/day1Map.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/32f);
 
-        playerImage = new Texture(Gdx.files.internal("Grass.png"));  // placeholder texture
+        playerImage = new Texture(Gdx.files.internal("Sprite-Chef_Idle1.png"));
         player = new Player(playerImage, 32, 32);
 
         Gdx.input.setInputProcessor(new InputAdapter() {
