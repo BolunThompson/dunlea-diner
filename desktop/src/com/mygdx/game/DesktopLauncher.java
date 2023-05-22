@@ -9,7 +9,8 @@ public class DesktopLauncher {
     public static void main (String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setForegroundFPS(60);
-        config.setTitle("Dunlea's Diner");
+        config.setWindowedMode(12*100, 9*100);
+        config.setTitle("Dunlea's Deli");
         new Lwjgl3Application(new Diner(), config);
     }
 }
