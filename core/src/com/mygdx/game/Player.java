@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 /**
@@ -17,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
  */
 public class Player extends Sprite {
 
+    Texture texture;
     final int speed = 100;
     public boolean moveLeft, moveRight, moveUp, moveDown;
 
@@ -24,17 +26,24 @@ public class Player extends Sprite {
     {
         super(texture, width, height);
         setPosition(0,0); // currently sets initial pos to bottom left corner; change later to set to middle of screen?
+        this.texture = texture;
     }
 
     public void update(float delta)
     {
         if(moveLeft)
-            setX(getX() + speed * delta);
-        if(moveRight)
             setX(getX() - speed * delta);
+        if(moveRight)
+            setX(getX() + speed * delta);
         if(moveUp)
             setY(getY() + speed * delta);
         if(moveDown)
             setY(getY() - speed * delta);
+    }
+
+    @Override
+    public void draw(Batch batch)
+    {
+        batch.draw(this.texture, getX(), getY(), getWidth(), getHeight());
     }
 }

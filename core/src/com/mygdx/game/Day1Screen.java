@@ -22,8 +22,12 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class Day1Screen implements Screen {
     final Diner game;
 
-    OrthographicCamera camera;
+    final int screenWidth = 100 * 12;
+    final int screenHeight = 100 * 9;
+    final int widthTiles = 12;
+    final int heightTiles = 9;
 
+    OrthographicCamera camera;
     TiledMap tiledMap;
     TiledMapRenderer tiledMapRenderer;
 
@@ -35,14 +39,15 @@ public class Day1Screen implements Screen {
         this.game = game;
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
+        camera.setToOrtho(false, screenWidth, screenHeight);
         camera.update();
 
         tiledMap = new TmxMapLoader().load("Maps/day1Map.tmx");
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/32f);
+        System.out.println("I guess that wasn't the problem");
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, screenWidth/widthTiles/32f); // unit scale is probably wrong
 
-        playerImage = new Texture(Gdx.files.internal("Sprite-Chef_Idle1.png"));
-        player = new Player(playerImage, 32, 32);
+        playerImage = new Texture(Gdx.files.internal("Misc/Sprite-Chef_Idle1.png"));
+        player = new Player(playerImage, screenWidth/widthTiles, screenHeight/heightTiles);
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             public boolean keyDown(int keycode)
