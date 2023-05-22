@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
  * Player class
  *
  * Created: May 19, 2023
- * Last Updated:
+ * Last Updated: May 22, 2023
  *
  * NOTES:
  * This one post online said that the Player class shouldn't be a sprite because the player uses Animations.
@@ -19,7 +19,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class Player extends Sprite {
 
     Texture texture;
-    final int speed = 100;
+    final int speed = 300;
     public boolean moveLeft, moveRight, moveUp, moveDown;
 
     public Player(Texture texture, int width, int height)
