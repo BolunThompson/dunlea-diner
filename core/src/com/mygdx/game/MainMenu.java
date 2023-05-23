@@ -14,7 +14,7 @@ class MainMenu implements Screen {
     MainMenu(final Diner game) {
         this.game = game;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
+        camera.setToOrtho(false, 100*12, 100*9); // this camera MUST have the same dimensions as camera in DayScreen.java
     }
 
     @Override
