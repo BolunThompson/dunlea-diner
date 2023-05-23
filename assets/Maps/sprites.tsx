@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.1" name="sprites" tilewidth="32" tileheight="32" tilecount="33" columns="0">
+<tileset version="1.10" tiledversion="1.10.1" name="sprites" tilewidth="96" tileheight="96" tilecount="40" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="1">
   <image width="32" height="32" source="../Crates/BananaBreadCrate.png"/>
@@ -99,5 +99,26 @@
  </tile>
  <tile id="38">
   <image width="32" height="32" source="../Misc/Mustard.png"/>
+ </tile>
+ <tile id="39">
+  <image width="32" height="32" source="../Misc/MinionGirl.png"/>
+ </tile>
+ <tile id="40">
+  <image width="32" height="32" source="../Floors/Grass.png"/>
+ </tile>
+ <tile id="41">
+  <image width="32" height="32" source="../Floors/Pebbles.png"/>
+ </tile>
+ <tile id="63">
+  <image width="32" height="32" source="../Misc/Fire.png"/>
+ </tile>
+ <tile id="64">
+  <image width="96" height="96" source="../Misc/FerrisWheel.png"/>
+ </tile>
+ <tile id="65">
+  <image width="32" height="32" source="../../../../DunleasDeli/Fire2.png"/>
+ </tile>
+ <tile id="66">
+  <image width="32" height="32" source="../Misc/Sprite-Minion_Man1.png"/>
  </tile>
 </tileset>
