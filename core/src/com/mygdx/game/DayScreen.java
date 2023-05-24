@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -24,7 +23,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * Day1Screen class
  *
  * Created: May 19, 2023
- * Last Updated: May 22, 2023
+ * Last Updated: May 23, 2023
  */
 public class DayScreen implements Screen {
     final Diner game;
@@ -34,12 +33,13 @@ public class DayScreen implements Screen {
     final int numHeightTiles = 9;
 
     // screen dimensions in pixels (1200 x 900)
-    final int screenWidth = 100*12;
-    final int screenHeight = 100*9;
+    final int screenWidth = 100 * numWidthTiles;
+    final int screenHeight = 100 * numHeightTiles;
 
     // tile size in pixels
-    final int tileWidth = screenWidth/numWidthTiles;
-    final int tileHeight = screenHeight/numHeightTiles;
+    final int tileWidth = screenWidth / numWidthTiles;
+    final int tileHeight = screenHeight / numHeightTiles;
+
 
     OrthographicCamera camera;
     TiledMap tiledMap;
@@ -48,11 +48,10 @@ public class DayScreen implements Screen {
     TiledMapTileLayer obstacleLayer;
     MapObjects obstacles;
 
-    Texture playerImage;
-    Player player;
+    TiledMapTileLayer interactLayer;
+    MapObjects interactRegions;
 
-    //Texture whatever;
-    //Rectangle whateverRect;
+    Player player;
 
     public DayScreen(Diner game, String tileMapFile)
     {
@@ -72,11 +71,11 @@ public class DayScreen implements Screen {
         obstacles.add(new RectangleMapObject(tileWidth * 6, tileHeight * 5, tileWidth * 5, tileHeight)); // food boxes
         obstacles.add(new RectangleMapObject(tileWidth * 6, tileHeight * 8, tileWidth * 6, tileHeight)); // ovens & order-in
 
-        playerImage = new Texture(Gdx.files.internal("Misc/Sprite-Chef_Idle1.png"));
-        player = new Player(playerImage, (int)(tileWidth), (int)(tileHeight)); // old: divided by 1.5f
+        interactLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
+        interactRegions = interactLayer.getObjects();
+        // add rectangles here ^^^
 
-        //whatever = new Texture(Gdx.files.internal("Misc/TEST_SPRITE.png"));
-        //whateverRect = new Rectangle(800-tileWidth, 400, tileWidth, tileHeight);
+        player = new Player((int)(tileWidth - 2), (int)(tileHeight - 2));
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             public boolean keyDown(int keycode)
@@ -120,6 +119,7 @@ public class DayScreen implements Screen {
         });  // there may be a better way to do input, but this functions
     }
 
+    @Override
     public void render(float delta)
     {
         ScreenUtils.clear(0,0,0,1);
@@ -128,11 +128,10 @@ public class DayScreen implements Screen {
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
 
-        float oldX = player.getX();
+        float oldX = player.getX(); // if collision, player position is set to (oldX, oldY)
         float oldY = player.getY();
 
-        player.update(delta);
-        //System.out.println("(" + oldX + ", " + oldY + ")");
+        player.update(delta); // update player position & animation frame
 
         // check if past screen border
         if(player.getX() < 0)
@@ -148,32 +147,37 @@ public class DayScreen implements Screen {
         for(MapObject object:obstacles)
         {
             Rectangle temp = ((RectangleMapObject)object).getRectangle();
-            if(Intersector.overlaps(new Rectangle(temp.getX()+temp.getWidth(),temp.getY(),1,temp.getHeight()), player.getBoundingRectangle()) ||
+            if(Intersector.overlaps(new Rectangle(temp.getX()+temp.getWidth()-1,temp.getY(),1,temp.getHeight()), player.getBoundingRectangle()) ||
                     Intersector.overlaps(new Rectangle(temp.getX(),temp.getY(),1,temp.getHeight()), player.getBoundingRectangle()))
             {
                 player.setX(oldX);
             }
             if(Intersector.overlaps(new Rectangle(temp.getX(),temp.getY(),temp.getWidth(),1), player.getBoundingRectangle()) ||
-                    Intersector.overlaps(new Rectangle(temp.getX(),temp.getY() + temp.getHeight(),temp.getWidth(),1), player.getBoundingRectangle()))
+                    Intersector.overlaps(new Rectangle(temp.getX(),temp.getY() + temp.getHeight()-1,temp.getWidth(),1), player.getBoundingRectangle()))
             {
                 player.setY(oldY);
+            }
+        }
+
+        // interaction
+        for(MapObject interactRegion:interactRegions)
+        {
+            if(Intersector.overlaps(((RectangleMapObject)interactRegion).getRectangle(), player.getBoundingRectangle()))
+            {
+                // something
             }
         }
 
         // draw player
         game.batch.begin();
         player.draw(game.batch);
-        //game.batch.draw(whatever, whateverRect.x, whateverRect.y, whateverRect.width, whateverRect.height);
         game.batch.end();
     }
 
-    public void dispose()
-    {
-        playerImage.dispose();
-        //whatever.dispose();
-    }
-
     @Override
+    public void dispose() {
+        player.dispose();
+    }
     public void resize(int width, int height) {}
     public void show() {} // runs upon screen shown
     public void hide() {}

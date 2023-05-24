@@ -8,7 +8,7 @@ import com.mygdx.game.Diner;
 public class DesktopLauncher {
     public static void main (String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setWindowedMode(12*100, 9*100);
+        config.setWindowedMode(12*100, 9*100); // 12 * 100 , 9 * 100
         config.useVsync(true);
         config.setForegroundFPS(60);
         config.setTitle("Dunlea's Deli");
