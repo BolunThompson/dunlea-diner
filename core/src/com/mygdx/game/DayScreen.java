@@ -20,7 +20,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
- * Day1Screen class
+ * DayScreen class
  *
  * Created: May 19, 2023
  * Last Updated: May 23, 2023
@@ -28,17 +28,16 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class DayScreen implements Screen {
     final Diner game;
 
-    // screen dimensions in tiles (12 x 9)
-    final int numWidthTiles = 12;
-    final int numHeightTiles = 9;
-
     // screen dimensions in pixels (1200 x 900)
-    final int screenWidth = 100 * numWidthTiles;
-    final int screenHeight = 100 * numHeightTiles;
+    static final int screenWidth = 100 * 12;
+    static final int screenHeight = 100 * 9;
 
-    // tile size in pixels
-    final int tileWidth = screenWidth / numWidthTiles;
-    final int tileHeight = screenHeight / numHeightTiles;
+    // screen dimensions in tiles (12 x 9)
+    static final int numWidthTiles = 12;
+    static final int numHeightTiles = 9;
+
+    static final int tileWidth = screenWidth / numWidthTiles;
+    static final int tileHeight = screenHeight / numHeightTiles;
 
 
     OrthographicCamera camera;
@@ -53,15 +52,18 @@ public class DayScreen implements Screen {
 
     Player player;
 
-    public DayScreen(Diner game, String tileMapFile)
+    DayState dayState;
+
+    DayScreen(Diner game, DayState dayState)
     {
         this.game = game;
+        this.dayState = dayState;
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, numWidthTiles, numHeightTiles);
         camera.update();
 
-        tiledMap = new TmxMapLoader().load(tileMapFile);
+        tiledMap = new TmxMapLoader().load(dayState.mapFile);
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/32f); // unit scale is probably wrong
 
         obstacleLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
@@ -82,18 +84,18 @@ public class DayScreen implements Screen {
             {
                 switch(keycode)
                 {
-                    case Input.Keys.LEFT:
-                        player.moveLeft = true;
-                        break;
-                    case Input.Keys.RIGHT:
-                        player.moveRight = true;
-                        break;
-                    case Input.Keys.UP:
-                        player.moveUp = true;
-                        break;
-                    case Input.Keys.DOWN:
-                        player.moveDown = true;
-                        break;
+                case Input.Keys.LEFT:
+                    player.moveLeft = true;
+                    break;
+                case Input.Keys.RIGHT:
+                    player.moveRight = true;
+                    break;
+                case Input.Keys.UP:
+                    player.moveUp = true;
+                    break;
+                case Input.Keys.DOWN:
+                    player.moveDown = true;
+                    break;
                 }
                 return true;
             }
@@ -101,18 +103,18 @@ public class DayScreen implements Screen {
             {
                 switch(keycode)
                 {
-                    case Input.Keys.LEFT:
-                        player.moveLeft = false;
-                        break;
-                    case Input.Keys.RIGHT:
-                        player.moveRight = false;
-                        break;
-                    case Input.Keys.UP:
-                        player.moveUp = false;
-                        break;
-                    case Input.Keys.DOWN:
-                        player.moveDown = false;
-                        break;
+                case Input.Keys.LEFT:
+                    player.moveLeft = false;
+                    break;
+                case Input.Keys.RIGHT:
+                    player.moveRight = false;
+                    break;
+                case Input.Keys.UP:
+                    player.moveUp = false;
+                    break;
+                case Input.Keys.DOWN:
+                    player.moveDown = false;
+                    break;
                 }
                 return true;
             }
@@ -128,7 +130,14 @@ public class DayScreen implements Screen {
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
 
-        float oldX = player.getX(); // if collision, player position is set to (oldX, oldY)
+        dayState.currentTime += delta;
+        if (dayState.isOver())
+        {
+            nextLevel();
+            return;
+        }
+        // if collision, player position is set to (oldX, oldY)
+        float oldX = player.getX();
         float oldY = player.getY();
 
         player.update(delta); // update player position & animation frame
@@ -172,6 +181,12 @@ public class DayScreen implements Screen {
         game.batch.begin();
         player.draw(game.batch);
         game.batch.end();
+    }
+
+    public void nextLevel()
+    {
+        dispose();
+        game.setScreen(new TransitionScreen(game, dayState));
     }
 
     @Override

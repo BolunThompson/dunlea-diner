@@ -7,9 +7,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 class MainMenu implements Screen {
-
-    protected OrthographicCamera camera;
-    protected final Diner game;
+    private final OrthographicCamera camera;
+    private final Diner game;
 
     private Texture title;
 
@@ -41,20 +40,25 @@ class MainMenu implements Screen {
         game.batch.end();
 
         if (Gdx.input.isTouched()) {
-            game.setScreen(new DayScreen(game, "Maps/day1Map.tmx"));
+            game.setScreen(new DayScreen(game, game.firstDay));
             dispose();
         }
     }
 
-    public void show() {}
+    public void show() {
+    }
 
-    public void hide() {}
+    public void hide() {
+    }
 
-    public void pause() {}
+    public void pause() {
+    }
 
-    public void resume() {}
+    public void resume() {
+    }
 
-    public void resize(int width, int height) {}
+    public void resize(int width, int height) {
+    }
 
     public void dispose() {
         // should something be disposed here?
