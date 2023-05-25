@@ -22,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class Player {
 
     final private int speed = 300;
-    //final private Texture tempTex = new Texture(Gdx.files.internal("Misc/TEST_SPRITE.png"));
 
     private float x, y, width, height;
     public boolean moveLeft, moveRight, moveUp, moveDown;
@@ -30,15 +29,13 @@ public class Player {
     private Rectangle rectangle;
 
     private Texture texture;
-    private TextureRegion[] animationFrames;
-    private Animation animation, idleAnimation, leftWalkAnimation, rightWalkAnimation, upWalkAnimation, downWalkAnimation;
-    private float elapsedTime;
-
     private TextureRegion[] idleFrames;
     private TextureRegion[] leftWalkFrames;
     private TextureRegion[] rightWalkFrames;
     private TextureRegion[] upWalkFrames;
     private TextureRegion[] downWalkFrames;
+    private Animation animation, idleAnimation, leftWalkAnimation, rightWalkAnimation, upWalkAnimation, downWalkAnimation;
+    private float elapsedTime;
 
     public Player(int width, int height)
     {
@@ -51,7 +48,6 @@ public class Player {
         // sprite texture & animation
         this.texture = new Texture(Gdx.files.internal("Misc/Sprite-Chef_WalkALL.png"));
         TextureRegion[][] tmpFrames = TextureRegion.split(texture, 32, 32);
-        //animationFrames = new TextureRegion[10];
 
         idleFrames = new TextureRegion[2];
         leftWalkFrames = new TextureRegion[2];

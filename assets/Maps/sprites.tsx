@@ -116,7 +116,7 @@
   <image width="96" height="96" source="../Misc/FerrisWheel.png"/>
  </tile>
  <tile id="65">
-  <image width="32" height="32" source="../../../../DunleasDeli/Fire2.png"/>
+  <image width="32" height="32" source="../Misc/Fire2.png"/>
  </tile>
  <tile id="66">
   <image width="32" height="32" source="../Misc/Sprite-Minion_Man1.png"/>

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -24,6 +26,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  *
  * Created: May 19, 2023
  * Last Updated: May 23, 2023
+ *
+ * NOTES:
+ *
+ * For now everything is a counter. Only bottom cutting board has a test interaction region set up.
  */
 public class DayScreen implements Screen {
     final Diner game;
@@ -39,20 +45,21 @@ public class DayScreen implements Screen {
     static final int tileWidth = screenWidth / numWidthTiles;
     static final int tileHeight = screenHeight / numHeightTiles;
 
+    DayState dayState;
 
     OrthographicCamera camera;
-    TiledMap tiledMap;
-    TiledMapRenderer tiledMapRenderer;
+    private TiledMap tiledMap;
+    private TiledMapRenderer tiledMapRenderer;
 
-    TiledMapTileLayer obstacleLayer;
+    Array<Appliance> appliances;
+
+    /**TiledMapTileLayer obstacleLayer;
     MapObjects obstacles;
 
     TiledMapTileLayer interactLayer;
-    MapObjects interactRegions;
+    MapObjects interactRegions;**/
 
     Player player;
-
-    DayState dayState;
 
     DayScreen(Diner game, DayState dayState)
     {
@@ -65,17 +72,14 @@ public class DayScreen implements Screen {
 
         tiledMap = new TmxMapLoader().load(dayState.mapFile);
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/32f); // unit scale is probably wrong
+        
 
-        obstacleLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
-        obstacles = obstacleLayer.getObjects();
-        obstacles.add(new RectangleMapObject(tileWidth * 3,tileHeight * 3, tileWidth,tileHeight * 4)); // left counter
-        obstacles.add(new RectangleMapObject(tileWidth * 5, tileHeight * 2, tileWidth * 7, tileHeight)); // bottom counter
-        obstacles.add(new RectangleMapObject(tileWidth * 6, tileHeight * 5, tileWidth * 5, tileHeight)); // food boxes
-        obstacles.add(new RectangleMapObject(tileWidth * 6, tileHeight * 8, tileWidth * 6, tileHeight)); // ovens & order-in
-
-        interactLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
-        interactRegions = interactLayer.getObjects();
-        // add rectangles here ^^^
+        appliances = new Array<Appliance>();
+        appliances.add(new ChoppingBoard(tileWidth * 3, tileHeight * 4, tileWidth, tileHeight)); // bottom cutting board
+        appliances.add(new Counter(tileWidth * 3, tileHeight * 3, tileWidth, tileHeight * 4)); // left counter
+        appliances.add(new Counter(tileWidth * 5, tileHeight * 2, tileWidth * 6, tileHeight * 4)); // bottom counter
+        appliances.add(new Counter(tileWidth * 6, tileHeight * 8, tileWidth * 6, tileHeight)); // top counter
+        appliances.add(new Counter(tileWidth * 6, tileHeight * 5, tileWidth * 5, tileHeight)); // middle food containers
 
         player = new Player((int)(tileWidth - 2), (int)(tileHeight - 2));
 
@@ -84,18 +88,18 @@ public class DayScreen implements Screen {
             {
                 switch(keycode)
                 {
-                case Input.Keys.LEFT:
-                    player.moveLeft = true;
-                    break;
-                case Input.Keys.RIGHT:
-                    player.moveRight = true;
-                    break;
-                case Input.Keys.UP:
-                    player.moveUp = true;
-                    break;
-                case Input.Keys.DOWN:
-                    player.moveDown = true;
-                    break;
+                    case Input.Keys.LEFT:
+                        player.moveLeft = true;
+                        break;
+                    case Input.Keys.RIGHT:
+                        player.moveRight = true;
+                        break;
+                    case Input.Keys.UP:
+                        player.moveUp = true;
+                        break;
+                    case Input.Keys.DOWN:
+                        player.moveDown = true;
+                        break;
                 }
                 return true;
             }
@@ -103,18 +107,18 @@ public class DayScreen implements Screen {
             {
                 switch(keycode)
                 {
-                case Input.Keys.LEFT:
-                    player.moveLeft = false;
-                    break;
-                case Input.Keys.RIGHT:
-                    player.moveRight = false;
-                    break;
-                case Input.Keys.UP:
-                    player.moveUp = false;
-                    break;
-                case Input.Keys.DOWN:
-                    player.moveDown = false;
-                    break;
+                    case Input.Keys.LEFT:
+                        player.moveLeft = false;
+                        break;
+                    case Input.Keys.RIGHT:
+                        player.moveRight = false;
+                        break;
+                    case Input.Keys.UP:
+                        player.moveUp = false;
+                        break;
+                    case Input.Keys.DOWN:
+                        player.moveDown = false;
+                        break;
                 }
                 return true;
             }
@@ -152,34 +156,31 @@ public class DayScreen implements Screen {
         if(player.getY() > screenHeight - player.getHeight())
             player.setY(screenHeight - player.getHeight());
 
-        // collision
-        for(MapObject object:obstacles)
+        // appliance collision & interaction
+        boolean withinInteractRegion = false;
+        for(Appliance app:appliances)
         {
-            Rectangle temp = ((RectangleMapObject)object).getRectangle();
-            if(Intersector.overlaps(new Rectangle(temp.getX()+temp.getWidth()-1,temp.getY(),1,temp.getHeight()), player.getBoundingRectangle()) ||
-                    Intersector.overlaps(new Rectangle(temp.getX(),temp.getY(),1,temp.getHeight()), player.getBoundingRectangle()))
-            {
+            // collision
+            Rectangle appRect = app.getCollisionRegion();
+            if(Intersector.overlaps(new Rectangle(appRect.getX()+appRect.getWidth()-1, appRect.getY(), 1, appRect.getHeight()), player.getBoundingRectangle())
+                    || Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY(), 1, appRect.getHeight()), player.getBoundingRectangle()))
                 player.setX(oldX);
-            }
-            if(Intersector.overlaps(new Rectangle(temp.getX(),temp.getY(),temp.getWidth(),1), player.getBoundingRectangle()) ||
-                    Intersector.overlaps(new Rectangle(temp.getX(),temp.getY() + temp.getHeight()-1,temp.getWidth(),1), player.getBoundingRectangle()))
-            {
+            if(Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY(), appRect.getWidth(), 1), player.getBoundingRectangle()) ||
+                    Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY() + appRect.getHeight()-1, appRect.getWidth(), 1), player.getBoundingRectangle()))
                 player.setY(oldY);
-            }
-        }
 
-        // interaction
-        for(MapObject interactRegion:interactRegions)
-        {
-            if(Intersector.overlaps(((RectangleMapObject)interactRegion).getRectangle(), player.getBoundingRectangle()))
+            // interaction
+            if(Intersector.overlaps(app.getInteractRegion(), player.getBoundingRectangle()))
             {
-                // something
+                withinInteractRegion = true;
             }
         }
 
         // draw player
         game.batch.begin();
         player.draw(game.batch);
+        if(withinInteractRegion)
+            game.batch.draw(new Texture(Gdx.files.internal("Misc/Fire.png")), tileWidth * 3,tileHeight * 4, tileWidth, tileHeight);
         game.batch.end();
     }
 
@@ -192,6 +193,9 @@ public class DayScreen implements Screen {
     @Override
     public void dispose() {
         player.dispose();
+        for(Appliance app:appliances) {
+            app.dispose();
+        }
     }
     public void resize(int width, int height) {}
     public void show() {} // runs upon screen shown
