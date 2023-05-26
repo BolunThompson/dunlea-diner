@@ -72,16 +72,16 @@ public class DayScreen implements Screen {
 
         tiledMap = new TmxMapLoader().load(dayState.mapFile);
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/32f); // unit scale is probably wrong
-        
+
 
         appliances = new Array<Appliance>();
         appliances.add(new ChoppingBoard(tileWidth * 3, tileHeight * 4, tileWidth, tileHeight)); // bottom cutting board
         appliances.add(new Counter(tileWidth * 3, tileHeight * 3, tileWidth, tileHeight * 4)); // left counter
-        appliances.add(new Counter(tileWidth * 5, tileHeight * 2, tileWidth * 6, tileHeight * 4)); // bottom counter
+        appliances.add(new Counter(tileWidth * 5, tileHeight * 2, tileWidth * 6, tileHeight)); // bottom counter
         appliances.add(new Counter(tileWidth * 6, tileHeight * 8, tileWidth * 6, tileHeight)); // top counter
         appliances.add(new Counter(tileWidth * 6, tileHeight * 5, tileWidth * 5, tileHeight)); // middle food containers
 
-        player = new Player((int)(tileWidth - 2), (int)(tileHeight - 2));
+        player = new Player((int)(tileWidth - 4), (int)(tileHeight - 4));
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             public boolean keyDown(int keycode)

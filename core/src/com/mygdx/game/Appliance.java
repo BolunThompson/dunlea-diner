@@ -31,13 +31,15 @@ public abstract class Appliance {
     public Appliance(Texture texture, int x, int y, int width, int height) // no interaction
     {
         this.texture = texture;
+        this.collisionRegion = new Rectangle(x, y, width, height);
         doAnimation = false;
+
+        interactRegion = new Rectangle(x , y, 0, 0);
     }
 
     public Appliance(Texture texture, int x, int y, int width, int height, direction dir) // interaction
     {
         this(texture, x, y, width, height);
-        collisionRegion = new Rectangle(x, y, width, height);
 
         switch(dir) { // from what direction the player interacts from
             case LEFT:
@@ -87,11 +89,11 @@ public abstract class Appliance {
 
     public Rectangle getCollisionRegion()
     {
-        return collisionRegion;
+        return this.collisionRegion;
     }
 
     public Rectangle getInteractRegion()
     {
-        return interactRegion;
+        return this.interactRegion;
     }
 }
