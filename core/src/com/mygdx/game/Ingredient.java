@@ -2,7 +2,9 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Ingredient {
     // can someone rename this stuff vv I feel like I named it very poorly
@@ -23,17 +25,20 @@ public class Ingredient {
             case bread:
                 texture = new Texture(Gdx.files.internal("Ingredients/bread.png"));
                 break;
+            default:
+                texture = new Texture(Gdx.files.internal("Ingredients/bread.png"));
+                break;
         }
-    }
-
-    public void dispose()
-    {
-        texture.dispose();
     }
 
     public Texture getTexture()
     {
         return texture;
+    }
+
+    public void dispose()
+    {
+        texture.dispose();
     }
 
     /**

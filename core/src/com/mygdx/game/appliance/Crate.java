@@ -19,7 +19,7 @@ public class Crate extends Appliance {
     {
         super(new Texture(Gdx.files.internal("Crates/PlainBreadCrate.png")), x, y, width, height, Appliance.direction.DOWN);
 
-        ingr = new Ingredient(Ingredient.Type.bread);
+        this.ingr = new Ingredient(Ingredient.Type.bread);
     }
 
     /**
@@ -28,5 +28,7 @@ public class Crate extends Appliance {
      * and nothing happens to the crate's ingredient slot (which is set in the constructor based on the type of crate)
      */
     @Override
-    public void interact(Ingredient ingr) {}
+    public Ingredient interact(Ingredient ingr) {
+        return this.ingr;
+    }
 }

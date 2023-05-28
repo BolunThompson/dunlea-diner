@@ -16,6 +16,7 @@ import com.mygdx.game.Ingredient;
  */
 public class Counter extends Appliance {
 
+
     TextureRegion textureRegion;
 
     public Counter(int x, int y, int width, int height, int length, Appliance.direction dir)
@@ -43,15 +44,16 @@ public class Counter extends Appliance {
      * The player's ingredients slot is switched with the counter's ingredient slot.
      */
     @Override
-    public void interact(Ingredient ingr)
+    public Ingredient interact(Ingredient ingr)
     {
         // to be implemented
+        return null;
     }
 
     @Override
     public void draw(Batch batch)
     {
-        batch.draw(textureRegion, getCollisionRegion().getX(), getCollisionRegion().getY(), getCollisionRegion().getWidth(), getCollisionRegion().getHeight());
+        //batch.draw(textureRegion, getCollisionRegion().getX(), getCollisionRegion().getY(), getCollisionRegion().getWidth(), getCollisionRegion().getHeight());
         if(ingr != null)
             batch.draw(ingr.getTexture(), getCollisionRegion().getX(), getCollisionRegion().getY(), getCollisionRegion().getWidth(), getCollisionRegion().getHeight());
     }

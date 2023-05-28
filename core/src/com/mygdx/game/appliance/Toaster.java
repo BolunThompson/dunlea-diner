@@ -23,9 +23,24 @@ public class Toaster extends Appliance {
     }
 
     @Override
-    public void interact(Ingredient ingr)
+    public Ingredient interact(Ingredient ingr) // precondition: canInteract is true
     {
-        super.interact(ingr);
-        doAnimation = true;
+        Ingredient temp = this.ingr;
+        this.ingr = ingr;
+
+        if(this.ingr != null) {
+            elapsedTime = 0;
+            doAnimation = true;
+        }
+
+        return temp;
+    }
+
+    public boolean canInteract(Ingredient ingr)
+    {
+        if(!doAnimation || animation.isAnimationFinished(elapsedTime))
+            return true;
+        else
+            return false;
     }
 }

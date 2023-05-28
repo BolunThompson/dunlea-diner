@@ -1,6 +1,7 @@
 package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -17,17 +18,16 @@ import com.mygdx.game.Ingredient;
  */
 public abstract class Appliance {
 
-    Texture texture;
-    Rectangle collisionRegion;
-    Rectangle interactRegion;
+    protected Texture texture;
+    private Rectangle collisionRegion;
+    private Rectangle interactRegion;
 
     private TextureRegion[] frames;
-    private Animation animation;
-    private float elapsedTime;
-
+    protected Animation animation;
+    protected float elapsedTime;
     protected boolean doAnimation;
 
-    Ingredient ingr;
+    protected Ingredient ingr;
 
     public enum direction {
         LEFT, RIGHT, UP, DOWN
@@ -89,20 +89,31 @@ public abstract class Appliance {
             frames[i] = tmpFrames[0][i];
         }
 
-        animation = new Animation(1/3f, (Object[])frames);
+        animation = new Animation(1f, (Object[])frames);
     }
 
-    public void interact(Ingredient ingr)
+    public Ingredient interact(Ingredient ingr)
     {
+        Ingredient temp = this.ingr;
         this.ingr = ingr;
+        return temp;
+    }
+
+    public boolean canInteract(Ingredient ingr)
+    {
+        // returns whether the ingredient type can be placed onto this appliance
+        return true;
     }
 
     public void update(float delta) // allows animation to progress
     {
         if(doAnimation)
             elapsedTime += Gdx.graphics.getDeltaTime();
-        else
+        if(animation != null && animation.isAnimationFinished(elapsedTime) && ingr == null)
+        {
+            doAnimation = false;
             elapsedTime = 0;
+        }
     }
 
     public void draw(Batch batch)

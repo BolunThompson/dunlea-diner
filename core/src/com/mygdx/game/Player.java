@@ -47,7 +47,7 @@ public class Player {
         setPosition(0,0); // currently sets initial pos to bottom left corner; change later to set to middle of screen?
 
         // sprite texture & animation
-        this.texture = new Texture(Gdx.files.internal("Misc/Sprite-Chef_WalkALL.png"));
+        this.texture = new Texture(Gdx.files.internal("Misc/TEST_SPRITE_FRAMESHEET.png")); // Misc/Sprite-Chef_WalkALL.png
         TextureRegion[][] tmpFrames = TextureRegion.split(texture, 32, 32);
 
         idleFrames = new TextureRegion[2];
@@ -114,9 +114,11 @@ public class Player {
     }
 
     // pick up or put down an item
-    public void interact(Ingredient ingr)
+    public Ingredient interact(Ingredient ingr)
     {
+        Ingredient temp = this.ingr;
         this.ingr = ingr;
+        return temp;
     }
 
     public void draw(Batch batch)

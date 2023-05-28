@@ -2,6 +2,7 @@ package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.game.Ingredient;
 
 /**
  * Chopping Board class (extends abstract Appliance class)
@@ -17,8 +18,8 @@ public class ChoppingBoard extends Appliance{
         super(new Texture(Gdx.files.internal("Appliances/Sprite-Empty_CuttingBoard.png")), x, y, width, height, Appliance.direction.RIGHT);
     }
 
-    public void interact()
+    public Ingredient interact()
     {
-
+        return null;
     }
 }

@@ -20,8 +20,8 @@ public class Trash extends Appliance{
     }
 
     @Override
-    public void interact(Ingredient ingr)
+    public Ingredient interact(Ingredient ingr)
     {
-        //ingr = null;
+        return null;
     }
 }

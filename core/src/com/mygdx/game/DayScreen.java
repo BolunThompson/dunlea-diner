@@ -44,10 +44,13 @@ public class DayScreen implements Screen {
     private TiledMap tiledMap;
     private TiledMapRenderer tiledMapRenderer;
 
+    exampleMusic proudLion;
+    exampleSound tallgiraffe;
+
     Array<Appliance> appliances;
 
     Player player;
-    boolean doInteraction;
+    boolean pressE;
 
     DayScreen(Diner game, DayState dayState)
     {
@@ -61,20 +64,35 @@ public class DayScreen implements Screen {
         tiledMap = new TmxMapLoader().load(dayState.mapFile);
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/32f); // unit scale is probably wrong
 
+        /**
+         * The following music was used for this media project:
+         * Music: Local Forecast - Slower by Kevin MacLeod
+         * Free download: https://filmmusic.io/song/3988-local-forecast-slower
+         * License (CC BY 4.0): https://filmmusic.io/standard-license
+         */
+        proudLion = new exampleMusic(Gdx.audio.newMusic((Gdx.files.internal("Sounds/local-forecast-slower-by-kevin-macleod-from-filmmusic-io.mp3"))));
+        tallgiraffe = new exampleSound(Gdx.audio.newSound(Gdx.files.internal("Sounds/Toaster-pop-up.wav")));
+
 
         appliances = new Array<Appliance>();
+        /**
+         * note: rearrange creation of appliances based on priority
+         * higher priority appliances will be interacted with if the player is in multiple interaction regions
+         * if time, change & add rectangles so that player will never be in multiple interaction regions
+         */
         //appliances.add(new ChoppingBoard(tileWidth * 3, tileHeight * 4, tileWidth, tileHeight)); // bottom cutting board
         appliances.add(new Counter(tileWidth * 3, tileHeight * 3, tileWidth, tileHeight * 4, 4, Appliance.direction.UP)); // left counter
         appliances.add(new Counter(tileWidth * 5, tileHeight * 2, tileWidth * 6, tileHeight, 6, Appliance.direction.RIGHT)); // bottom counter
-        appliances.add(new Counter(tileWidth * 6, tileHeight * 8, tileWidth * 6, tileHeight, 6, Appliance.direction.RIGHT)); // top counter
+        appliances.add(new Counter(tileWidth * 8, tileHeight * 8, tileWidth * 6, tileHeight, 6, Appliance.direction.RIGHT)); // top counter
 
         appliances.add(new Crate(tileWidth * 6, tileHeight * 5, tileWidth, tileHeight)); // bread container
-        appliances.add(new Toaster(tileWidth * 6, tileHeight * 8, tileWidth, tileHeight)); // left toaster
+        appliances.add(new Toaster(tileWidth * 6, tileHeight * 8, tileWidth, tileHeight)); // toaster (left)
         appliances.add(new Trash(tileWidth * 11, tileHeight * 2, tileWidth, tileHeight)); // trash
+        appliances.add(new ServingWindow(tileWidth * 9, tileHeight * 8, tileWidth, tileHeight)); // serving window (left)
 
         player = new Player((int)(tileWidth - 4), (int)(tileHeight - 4));
 
-        doInteraction = false;
+        pressE = false;
         Gdx.input.setInputProcessor(new InputAdapter() {
             public boolean keyDown(int keycode)
             {
@@ -93,7 +111,13 @@ public class DayScreen implements Screen {
                         player.moveDown = true;
                         break;
                     case Input.Keys.E: // interact key
-                        doInteraction = true;
+                        pressE = true;
+                        break;
+                    case Input.Keys.SPACE: // test sound
+                        tallgiraffe.playSound();
+                        break;
+                    case Input.Keys.M: // test music
+                        proudLion.pause();
                         break;
                 }
                 return true;
@@ -169,13 +193,12 @@ public class DayScreen implements Screen {
                 player.setY(oldY);
 
             // interaction
-            if(Intersector.overlaps(app.getInteractRegion(), player.getBoundingRectangle()) && doInteraction)
+            if(pressE && Intersector.overlaps(app.getInteractRegion(), player.getBoundingRectangle()) && app.canInteract(player.getIngredient()))
             {
-                Ingredient appIngr = app.getIngredient();
-                app.interact(player.getIngredient());
-                player.interact(appIngr);
+                player.interact(app.interact(player.getIngredient()));
             }
         }
+        pressE = false;
 
         // draw player
         game.batch.begin();
@@ -185,8 +208,6 @@ public class DayScreen implements Screen {
         }
         player.draw(game.batch);
         game.batch.end();
-
-        doInteraction = false;
     }
 
     public void nextLevel()
@@ -201,6 +222,8 @@ public class DayScreen implements Screen {
         for(Appliance app:appliances) {
             app.dispose();
         }
+        proudLion.dispose();
+        tallgiraffe.dispose();
     }
     public void resize(int width, int height) {}
     public void show() {} // runs upon screen shown
