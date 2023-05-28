@@ -1,9 +1,7 @@
-package com.mygdx.game;
+package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-
-import static com.mygdx.game.Appliance.direction;
 
 /**
  * Chopping Board class (extends abstract Appliance class)
@@ -11,9 +9,6 @@ import static com.mygdx.game.Appliance.direction;
  * Created: May 25, 2023
  * Last Updated: May 25, 2023
  *
- * Notes:
- * width = tileWidth
- * height = tileHeight
  */
 public class ChoppingBoard extends Appliance{
 

@@ -5,27 +5,20 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.appliance.*;
 
 /**
  * DayScreen class
  *
  * Created: May 19, 2023
- * Last Updated: May 23, 2023
  *
  * NOTES:
  *
@@ -53,13 +46,8 @@ public class DayScreen implements Screen {
 
     Array<Appliance> appliances;
 
-    /**TiledMapTileLayer obstacleLayer;
-    MapObjects obstacles;
-
-    TiledMapTileLayer interactLayer;
-    MapObjects interactRegions;**/
-
     Player player;
+    boolean doInteraction;
 
     DayScreen(Diner game, DayState dayState)
     {
@@ -75,14 +63,18 @@ public class DayScreen implements Screen {
 
 
         appliances = new Array<Appliance>();
-        appliances.add(new ChoppingBoard(tileWidth * 3, tileHeight * 4, tileWidth, tileHeight)); // bottom cutting board
-        appliances.add(new Counter(tileWidth * 3, tileHeight * 3, tileWidth, tileHeight * 4)); // left counter
-        appliances.add(new Counter(tileWidth * 5, tileHeight * 2, tileWidth * 6, tileHeight)); // bottom counter
-        appliances.add(new Counter(tileWidth * 6, tileHeight * 8, tileWidth * 6, tileHeight)); // top counter
-        appliances.add(new Counter(tileWidth * 6, tileHeight * 5, tileWidth * 5, tileHeight)); // middle food containers
+        //appliances.add(new ChoppingBoard(tileWidth * 3, tileHeight * 4, tileWidth, tileHeight)); // bottom cutting board
+        appliances.add(new Counter(tileWidth * 3, tileHeight * 3, tileWidth, tileHeight * 4, 4, Appliance.direction.UP)); // left counter
+        appliances.add(new Counter(tileWidth * 5, tileHeight * 2, tileWidth * 6, tileHeight, 6, Appliance.direction.RIGHT)); // bottom counter
+        appliances.add(new Counter(tileWidth * 6, tileHeight * 8, tileWidth * 6, tileHeight, 6, Appliance.direction.RIGHT)); // top counter
+
+        appliances.add(new Crate(tileWidth * 6, tileHeight * 5, tileWidth, tileHeight)); // bread container
+        appliances.add(new Toaster(tileWidth * 6, tileHeight * 8, tileWidth, tileHeight)); // left toaster
+        appliances.add(new Trash(tileWidth * 11, tileHeight * 2, tileWidth, tileHeight)); // trash
 
         player = new Player((int)(tileWidth - 4), (int)(tileHeight - 4));
 
+        doInteraction = false;
         Gdx.input.setInputProcessor(new InputAdapter() {
             public boolean keyDown(int keycode)
             {
@@ -99,6 +91,9 @@ public class DayScreen implements Screen {
                         break;
                     case Input.Keys.DOWN:
                         player.moveDown = true;
+                        break;
+                    case Input.Keys.E: // interact key
+                        doInteraction = true;
                         break;
                 }
                 return true;
@@ -140,6 +135,7 @@ public class DayScreen implements Screen {
             nextLevel();
             return;
         }
+
         // if collision, player position is set to (oldX, oldY)
         float oldX = player.getX();
         float oldY = player.getY();
@@ -156,10 +152,13 @@ public class DayScreen implements Screen {
         if(player.getY() > screenHeight - player.getHeight())
             player.setY(screenHeight - player.getHeight());
 
+
         // appliance collision & interaction
         boolean withinInteractRegion = false;
         for(Appliance app:appliances)
         {
+            app.update(delta); // update time info for appliance animation
+
             // collision
             Rectangle appRect = app.getCollisionRegion();
             if(Intersector.overlaps(new Rectangle(appRect.getX()+appRect.getWidth()-1, appRect.getY(), 1, appRect.getHeight()), player.getBoundingRectangle())
@@ -170,18 +169,24 @@ public class DayScreen implements Screen {
                 player.setY(oldY);
 
             // interaction
-            if(Intersector.overlaps(app.getInteractRegion(), player.getBoundingRectangle()))
+            if(Intersector.overlaps(app.getInteractRegion(), player.getBoundingRectangle()) && doInteraction)
             {
-                withinInteractRegion = true;
+                Ingredient appIngr = app.getIngredient();
+                app.interact(player.getIngredient());
+                player.interact(appIngr);
             }
         }
 
         // draw player
         game.batch.begin();
+        for(Appliance app:appliances)
+        {
+            app.draw(game.batch);
+        }
         player.draw(game.batch);
-        if(withinInteractRegion)
-            game.batch.draw(new Texture(Gdx.files.internal("Misc/Fire.png")), tileWidth * 3,tileHeight * 4, tileWidth, tileHeight);
         game.batch.end();
+
+        doInteraction = false;
     }
 
     public void nextLevel()

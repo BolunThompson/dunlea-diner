@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * Player class
  *
  * Created: May 19, 2023
- * Last Updated: May 24, 2023
  *
  * NOTES:
  *
@@ -37,6 +36,8 @@ public class Player {
     private Animation animation, idleAnimation, leftWalkAnimation, rightWalkAnimation, upWalkAnimation, downWalkAnimation;
     private float elapsedTime;
 
+    private Ingredient ingr;
+
     public Player(int width, int height)
     {
         // position & size
@@ -55,7 +56,7 @@ public class Player {
         upWalkFrames = new TextureRegion[2];
         downWalkFrames = new TextureRegion[2];
 
-        idleFrames[0] = tmpFrames[0][0];
+        idleFrames[0] = tmpFrames[0][0]; // ik... this section looks awful lol
         idleFrames[1] = tmpFrames[0][1];
         leftWalkFrames[0] = tmpFrames[0][2];
         leftWalkFrames[1] = tmpFrames[0][3];
@@ -80,6 +81,8 @@ public class Player {
         downWalkAnimation = new Animation(1/5f, (Object[])downWalkFrames);
 
         animation = idleAnimation;
+
+        ingr = null;
     }
 
     public void update(float delta)
@@ -110,33 +113,47 @@ public class Player {
         }
     }
 
+    // pick up or put down an item
+    public void interact(Ingredient ingr)
+    {
+        this.ingr = ingr;
+    }
+
     public void draw(Batch batch)
     {
-        batch.draw((TextureRegion)animation.getKeyFrame(elapsedTime, true), getX(), getY(), getWidth(), getHeight());
+        batch.draw((TextureRegion)animation.getKeyFrame(elapsedTime, true), x, y, width, height);
+        if(ingr != null)
+            batch.draw(ingr.getTexture(), x, y, width, height);
     }
 
     public void dispose()
     {
-        this.texture.dispose();
+        texture.dispose();
+        if(ingr != null)
+            ingr.dispose();
     }
 
     /**
      * Return values
      */
     public float getX() {
-        return this.x;
+        return x;
     }
     public float getY() {
-        return this.y;
+        return y;
     }
     public float getWidth() {
-        return this.width;
+        return width;
     }
     public float getHeight() {
-        return this.height;
+        return height;
     }
     public Rectangle getBoundingRectangle() {
-        return this.rectangle;
+        return rectangle;
+    }
+
+    public Ingredient getIngredient() {
+        return ingr;
     }
 
     /**
