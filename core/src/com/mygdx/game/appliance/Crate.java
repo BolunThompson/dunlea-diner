@@ -51,7 +51,7 @@ public class Crate extends Appliance {
     @Override
     public Ingredient interact(Ingredient ingr) {
         if(ingr == null)
-            return this.ingr;
+            return this.ingr.copy(this.ingr);
         else
             return ingr;
     }

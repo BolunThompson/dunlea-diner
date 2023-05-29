@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -48,6 +49,7 @@ public class DayScreen implements Screen {
 
     exampleMusic proudLion;
     exampleSound tallgiraffe;
+    ShapeRenderer showHitboxRender;
 
     Array<Appliance> appliances;
 
@@ -74,15 +76,15 @@ public class DayScreen implements Screen {
          */
         proudLion = new exampleMusic(Gdx.audio.newMusic((Gdx.files.internal("Sounds/local-forecast-slower-by-kevin-macleod-from-filmmusic-io.mp3"))));
         tallgiraffe = new exampleSound(Gdx.audio.newSound(Gdx.files.internal("Sounds/Toaster-pop-up.wav")));
-
+        showHitboxRender = new ShapeRenderer();
 
         appliances = new Array<Appliance>();
 
         // blank countertops
         appliances.add(new Counter(tileWidth * 3, tileHeight * 6, tileWidth, tileHeight, Appliance.direction.UP)); // left top counter
         appliances.add(new Counter(tileWidth * 3, tileHeight * 3, tileWidth, tileHeight, Appliance.direction.UP)); // left bottom counter
-        for(int i = 0; i < 6; i++) {                                                                                                    // bottom counters
-            appliances.add(new Counter(tileWidth * (5+i), tileHeight * 2, tileWidth, tileHeight, Appliance.direction.RIGHT));
+        for(int i = 0; i < 5; i++) {                                                                                                    // bottom counters
+            appliances.add(new Counter(tileWidth * (6+i), tileHeight * 2, tileWidth, tileHeight, Appliance.direction.RIGHT));
         }
         appliances.add(new Counter(tileWidth * 8, tileHeight * 8, tileWidth, tileHeight, Appliance.direction.RIGHT)); // top left counter
         appliances.add(new Counter(tileWidth * 11, tileHeight * 8, tileWidth, tileHeight, Appliance.direction.RIGHT)); // top right counter
@@ -210,6 +212,12 @@ public class DayScreen implements Screen {
             }
         }
         pressE = false;
+
+        // test stuff
+        showHitboxRender.begin(ShapeRenderer.ShapeType.Filled);
+        showHitboxRender.setColor(0.1f, 1f, 0.3f, 1f);
+        showHitboxRender.rect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
+        showHitboxRender.end();
 
         // draw player
         game.batch.begin();
