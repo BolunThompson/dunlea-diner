@@ -38,7 +38,7 @@ public class Toaster extends Appliance {
 
     public boolean canInteract(Ingredient ingr)
     {
-        if(!doAnimation || animation.isAnimationFinished(elapsedTime))
+        if(ingr == null || ((ingr != null && ingr.getName().equals(Ingredient.Type.bread))) && (!doAnimation || animation.isAnimationFinished(elapsedTime)))
             return true;
         else
             return false;

@@ -19,8 +19,8 @@ import com.mygdx.game.Ingredient;
 public abstract class Appliance {
 
     protected Texture texture;
-    private Rectangle collisionRegion;
-    private Rectangle interactRegion;
+    protected Rectangle collisionRegion;
+    protected Rectangle interactRegion;
 
     private TextureRegion[] frames;
     protected Animation animation;
@@ -55,19 +55,19 @@ public abstract class Appliance {
 
         switch(dir) { // from what direction the player interacts from
             case LEFT:
-                interactRegion = new Rectangle(x - width/2f, y, width/2f, height);
+                interactRegion = new Rectangle(x - width/2f, y + height/4f, width/2f, height/2f);
                 break;
             case RIGHT:
-                interactRegion = new Rectangle(x + width, y, width/2f, height);
+                interactRegion = new Rectangle(x + width, y + height/4f, width/2f, height/2f);
                 break;
             case UP:
-                interactRegion = new Rectangle(x, y + height, width, height/2f);
+                interactRegion = new Rectangle(x + width/4f, y + height, width/2f, height/2f);
                 break;
             case DOWN:
-                interactRegion = new Rectangle(x, y - height/2f, width, height/2f);
+                interactRegion = new Rectangle(x + width/4f, y - height/2f, width/2f, height/2f);
                 break;
-            default:
-                interactRegion = new Rectangle(x - width/2f, y - height/2f, width*2f, height*2f);
+            default: // invalid direction
+                interactRegion = new Rectangle(0, 0, 0, 0);
                 break;
         }
     }
@@ -123,8 +123,8 @@ public abstract class Appliance {
         } else
             batch.draw(texture, collisionRegion.x, collisionRegion.y, collisionRegion.width, collisionRegion.height);
 
-        if(ingr != null)
-            batch.draw(ingr.getTexture(), collisionRegion.x, collisionRegion.y, collisionRegion.width, collisionRegion.height);
+        //if(ingr != null) // visual of ingredient in oven for testing purposes
+            //batch.draw(ingr.getTexture(), collisionRegion.x, collisionRegion.y, collisionRegion.width, collisionRegion.height);
     }
 
     public void dispose() {

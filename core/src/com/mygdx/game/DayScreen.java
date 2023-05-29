@@ -75,20 +75,25 @@ public class DayScreen implements Screen {
 
 
         appliances = new Array<Appliance>();
-        /**
-         * note: rearrange creation of appliances based on priority
-         * higher priority appliances will be interacted with if the player is in multiple interaction regions
-         * if time, change & add rectangles so that player will never be in multiple interaction regions
-         */
-        //appliances.add(new ChoppingBoard(tileWidth * 3, tileHeight * 4, tileWidth, tileHeight)); // bottom cutting board
+
+        // blank countertops
         appliances.add(new Counter(tileWidth * 3, tileHeight * 3, tileWidth, tileHeight * 4, 4, Appliance.direction.UP)); // left counter
         appliances.add(new Counter(tileWidth * 5, tileHeight * 2, tileWidth * 6, tileHeight, 6, Appliance.direction.RIGHT)); // bottom counter
         appliances.add(new Counter(tileWidth * 8, tileHeight * 8, tileWidth * 6, tileHeight, 6, Appliance.direction.RIGHT)); // top counter
 
-        appliances.add(new Crate(tileWidth * 6, tileHeight * 5, tileWidth, tileHeight)); // bread container
+        // ingredient containers
+        appliances.add(new Crate(tileWidth * 6, tileHeight * 5, tileWidth, tileHeight, Ingredient.Type.bread)); // bread container
+        appliances.add(new Crate(tileWidth * 7, tileHeight * 5, tileWidth, tileHeight, Ingredient.Type.ham)); // ham container
+        appliances.add(new Crate(tileWidth * 8, tileHeight * 5, tileWidth, tileHeight, Ingredient.Type.cheese)); // cheese container
+        appliances.add(new Crate(tileWidth * 9, tileHeight * 5, tileWidth, tileHeight, Ingredient.Type.lettuce)); // lettuce container
+        appliances.add(new Crate(tileWidth * 10, tileHeight * 5, tileWidth, tileHeight, Ingredient.Type.tomato)); // tomato container
+
+        // appliances
+        //appliances.add(new ChoppingBoard(tileWidth * 3, tileHeight * 4, tileWidth, tileHeight)); // bottom cutting board
         appliances.add(new Toaster(tileWidth * 6, tileHeight * 8, tileWidth, tileHeight)); // toaster (left)
+        appliances.add(new Toaster(tileWidth * 7, tileHeight * 8, tileWidth, tileHeight)); // toaster (right)
         appliances.add(new Trash(tileWidth * 11, tileHeight * 2, tileWidth, tileHeight)); // trash
-        appliances.add(new ServingWindow(tileWidth * 9, tileHeight * 8, tileWidth, tileHeight)); // serving window (left)
+        appliances.add(new ServingWindow(tileWidth * 9, tileHeight * 8, tileWidth * 2, tileHeight)); // serving windows (2x1)
 
         player = new Player((int)(tileWidth - 4), (int)(tileHeight - 4));
 
@@ -98,16 +103,16 @@ public class DayScreen implements Screen {
             {
                 switch(keycode)
                 {
-                    case Input.Keys.LEFT:
+                    case Input.Keys.A:
                         player.moveLeft = true;
                         break;
-                    case Input.Keys.RIGHT:
+                    case Input.Keys.D:
                         player.moveRight = true;
                         break;
-                    case Input.Keys.UP:
+                    case Input.Keys.W:
                         player.moveUp = true;
                         break;
-                    case Input.Keys.DOWN:
+                    case Input.Keys.S:
                         player.moveDown = true;
                         break;
                     case Input.Keys.E: // interact key
@@ -126,16 +131,16 @@ public class DayScreen implements Screen {
             {
                 switch(keycode)
                 {
-                    case Input.Keys.LEFT:
+                    case Input.Keys.A:
                         player.moveLeft = false;
                         break;
-                    case Input.Keys.RIGHT:
+                    case Input.Keys.D:
                         player.moveRight = false;
                         break;
-                    case Input.Keys.UP:
+                    case Input.Keys.W:
                         player.moveUp = false;
                         break;
-                    case Input.Keys.DOWN:
+                    case Input.Keys.S:
                         player.moveDown = false;
                         break;
                 }
@@ -193,7 +198,7 @@ public class DayScreen implements Screen {
                 player.setY(oldY);
 
             // interaction
-            if(pressE && Intersector.overlaps(app.getInteractRegion(), player.getBoundingRectangle()) && app.canInteract(player.getIngredient()))
+            if(pressE && Intersector.overlaps(app.getInteractRegion(), player.getInteractRectangle()) && app.canInteract(player.getIngredient()))
             {
                 player.interact(app.interact(player.getIngredient()));
             }

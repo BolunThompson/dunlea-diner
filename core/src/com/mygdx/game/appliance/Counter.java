@@ -16,7 +16,6 @@ import com.mygdx.game.Ingredient;
  */
 public class Counter extends Appliance {
 
-
     TextureRegion textureRegion;
 
     public Counter(int x, int y, int width, int height, int length, Appliance.direction dir)
@@ -53,7 +52,6 @@ public class Counter extends Appliance {
     @Override
     public void draw(Batch batch)
     {
-        //batch.draw(textureRegion, getCollisionRegion().getX(), getCollisionRegion().getY(), getCollisionRegion().getWidth(), getCollisionRegion().getHeight());
         if(ingr != null)
             batch.draw(ingr.getTexture(), getCollisionRegion().getX(), getCollisionRegion().getY(), getCollisionRegion().getWidth(), getCollisionRegion().getHeight());
     }

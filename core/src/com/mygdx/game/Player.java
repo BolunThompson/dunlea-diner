@@ -25,7 +25,8 @@ public class Player {
     private float x, y, width, height;
     public boolean moveLeft, moveRight, moveUp, moveDown;
 
-    private Rectangle rectangle;
+    private Rectangle rectangle; // collision hitbox
+    private Rectangle interactRect; // the area checked for overlap with appliance interactRegion
 
     private Texture texture;
     private TextureRegion[] idleFrames;
@@ -44,10 +45,11 @@ public class Player {
         this.width = width;
         this.height = height;
         rectangle = new Rectangle(0,0, width, height);
+        interactRect = new Rectangle(x + width/4f, y + height/4f, width/2, height/2);
         setPosition(0,0); // currently sets initial pos to bottom left corner; change later to set to middle of screen?
 
         // sprite texture & animation
-        this.texture = new Texture(Gdx.files.internal("Misc/TEST_SPRITE_FRAMESHEET.png")); // Misc/Sprite-Chef_WalkALL.png
+        this.texture = new Texture(Gdx.files.internal("Misc/Sprite-Chef_WalkALL.png"));
         TextureRegion[][] tmpFrames = TextureRegion.split(texture, 32, 32);
 
         idleFrames = new TextureRegion[2];
@@ -79,7 +81,6 @@ public class Player {
         rightWalkAnimation = new Animation(1/5f, (Object[])rightWalkFrames);
         upWalkAnimation = new Animation(1/5f, (Object[])upWalkFrames);
         downWalkAnimation = new Animation(1/5f, (Object[])downWalkFrames);
-
         animation = idleAnimation;
 
         ingr = null;
@@ -153,7 +154,9 @@ public class Player {
     public Rectangle getBoundingRectangle() {
         return rectangle;
     }
-
+    public Rectangle getInteractRectangle() {
+        return interactRect;
+    }
     public Ingredient getIngredient() {
         return ingr;
     }
@@ -165,15 +168,17 @@ public class Player {
         this.x = x;
         this.y = y;
 
-        rectangle.setX(x);
-        rectangle.setY(y);
+        rectangle.setPosition(x, y);
+        interactRect.setPosition(x + width/4f, y + height/4f);
     }
     public void setX(float x) {
         this.x = x;
         rectangle.setX(x);
+        interactRect.setX(x + width/4f);
     }
     public void setY(float y) {
         this.y = y;
         rectangle.setY(y);
+        interactRect.setY(y + height/4f);
     }
 }

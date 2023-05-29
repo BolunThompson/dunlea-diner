@@ -2,6 +2,7 @@ package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.Ingredient;
 
 /**
@@ -15,11 +16,36 @@ import com.mygdx.game.Ingredient;
  */
 public class Crate extends Appliance {
 
-    public Crate(int x, int y, int width, int height)
+    public Crate(int x, int y, int width, int height, Ingredient.Type type)
     {
-        super(new Texture(Gdx.files.internal("Crates/PlainBreadCrate.png")), x, y, width, height, Appliance.direction.DOWN);
+        super(null, x, y, width, height);
 
-        this.ingr = new Ingredient(Ingredient.Type.bread);
+        this.interactRegion = new Rectangle(x + width/4, y - height/2, width/2f, height*2f);
+
+        switch(type)
+        {
+            case bread:
+            default:
+                this.texture = new Texture(Gdx.files.internal("Crates/PlainBreadCrate.png"));
+                this.ingr = new Ingredient(Ingredient.Type.bread);
+                break;
+            case ham:
+                this.texture = new Texture(Gdx.files.internal("Crates/HamCrate.png"));
+                this.ingr = new Ingredient(Ingredient.Type.ham);
+                break;
+            case cheese:
+                this.texture = new Texture(Gdx.files.internal("Crates/CheeseCrate.png"));
+                this.ingr = new Ingredient(Ingredient.Type.cheese);
+                break;
+            case lettuce:
+                this.texture = new Texture(Gdx.files.internal("Crates/LettuceCrate.png"));
+                this.ingr = new Ingredient(Ingredient.Type.lettuce);
+                break;
+            case tomato:
+                this.texture = new Texture(Gdx.files.internal("Crates/TomatoCrate.png"));
+                this.ingr = new Ingredient(Ingredient.Type.tomato);
+                break;
+        }
     }
 
     /**
