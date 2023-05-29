@@ -5,13 +5,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.holdable.Ingredient;
 
 /**
- * Toaster class (extends abstract Appliance class)
+ * Toaster class (extends abstract class Appliance)
  *
  * Created: May 25, 2023
  *
  * Notes:
- * Animation does not reset after first interaction.
- * Interaction with toaster still works while in process of cooking animation
+ * Currently can only remove item from toasting after waiting 1 second after "DONE" shows up.
+ * Need to alter so that bread can be removed from toaster as soon as "DONE" shows up.
  */
 public class Toaster extends Appliance {
 
@@ -22,8 +22,14 @@ public class Toaster extends Appliance {
                 x, y, width, height, Appliance.direction.DOWN);
     }
 
+    /**
+     * Put bread in / take bread out of oven.
+     * Precondition: canInteract is true
+     *
+     * @param ingr - Ingredient held by the player (null if nothing held)
+     */
     @Override
-    public Ingredient interact(Ingredient ingr) // precondition: canInteract is true
+    public Ingredient interact(Ingredient ingr)
     {
         Ingredient temp = this.ingr;
         this.ingr = ingr;
@@ -37,6 +43,13 @@ public class Toaster extends Appliance {
         return temp;
     }
 
+    /**
+     * Conditions checked:
+     * (1) Ingredient being put in oven is bread
+     * (2) Oven is empty or finished toasting.
+     *
+     * @param ingr - Ingredient held by the player (null if nothing held)
+     */
     @Override
     public boolean canInteract(Ingredient ingr)
     {

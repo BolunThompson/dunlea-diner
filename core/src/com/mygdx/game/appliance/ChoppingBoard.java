@@ -5,11 +5,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.holdable.Ingredient;
 
 /**
- * Chopping Board class (extends abstract Appliance class)
+ * Chopping Board class (extends abstract class Appliance)
  *
  * Created: May 25, 2023
- * Last Updated: May 25, 2023
  *
+ * No functions yet.
  */
 public class ChoppingBoard extends Appliance{
 
@@ -18,7 +18,8 @@ public class ChoppingBoard extends Appliance{
         super(new Texture(Gdx.files.internal("Appliances/Sprite-Empty_CuttingBoard.png")), x, y, width, height, Appliance.direction.RIGHT);
     }
 
-    public Ingredient interact()
+    @Override
+    public Ingredient interact(Ingredient ingr)
     {
         return null;
     }

@@ -2,19 +2,16 @@ package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.mygdx.game.holdable.Ingredient;
 
 
 /**
- * Trash class (extends Appliance)
+ * ServingWindow class (extends abstract class Appliance)
  *
  * Created May 28, 2023
  *
  * The serving window is a 2x1 tile
- *
- * When the player interacts with the serving window, player.interact() and ServingWindow.interact() are called
- * The player's ingredients slot is changed to empty, and nothing happens to the serving window's ingredient slot, which is by default empty.
+ * NOT FUNCTIONAL YET
  */
 public class ServingWindow extends Appliance{
 
@@ -25,17 +22,33 @@ public class ServingWindow extends Appliance{
         this.texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
     }
 
+    /**
+     * Processes a submitted sandwich order by comparing to sandwich in orders list
+     *
+     * @param ingr - Ingredient held by the player (null if nothing held)
+     */
     @Override
     public Ingredient interact(Ingredient ingr)
     {
         // add code for processing sandwich order
-        // do not accept sandwich
         return null;
     }
 
-    public void draw(Batch batch)
+    /**
+     * Returns whether an item can be submitted at the serving window.
+     * TRUE if item is a sandwich. FALSE otherwise.
+     *
+     * @param ingr - Ingredient held by the player (null if nothing held)
+     */
+    @Override
+    public boolean canInteract(Ingredient ingr)
+    {
+        return true;
+    }
+
+    /**public void draw(Batch batch)
     {
         if(ingr != null)
             batch.draw(ingr.getTexture(), getCollisionRegion().getX(), getCollisionRegion().getY(), getCollisionRegion().getWidth(), getCollisionRegion().getHeight());
-    }
+    }**/
 }

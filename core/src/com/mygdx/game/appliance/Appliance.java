@@ -34,6 +34,12 @@ public abstract class Appliance {
 
     /**
      * Creates an appliance with no interaction
+     *
+     * @param texture - SHOULD PROBABLY DELETE THIS PARAMETER
+     * @param x - x-coordinate of collision box's bottom left corner (in pixels)
+     * @param y - y-coordinate of collision box's bottom left corner (in pixels)
+     * @param width - width of collision box (in pixels)
+     * @param height - height of collision box (in pixels)
      */
     public Appliance(Texture texture, int x, int y, int width, int height)
     {
@@ -45,7 +51,7 @@ public abstract class Appliance {
     }
 
     /**
-     * Creates an appliance with interaction in 1 of 4 directions
+     * Creates an appliance with interaction box in 1 of 4 directions
      *
      * @param dir - sets interaction box to left, right, above, or below appliance
      */
@@ -92,6 +98,14 @@ public abstract class Appliance {
         animation = new Animation(1f, (Object[])frames);
     }
 
+    /**
+     * Called when (1) Player is within appliance's interact region
+     *             (2) canInteract is true
+     *             (3) E key pressed
+     *
+     * @param ingr - Ingredient held by the player (null if nothing held)
+     * @return Ingredient held by the appliance (null if nothing held)
+     */
     public Ingredient interact(Ingredient ingr)
     {
         Ingredient temp = this.ingr;
@@ -99,13 +113,20 @@ public abstract class Appliance {
         return temp;
     }
 
+    /**
+     * Returns whether the appliance can currently be interacted with by the player
+     *
+     * @param ingr - Ingredient held by the player (null if nothing held)
+     */
     public boolean canInteract(Ingredient ingr)
     {
-        // returns whether the ingredient type can be placed onto this appliance
         return true;
     }
 
-    public void update(float delta) // allows animation to progress
+    /**
+     * Allows animation to start/progress/stop playing
+     */
+    public void update(float delta)
     {
         if(doAnimation)
             elapsedTime += Gdx.graphics.getDeltaTime();
@@ -120,10 +141,10 @@ public abstract class Appliance {
     {
         if(doAnimation) {
             batch.draw((TextureRegion) animation.getKeyFrame(elapsedTime, false), collisionRegion.x, collisionRegion.y, collisionRegion.width, collisionRegion.height);
-        } else
-            batch.draw(texture, collisionRegion.x, collisionRegion.y, collisionRegion.width, collisionRegion.height);
+        } //else
+            //batch.draw(texture, collisionRegion.x, collisionRegion.y, collisionRegion.width, collisionRegion.height);
 
-        //if(ingr != null) // visual of ingredient in oven for testing purposes
+        //if(ingr != null) // visual of ingredient on appliance for testing purposes
             //batch.draw(ingr.getTexture(), collisionRegion.x, collisionRegion.y, collisionRegion.width, collisionRegion.height);
     }
 
@@ -133,14 +154,15 @@ public abstract class Appliance {
             ingr.dispose();
     }
 
+    /**
+     * Get methods
+     */
     public Rectangle getCollisionRegion() {
         return collisionRegion;
     }
-
     public Rectangle getInteractRegion() {
         return interactRegion;
     }
-
     public Ingredient getIngredient() {
         return ingr;
     }

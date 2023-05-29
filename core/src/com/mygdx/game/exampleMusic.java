@@ -3,6 +3,8 @@ package com.mygdx.game;
 import com.badlogic.gdx.audio.Music;
 
 /**
+ * (To be deleted later)
+ *
  * More info here:
  * https://libgdx.com/wiki/audio/streaming-music
  */

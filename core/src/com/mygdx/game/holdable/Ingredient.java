@@ -3,14 +3,17 @@ package com.mygdx.game.holdable;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+/**
+ * Ingredient class (abstract class)
+ *
+ * Created: May 28, 2023
+ */
 public abstract class Ingredient {
 
     protected Texture texture;
     protected TextureRegion[] costumes;
     protected int costumeIndex;
     final int maxIndex;
-
-    Ingredient shallowCopy;
 
     public enum Type {
         bread, ham, cheese, lettuce, tomato
@@ -30,7 +33,7 @@ public abstract class Ingredient {
     }
 
     /**
-     * This doesn't actually copy the ingredient passed into this method, it just creates a new one of the same type.
+     * This doesn't actually copy the ingredient passed into this method, it just creates a new one of the same ingredient type.
      * This method is used only for creating new ingredients to be dispensed from crates.
      */
     public Ingredient copy(Ingredient orig) {
@@ -51,6 +54,9 @@ public abstract class Ingredient {
         }
     }
 
+    /**
+     * Change texture to next in sprite sheet
+     */
     public void nextCostume() {
         costumeIndex++;
 
@@ -58,19 +64,21 @@ public abstract class Ingredient {
             costumeIndex = maxIndex;
     }
 
+    public void dispose() {
+        texture.dispose();
+    }
+
+    /**
+     * Get methods
+     */
     public TextureRegion getTexture() {
         return costumes[costumeIndex];
     }
-
     public Type getType() {
         return null;
     }
-
     public String toString() {
         return "ingredient";
     }
 
-    public void dispose() {
-        texture.dispose();
-    }
 }

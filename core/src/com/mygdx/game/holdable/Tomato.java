@@ -3,6 +3,11 @@ package com.mygdx.game.holdable;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
+/**
+ * Tomato class (extends abstract class Ingredient)
+ *
+ * Created: May 29, 2023
+ */
 public class Tomato extends Ingredient {
 
     public Tomato() {

@@ -5,12 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.holdable.Ingredient;
 
 /**
- * Trash class (extends Appliance)
+ * Trash class (extends abstract class Appliance)
  *
  * Created May 28, 2023
- *
- * When the player interacts with the trash, player.interact() and trash.interact() are called
- * The player's ingredients slot is changed to empty, and nothing happens to the trash's ingredient slot, which is by default empty.
  */
 public class Trash extends Appliance{
 
@@ -19,6 +16,11 @@ public class Trash extends Appliance{
         super(new Texture(Gdx.files.internal("Appliances/Trash.png")), x, y, width, height, Appliance.direction.UP);
     }
 
+    /**
+     * Remove ingredient held by player
+     *
+     * @param ingr - Ingredient held by the player (null if nothing held)
+     */
     @Override
     public Ingredient interact(Ingredient ingr)
     {

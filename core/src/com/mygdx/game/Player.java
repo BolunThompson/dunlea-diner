@@ -14,8 +14,7 @@ import com.mygdx.game.holdable.Ingredient;
  * Created: May 19, 2023
  *
  * NOTES:
- *
- * Sprite Animations code from here:
+ * Sprite animations code from here:
  *      https://www.youtube.com/watch?v=SVyYvi0I6Bc
  */
 public class Player {
@@ -28,7 +27,7 @@ public class Player {
     public boolean moveLeft, moveRight, moveUp, moveDown;
 
     private Rectangle rectangle; // collision hitbox
-    private Rectangle interactRect; // the area checked for overlap with appliance interactRegion
+    private Rectangle interactRect; // the area checked to determine if player is close enough to interact with appliance
 
     private Texture texture;
     private TextureRegion[] idleFrames;
@@ -47,8 +46,8 @@ public class Player {
         this.width = width;
         this.height = height;
         rectangle = new Rectangle(startX,startY, width, height);
-        interactRect = new Rectangle(startX + width/4f, startY + height/4f, width/2, height/2);
-        setPosition(startX,startY); // currently sets initial pos to bottom left corner; change later to set to middle of screen?
+        interactRect = new Rectangle(startX + width/4f, startY + height/4f, width/2f, height/2f);
+        setPosition(startX,startY);
 
         // sprite texture & animation
         this.texture = new Texture(Gdx.files.internal("Misc/Sprite-Chef_WalkALL.png"));
@@ -71,13 +70,6 @@ public class Player {
         downWalkFrames[0] = tmpFrames[0][8];
         downWalkFrames[1] = tmpFrames[0][9];
 
-        /**int index = 0;
-        for(int i = 0; i < 1; i++) { // rows
-            for(int j = 0; j < 10; j++) { // cols
-                animationFrames[index++] = tmpFrames[i][j];
-            }
-        }**/
-
         idleAnimation = new Animation(1/3f, (Object[])idleFrames); // cast to (Object[]) because console said to
         leftWalkAnimation = new Animation(1/5f, (Object[])leftWalkFrames);
         rightWalkAnimation = new Animation(1/5f, (Object[])rightWalkFrames);
@@ -88,6 +80,9 @@ public class Player {
         ingr = null;
     }
 
+    /**
+     * Update player position & appearance based on input movement
+     */
     public void update(float delta)
     {
         elapsedTime += Gdx.graphics.getDeltaTime();
@@ -116,7 +111,12 @@ public class Player {
         }
     }
 
-    // pick up or put down an item
+    /**
+     * Interact with appliances
+     *
+     * @param ingr - Ingredient held by the appliance (null if nothing held)
+     * @return Ingredient held by the player (null if nothing held)
+     */
     public Ingredient interact(Ingredient ingr)
     {
         Ingredient temp = this.ingr;
@@ -124,6 +124,9 @@ public class Player {
         return temp;
     }
 
+    /**
+     * Draw the player & held item on screen
+     */
     public void draw(Batch batch)
     {
         batch.draw((TextureRegion)animation.getKeyFrame(elapsedTime, true), x, y, width, height);
@@ -139,7 +142,7 @@ public class Player {
     }
 
     /**
-     * Return values
+     * Get values
      */
     public float getX() {
         return x;

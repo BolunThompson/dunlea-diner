@@ -3,6 +3,11 @@ package com.mygdx.game.holdable;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
+/**
+ * Bread class (extends abstract class Ingredient)
+ *
+ * Created: May 29, 2023
+ */
 public class Bread extends Ingredient{
 
     private boolean toasted;
@@ -16,6 +21,7 @@ public class Bread extends Ingredient{
         return toasted;
     }
 
+    @Override
     public void nextCostume() {
         super.nextCostume();
         toasted = true;

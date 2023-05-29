@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.holdable.*;
 
 /**
- * Crate class (extends Appliance)
+ * Crate class (extends abstract class Appliance)
  *
  * Created May 28, 2023
  */
@@ -45,8 +45,10 @@ public class Crate extends Appliance {
     }
 
     /**
-     * if player is holding item, return same item
-     * if player is not holding item, return crate item
+     * Gives the player an ingredient if not holding anything
+     *
+     * @param ingr - Ingredient held by the player (null if nothing held)
+     * @return copy of ingredient held by crate
      */
     @Override
     public Ingredient interact(Ingredient ingr) {

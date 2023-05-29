@@ -21,10 +21,6 @@ import com.mygdx.game.holdable.Ingredient;
  * DayScreen class
  *
  * Created: May 19, 2023
- *
- * NOTES:
- *
- * For now everything is a counter. Only bottom cutting board has a test interaction region set up.
  */
 public class DayScreen implements Screen {
     final Diner game;
@@ -47,14 +43,14 @@ public class DayScreen implements Screen {
     private TiledMap tiledMap;
     private TiledMapRenderer tiledMapRenderer;
 
+    Player player;
+    boolean pressE;
+    Array<Appliance> appliances;
+
+    // delete later - for testing purposes
     exampleMusic proudLion;
     exampleSound tallgiraffe;
     ShapeRenderer showHitboxRender;
-
-    Array<Appliance> appliances;
-
-    Player player;
-    boolean pressE;
 
     DayScreen(Diner game, DayState dayState)
     {
@@ -78,6 +74,10 @@ public class DayScreen implements Screen {
         tallgiraffe = new exampleSound(Gdx.audio.newSound(Gdx.files.internal("Sounds/Toaster-pop-up.wav")));
         showHitboxRender = new ShapeRenderer();
 
+
+        /**
+         * APPLIANCES
+         */
         appliances = new Array<Appliance>();
 
         // blank countertops
@@ -103,8 +103,11 @@ public class DayScreen implements Screen {
         appliances.add(new Trash(tileWidth * 11, tileHeight * 2, tileWidth, tileHeight)); // trash
         appliances.add(new ServingWindow(tileWidth * 9, tileHeight * 8, tileWidth * 2, tileHeight)); // serving windows (2x1)
 
-        player = new Player((int)(tileWidth - 4), (int)(tileHeight - 4));
 
+        /**
+         * PLAYER & CONTROLS
+         */
+        player = new Player((int)(tileWidth - 4), (int)(tileHeight - 4));
         pressE = false;
         Gdx.input.setInputProcessor(new InputAdapter() {
             public boolean keyDown(int keycode)
@@ -126,6 +129,8 @@ public class DayScreen implements Screen {
                     case Input.Keys.E: // interact key
                         pressE = true;
                         break;
+
+                        // TEST STUFF (delete later)
                     case Input.Keys.SPACE: // test sound
                         tallgiraffe.playSound();
                         break;
@@ -173,13 +178,14 @@ public class DayScreen implements Screen {
             return;
         }
 
+        // save old position in case of collision
         // if collision, player position is set to (oldX, oldY)
         float oldX = player.getX();
         float oldY = player.getY();
 
         player.update(delta); // update player position & animation frame
 
-        // check if past screen border
+        // check if player is past screen border
         if(player.getX() < 0)
             player.setX(0);
         if(player.getX() > screenWidth - player.getWidth())
@@ -191,7 +197,6 @@ public class DayScreen implements Screen {
 
 
         // appliance collision & interaction
-        boolean withinInteractRegion = false;
         for(Appliance app:appliances)
         {
             app.update(delta); // update time info for appliance animation
@@ -213,7 +218,7 @@ public class DayScreen implements Screen {
         }
         pressE = false;
 
-        // test stuff
+        // TEST STUFF (delete later)
         showHitboxRender.begin(ShapeRenderer.ShapeType.Filled);
         showHitboxRender.setColor(0.1f, 1f, 0.3f, 1f);
         showHitboxRender.rect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
@@ -241,12 +246,19 @@ public class DayScreen implements Screen {
         for(Appliance app:appliances) {
             app.dispose();
         }
+
+        // TEST STUFF (delete later)
         proudLion.dispose();
         tallgiraffe.dispose();
     }
+    @Override
     public void resize(int width, int height) {}
+    @Override
     public void show() {} // runs upon screen shown
+    @Override
     public void hide() {}
+    @Override
     public void pause() {}
+    @Override
     public void resume() {}
 }
