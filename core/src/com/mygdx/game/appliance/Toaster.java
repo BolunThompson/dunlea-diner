@@ -2,7 +2,7 @@ package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.mygdx.game.Ingredient;
+import com.mygdx.game.holdable.Ingredient;
 
 /**
  * Toaster class (extends abstract Appliance class)
@@ -31,14 +31,16 @@ public class Toaster extends Appliance {
         if(this.ingr != null) {
             elapsedTime = 0;
             doAnimation = true;
+            this.ingr.nextCostume(); // toasts bread
         }
 
         return temp;
     }
 
+    @Override
     public boolean canInteract(Ingredient ingr)
     {
-        if(ingr == null || ((ingr != null && ingr.getName().equals(Ingredient.Type.bread))) && (!doAnimation || animation.isAnimationFinished(elapsedTime)))
+        if((ingr == null || (ingr != null && ingr.getType().equals(Ingredient.Type.bread))) && (!doAnimation || animation.isAnimationFinished(elapsedTime)))
             return true;
         else
             return false;

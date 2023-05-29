@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.mygdx.game.holdable.Ingredient;
 
 /**
  * Player class
@@ -20,6 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  */
 public class Player {
 
+    final private int startX = 100 * 8;
+    final private int startY = 100 * 3;
     final private int speed = 300;
 
     private float x, y, width, height;
@@ -44,9 +46,9 @@ public class Player {
         // position & size
         this.width = width;
         this.height = height;
-        rectangle = new Rectangle(0,0, width, height);
-        interactRect = new Rectangle(x + width/4f, y + height/4f, width/2, height/2);
-        setPosition(0,0); // currently sets initial pos to bottom left corner; change later to set to middle of screen?
+        rectangle = new Rectangle(startX,startY, width, height);
+        interactRect = new Rectangle(startX + width/4f, startY + height/4f, width/2, height/2);
+        setPosition(startX,startY); // currently sets initial pos to bottom left corner; change later to set to middle of screen?
 
         // sprite texture & animation
         this.texture = new Texture(Gdx.files.internal("Misc/Sprite-Chef_WalkALL.png"));

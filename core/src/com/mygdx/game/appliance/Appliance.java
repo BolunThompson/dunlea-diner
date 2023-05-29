@@ -1,13 +1,12 @@
 package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.Ingredient;
+import com.mygdx.game.holdable.Ingredient;
 
 /**
  * Appliance class (abstract class)
@@ -42,6 +41,7 @@ public abstract class Appliance {
         collisionRegion = new Rectangle(x, y, width, height);
         interactRegion = new Rectangle(x , y, 0, 0);
         ingr = null;
+        doAnimation = false;
     }
 
     /**

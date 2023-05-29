@@ -2,7 +2,7 @@ package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.mygdx.game.Ingredient;
+import com.mygdx.game.holdable.Ingredient;
 
 /**
  * Trash class (extends Appliance)

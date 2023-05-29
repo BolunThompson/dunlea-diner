@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.appliance.*;
+import com.mygdx.game.holdable.Ingredient;
 
 /**
  * DayScreen class
@@ -35,6 +36,7 @@ public class DayScreen implements Screen {
     static final int numWidthTiles = 12;
     static final int numHeightTiles = 9;
 
+    // tile dimensions in pixels (100 x 100)
     static final int tileWidth = screenWidth / numWidthTiles;
     static final int tileHeight = screenHeight / numHeightTiles;
 
@@ -77,9 +79,13 @@ public class DayScreen implements Screen {
         appliances = new Array<Appliance>();
 
         // blank countertops
-        appliances.add(new Counter(tileWidth * 3, tileHeight * 3, tileWidth, tileHeight * 4, 4, Appliance.direction.UP)); // left counter
-        appliances.add(new Counter(tileWidth * 5, tileHeight * 2, tileWidth * 6, tileHeight, 6, Appliance.direction.RIGHT)); // bottom counter
-        appliances.add(new Counter(tileWidth * 8, tileHeight * 8, tileWidth * 6, tileHeight, 6, Appliance.direction.RIGHT)); // top counter
+        appliances.add(new Counter(tileWidth * 3, tileHeight * 6, tileWidth, tileHeight, Appliance.direction.UP)); // left top counter
+        appliances.add(new Counter(tileWidth * 3, tileHeight * 3, tileWidth, tileHeight, Appliance.direction.UP)); // left bottom counter
+        for(int i = 0; i < 6; i++) {                                                                                                    // bottom counters
+            appliances.add(new Counter(tileWidth * (5+i), tileHeight * 2, tileWidth, tileHeight, Appliance.direction.RIGHT));
+        }
+        appliances.add(new Counter(tileWidth * 8, tileHeight * 8, tileWidth, tileHeight, Appliance.direction.RIGHT)); // top left counter
+        appliances.add(new Counter(tileWidth * 11, tileHeight * 8, tileWidth, tileHeight, Appliance.direction.RIGHT)); // top right counter
 
         // ingredient containers
         appliances.add(new Crate(tileWidth * 6, tileHeight * 5, tileWidth, tileHeight, Ingredient.Type.bread)); // bread container
