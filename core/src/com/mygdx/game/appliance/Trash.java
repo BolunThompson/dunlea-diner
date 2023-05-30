@@ -3,6 +3,7 @@ package com.mygdx.game.appliance;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.holdable.Ingredient;
+import com.badlogic.gdx.audio.Sound;
 
 /**
  * Trash class (extends abstract class Appliance)
@@ -11,9 +12,16 @@ import com.mygdx.game.holdable.Ingredient;
  */
 public class Trash extends Appliance{
 
+    Sound sound;
+
     public Trash(int x, int y, int width, int height)
     {
         super(new Texture(Gdx.files.internal("Appliances/Trash.png")), x, y, width, height, Appliance.direction.UP);
+        sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Trash.mp4"));
+    }
+
+    public void dispose() {
+        sound.dispose();
     }
 
     /**

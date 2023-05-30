@@ -3,6 +3,7 @@ package com.mygdx.game.appliance;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.holdable.Ingredient;
+import com.badlogic.gdx.audio.Sound;
 
 /**
  * Toaster class (extends abstract class Appliance)
@@ -15,11 +16,18 @@ import com.mygdx.game.holdable.Ingredient;
  */
 public class Toaster extends Appliance {
 
+    Sound sound;
+
     public Toaster(int x, int y, int width, int height)
     {
         super(new Texture(Gdx.files.internal("Appliances/Sprite-Empty_Toaster.png")),
                 new Texture(Gdx.files.internal("Appliances/Sprite-Cooking_Toaster_SPRITESHEET.png")),
                 x, y, width, height, Appliance.direction.DOWN);
+        sound = Gdx.audio.newSound(gdx.files.internal("Sounds/Toaster-pop-up.wav"));
+    }
+
+    public void dispose() {
+        sound.dispose;
     }
 
     /**
