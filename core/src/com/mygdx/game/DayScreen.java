@@ -5,25 +5,22 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.appliance.*;
+import com.mygdx.game.holdable.Ingredient;
 
 /**
  * DayScreen class
  *
  * Created: May 19, 2023
- * Last Updated: May 23, 2023
  */
 public class DayScreen implements Screen {
     final Diner game;
@@ -36,23 +33,24 @@ public class DayScreen implements Screen {
     static final int numWidthTiles = 12;
     static final int numHeightTiles = 9;
 
+    // tile dimensions in pixels (100 x 100)
     static final int tileWidth = screenWidth / numWidthTiles;
     static final int tileHeight = screenHeight / numHeightTiles;
 
+    DayState dayState;
 
     OrthographicCamera camera;
-    TiledMap tiledMap;
-    TiledMapRenderer tiledMapRenderer;
-
-    TiledMapTileLayer obstacleLayer;
-    MapObjects obstacles;
-
-    TiledMapTileLayer interactLayer;
-    MapObjects interactRegions;
+    private TiledMap tiledMap;
+    private TiledMapRenderer tiledMapRenderer;
 
     Player player;
+    boolean pressE;
+    Array<Appliance> appliances;
 
-    DayState dayState;
+    // delete later - for testing purposes
+    exampleMusic proudLion;
+    exampleSound tallgiraffe;
+    ShapeRenderer showHitboxRender;
 
     DayScreen(Diner game, DayState dayState)
     {
@@ -66,36 +64,79 @@ public class DayScreen implements Screen {
         tiledMap = new TmxMapLoader().load(dayState.mapFile);
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/32f); // unit scale is probably wrong
 
-        obstacleLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
-        obstacles = obstacleLayer.getObjects();
-        obstacles.add(new RectangleMapObject(tileWidth * 3,tileHeight * 3, tileWidth,tileHeight * 4)); // left counter
-        obstacles.add(new RectangleMapObject(tileWidth * 5, tileHeight * 2, tileWidth * 7, tileHeight)); // bottom counter
-        obstacles.add(new RectangleMapObject(tileWidth * 6, tileHeight * 5, tileWidth * 5, tileHeight)); // food boxes
-        obstacles.add(new RectangleMapObject(tileWidth * 6, tileHeight * 8, tileWidth * 6, tileHeight)); // ovens & order-in
+        /**
+         * The following music was used for this media project:
+         * Music: Local Forecast - Slower by Kevin MacLeod
+         * Free download: https://filmmusic.io/song/3988-local-forecast-slower
+         * License (CC BY 4.0): https://filmmusic.io/standard-license
+         */
+        proudLion = new exampleMusic(Gdx.audio.newMusic((Gdx.files.internal("Sounds/local-forecast-slower-by-kevin-macleod-from-filmmusic-io.mp3"))));
+        tallgiraffe = new exampleSound(Gdx.audio.newSound(Gdx.files.internal("Sounds/Toaster-pop-up.wav")));
+        showHitboxRender = new ShapeRenderer();
 
-        interactLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
-        interactRegions = interactLayer.getObjects();
-        // add rectangles here ^^^
 
-        player = new Player((int)(tileWidth - 2), (int)(tileHeight - 2));
+        /**
+         * APPLIANCES
+         */
+        appliances = new Array<Appliance>();
 
+        // blank countertops
+        appliances.add(new Counter(tileWidth * 3, tileHeight * 6, tileWidth, tileHeight, Appliance.direction.UP)); // left top counter
+        appliances.add(new Counter(tileWidth * 3, tileHeight * 3, tileWidth, tileHeight, Appliance.direction.UP)); // left bottom counter
+        for(int i = 0; i < 5; i++) {                                                                                                    // bottom counters
+            appliances.add(new Counter(tileWidth * (6+i), tileHeight * 2, tileWidth, tileHeight, Appliance.direction.RIGHT));
+        }
+        appliances.add(new Counter(tileWidth * 8, tileHeight * 8, tileWidth, tileHeight, Appliance.direction.RIGHT)); // top left counter
+        appliances.add(new Counter(tileWidth * 11, tileHeight * 8, tileWidth, tileHeight, Appliance.direction.RIGHT)); // top right counter
+
+        // ingredient containers
+        appliances.add(new Crate(tileWidth * 6, tileHeight * 5, tileWidth, tileHeight, Ingredient.Type.bread)); // bread container
+        appliances.add(new Crate(tileWidth * 7, tileHeight * 5, tileWidth, tileHeight, Ingredient.Type.ham)); // ham container
+        appliances.add(new Crate(tileWidth * 8, tileHeight * 5, tileWidth, tileHeight, Ingredient.Type.cheese)); // cheese container
+        appliances.add(new Crate(tileWidth * 9, tileHeight * 5, tileWidth, tileHeight, Ingredient.Type.lettuce)); // lettuce container
+        appliances.add(new Crate(tileWidth * 10, tileHeight * 5, tileWidth, tileHeight, Ingredient.Type.tomato)); // tomato container
+
+        // appliances
+        //appliances.add(new ChoppingBoard(tileWidth * 3, tileHeight * 4, tileWidth, tileHeight)); // bottom cutting board
+        appliances.add(new Toaster(tileWidth * 6, tileHeight * 8, tileWidth, tileHeight)); // toaster (left)
+        appliances.add(new Toaster(tileWidth * 7, tileHeight * 8, tileWidth, tileHeight)); // toaster (right)
+        appliances.add(new Trash(tileWidth * 11, tileHeight * 2, tileWidth, tileHeight)); // trash
+        appliances.add(new ServingWindow(tileWidth * 9, tileHeight * 8, tileWidth * 2, tileHeight)); // serving windows (2x1)
+
+
+        /**
+         * PLAYER & CONTROLS
+         */
+        player = new Player((int)(tileWidth - 4), (int)(tileHeight - 4));
+        pressE = false;
         Gdx.input.setInputProcessor(new InputAdapter() {
             public boolean keyDown(int keycode)
             {
                 switch(keycode)
                 {
-                case Input.Keys.LEFT:
-                    player.moveLeft = true;
-                    break;
-                case Input.Keys.RIGHT:
-                    player.moveRight = true;
-                    break;
-                case Input.Keys.UP:
-                    player.moveUp = true;
-                    break;
-                case Input.Keys.DOWN:
-                    player.moveDown = true;
-                    break;
+                    case Input.Keys.A:
+                        player.moveLeft = true;
+                        break;
+                    case Input.Keys.D:
+                        player.moveRight = true;
+                        break;
+                    case Input.Keys.W:
+                        player.moveUp = true;
+                        break;
+                    case Input.Keys.S:
+                        player.moveDown = true;
+                        break;
+                    case Input.Keys.E: // interact key
+                        pressE = true;
+                        break;
+
+                        // TEST STUFF (delete later)
+                    case Input.Keys.SPACE: // test sound
+                        tallgiraffe.playSound();
+                        break;
+                    case Input.Keys.M: // test music
+                        proudLion.pause();
+                        break;
                 }
                 return true;
             }
@@ -103,18 +144,18 @@ public class DayScreen implements Screen {
             {
                 switch(keycode)
                 {
-                case Input.Keys.LEFT:
-                    player.moveLeft = false;
-                    break;
-                case Input.Keys.RIGHT:
-                    player.moveRight = false;
-                    break;
-                case Input.Keys.UP:
-                    player.moveUp = false;
-                    break;
-                case Input.Keys.DOWN:
-                    player.moveDown = false;
-                    break;
+                    case Input.Keys.A:
+                        player.moveLeft = false;
+                        break;
+                    case Input.Keys.D:
+                        player.moveRight = false;
+                        break;
+                    case Input.Keys.W:
+                        player.moveUp = false;
+                        break;
+                    case Input.Keys.S:
+                        player.moveDown = false;
+                        break;
                 }
                 return true;
             }
@@ -136,13 +177,15 @@ public class DayScreen implements Screen {
             nextLevel();
             return;
         }
+
+        // save old position in case of collision
         // if collision, player position is set to (oldX, oldY)
         float oldX = player.getX();
         float oldY = player.getY();
 
         player.update(delta); // update player position & animation frame
 
-        // check if past screen border
+        // check if player is past screen border
         if(player.getX() < 0)
             player.setX(0);
         if(player.getX() > screenWidth - player.getWidth())
@@ -152,33 +195,41 @@ public class DayScreen implements Screen {
         if(player.getY() > screenHeight - player.getHeight())
             player.setY(screenHeight - player.getHeight());
 
-        // collision
-        for(MapObject object:obstacles)
-        {
-            Rectangle temp = ((RectangleMapObject)object).getRectangle();
-            if(Intersector.overlaps(new Rectangle(temp.getX()+temp.getWidth()-1,temp.getY(),1,temp.getHeight()), player.getBoundingRectangle()) ||
-                    Intersector.overlaps(new Rectangle(temp.getX(),temp.getY(),1,temp.getHeight()), player.getBoundingRectangle()))
-            {
-                player.setX(oldX);
-            }
-            if(Intersector.overlaps(new Rectangle(temp.getX(),temp.getY(),temp.getWidth(),1), player.getBoundingRectangle()) ||
-                    Intersector.overlaps(new Rectangle(temp.getX(),temp.getY() + temp.getHeight()-1,temp.getWidth(),1), player.getBoundingRectangle()))
-            {
-                player.setY(oldY);
-            }
-        }
 
-        // interaction
-        for(MapObject interactRegion:interactRegions)
+        // appliance collision & interaction
+        for(Appliance app:appliances)
         {
-            if(Intersector.overlaps(((RectangleMapObject)interactRegion).getRectangle(), player.getBoundingRectangle()))
+            app.update(delta); // update time info for appliance animation
+
+            // collision
+            Rectangle appRect = app.getCollisionRegion();
+            if(Intersector.overlaps(new Rectangle(appRect.getX()+appRect.getWidth()-1, appRect.getY(), 1, appRect.getHeight()), player.getBoundingRectangle())
+                    || Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY(), 1, appRect.getHeight()), player.getBoundingRectangle()))
+                player.setX(oldX);
+            if(Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY(), appRect.getWidth(), 1), player.getBoundingRectangle()) ||
+                    Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY() + appRect.getHeight()-1, appRect.getWidth(), 1), player.getBoundingRectangle()))
+                player.setY(oldY);
+
+            // interaction
+            if(pressE && Intersector.overlaps(app.getInteractRegion(), player.getInteractRectangle()) && app.canInteract(player.getIngredient()))
             {
-                // something
+                player.interact(app.interact(player.getIngredient()));
             }
         }
+        pressE = false;
+
+        // TEST STUFF (delete later)
+        showHitboxRender.begin(ShapeRenderer.ShapeType.Filled);
+        showHitboxRender.setColor(0.1f, 1f, 0.3f, 1f);
+        showHitboxRender.rect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
+        showHitboxRender.end();
 
         // draw player
         game.batch.begin();
+        for(Appliance app:appliances)
+        {
+            app.draw(game.batch);
+        }
         player.draw(game.batch);
         game.batch.end();
     }
@@ -192,10 +243,22 @@ public class DayScreen implements Screen {
     @Override
     public void dispose() {
         player.dispose();
+        for(Appliance app:appliances) {
+            app.dispose();
+        }
+
+        // TEST STUFF (delete later)
+        proudLion.dispose();
+        tallgiraffe.dispose();
     }
+    @Override
     public void resize(int width, int height) {}
+    @Override
     public void show() {} // runs upon screen shown
+    @Override
     public void hide() {}
+    @Override
     public void pause() {}
+    @Override
     public void resume() {}
 }
