@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.holdable.Holdable;
 import com.mygdx.game.holdable.Ingredient;
+import com.mygdx.game.holdable.Sandwich;
 
 /**
  * Player class
@@ -131,8 +132,17 @@ public class Player {
     public void draw(Batch batch)
     {
         batch.draw((TextureRegion)animation.getKeyFrame(elapsedTime, true), x, y, width, height);
-        if(item != null)
-            item.draw(batch, x, y, width, height);
+        if(item != null) {
+            // draw sandwich
+            if(item instanceof Sandwich) {
+                float i = 0;
+                for(Ingredient ingr : ((Sandwich)item).getIngredients()) {
+                    batch.draw(ingr.getTexture(), rectangle.x, rectangle.y + i, rectangle.width, rectangle.height);
+                    i += rectangle.height/8f;
+                }
+            } else // draw other items
+                item.draw(batch, x, y, width, height);
+        }
     }
 
     public void dispose()

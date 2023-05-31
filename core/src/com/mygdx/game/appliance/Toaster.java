@@ -18,14 +18,12 @@ import com.badlogic.gdx.audio.Sound;
  */
 public class Toaster extends Appliance {
 
-    Sound sound;
-
     public Toaster(int x, int y, int width, int height)
     {
         super(new Texture(Gdx.files.internal("Appliances/Sprite-Cooking_Toaster_SPRITESHEET.png")),
                 x, y, width, height, Appliance.direction.DOWN, 5);
 
-        sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Toaster-pop-up.wav"));
+        this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Toaster-pop-up.wav"));
     }
 
     /**
@@ -45,6 +43,9 @@ public class Toaster extends Appliance {
             doAnimation = true;
             ((Ingredient)(this.item)).nextCostume(); // toasts bread
         }
+
+        if(sound != null)
+            sound.play(1.0f);
 
         return temp;
     }

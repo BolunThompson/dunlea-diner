@@ -1,6 +1,7 @@
 package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -26,6 +27,8 @@ public abstract class Appliance {
     protected Animation animation;
     protected float elapsedTime;
     protected boolean doAnimation;
+
+    protected Sound sound;
 
     protected Holdable item;
 
@@ -156,6 +159,8 @@ public abstract class Appliance {
 
     public void dispose() {
         texture.dispose();
+        if(sound != null)
+            sound.dispose();
         if(item != null)
             item.dispose();
     }

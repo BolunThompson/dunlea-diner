@@ -16,16 +16,13 @@ import com.badlogic.gdx.audio.Sound;
  */
 public class ChoppingBoard extends Appliance{
 
-    Sound sound;
     public ChoppingBoard(int x, int y, int width, int height)
     {
         super(new Texture(Gdx.files.internal("Appliances/Sprite-Cutting_Board_SPRITESHEET.png")),
                 x, y, width, height, Appliance.direction.RIGHT, 4);
 
-        sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Chopping.mp4"));
+        this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Chopping.wav"));
     }
-
-    public void dispose() { sound.dispose(); }
 
     @Override
     public Holdable interact(Holdable item)
@@ -38,6 +35,9 @@ public class ChoppingBoard extends Appliance{
             doAnimation = true;
             ((Ingredient)(this.item)).nextCostume(); // cuts item
         }
+
+        if(sound != null)
+            sound.play(1.0f);
 
         return temp;
     }

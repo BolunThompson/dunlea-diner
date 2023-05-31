@@ -228,11 +228,11 @@ public class DayScreen implements Screen {
 
         // draw player
         game.batch.begin();
+        player.draw(game.batch);
         for(Appliance app:appliances)
         {
             app.draw(game.batch);
         }
-        player.draw(game.batch);
         game.batch.end();
     }
 

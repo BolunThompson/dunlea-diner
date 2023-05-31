@@ -13,16 +13,10 @@ import com.badlogic.gdx.audio.Sound;
  */
 public class Trash extends Appliance{
 
-    Sound sound;
-
     public Trash(int x, int y, int width, int height)
     {
         super(new Texture(Gdx.files.internal("Appliances/Trash.png")), x, y, width, height, Appliance.direction.UP);
-        sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Trash.mp4"));
-    }
-
-    public void dispose() {
-        sound.dispose();
+        this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Trash.wav"));
     }
 
     /**
@@ -33,6 +27,8 @@ public class Trash extends Appliance{
     @Override
     public Holdable interact(Holdable ingr)
     {
+        if(sound != null)
+            sound.play(1.0f);
         return null;
     }
 }
