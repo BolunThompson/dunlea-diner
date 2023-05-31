@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.holdable.Ingredient;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -32,8 +33,9 @@ class DayState {
         for (int i = 0; i < wantedOrders; i++) {
             List<Ingredient.Type> ingredients = Arrays.asList(wantedIngredients);
             Collections.shuffle(ingredients);
-            ingredients = ingredients.subList(0, 3);
+            ingredients = new ArrayList<Ingredient.Type>(ingredients.subList(0, 2));
             orders.add(new Order(ingredients));
+            ingredients.add(Ingredient.Type.bread);
         }
     }
 
