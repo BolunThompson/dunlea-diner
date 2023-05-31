@@ -16,7 +16,7 @@ public class Ham extends Ingredient {
 
     @Override
     public Type getType() {
-        return Ingredient.Type.ham;
+        return Holdable.Type.ham;
     }
 
     @Override

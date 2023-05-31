@@ -29,7 +29,7 @@ public class Bread extends Ingredient{
 
     @Override
     public Type getType() {
-        return Ingredient.Type.bread;
+        return Holdable.Type.bread;
     }
 
     @Override

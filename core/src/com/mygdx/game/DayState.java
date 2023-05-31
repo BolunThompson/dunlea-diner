@@ -1,7 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.holdable.Ingredient;
+import com.mygdx.game.holdable.Holdable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +12,8 @@ import java.util.Optional;
 class DayState {
     final String mapFile;
     final String name;
-
+    
+    final int wantedOrders;
     private Array<Order> orders;
 
     static final float maxTime = 180;
@@ -25,17 +26,18 @@ class DayState {
             String name,
             Optional<DayState> nextDay,
             int wantedOrders,
-            Ingredient.Type[] wantedIngredients) {
+            Holdable.Type[] wantedIngredients) {
         this.mapFile = mapFile;
         this.name = name;
         this.nextDay = nextDay;
+        this.wantedOrders = wantedOrders;
         orders = new Array<Order>();
         for (int i = 0; i < wantedOrders; i++) {
-            List<Ingredient.Type> ingredients = Arrays.asList(wantedIngredients);
+            List<Holdable.Type> ingredients = Arrays.asList(wantedIngredients);
             Collections.shuffle(ingredients);
-            ingredients = new ArrayList<Ingredient.Type>(ingredients.subList(0, 2));
+            ingredients = new ArrayList<Holdable.Type>(ingredients.subList(0, 2));
             orders.add(new Order(ingredients));
-            ingredients.add(Ingredient.Type.bread);
+            ingredients.add(Holdable.Type.bread);
         }
     }
 
@@ -44,52 +46,52 @@ class DayState {
         for (int level = 5; level >= 1; level--) {
             String mapFile = String.format("Maps/day%dMap.tmx", level);
             String name = String.format("Day %d", level);
-            Ingredient.Type[] ingredients;
+            Holdable.Type[] ingredients;
             int wantedOrders;
             // right now the only ingredients are ham, cheese, lettuce, and tomato
             // bread is not included since bread is always available
             // for all days
             switch (level) {
                 case 1:
-                    ingredients = new Ingredient.Type[] {
-                            Ingredient.Type.ham,
-                            Ingredient.Type.cheese,
-                            Ingredient.Type.lettuce,
-                            Ingredient.Type.tomato };
+                    ingredients = new Holdable.Type[] {
+                            Holdable.Type.ham,
+                            Holdable.Type.cheese,
+                            Holdable.Type.lettuce,
+                            Holdable.Type.tomato };
                     wantedOrders = 10;
                     break;
                 // repeat for cases 2 through 5
                 case 2:
-                    ingredients = new Ingredient.Type[] {
-                            Ingredient.Type.ham,
-                            Ingredient.Type.cheese,
-                            Ingredient.Type.lettuce,
-                            Ingredient.Type.tomato };
+                    ingredients = new Holdable.Type[] {
+                            Holdable.Type.ham,
+                            Holdable.Type.cheese,
+                            Holdable.Type.lettuce,
+                            Holdable.Type.tomato };
                     wantedOrders = 10;
                     break;
                 case 3:
-                    ingredients = new Ingredient.Type[] {
-                            Ingredient.Type.ham,
-                            Ingredient.Type.cheese,
-                            Ingredient.Type.lettuce,
-                            Ingredient.Type.tomato };
+                    ingredients = new Holdable.Type[] {
+                            Holdable.Type.ham,
+                            Holdable.Type.cheese,
+                            Holdable.Type.lettuce,
+                            Holdable.Type.tomato };
                     wantedOrders = 10;
                     break;
                 // repeat for cases 4 and 5
                 case 4:
-                    ingredients = new Ingredient.Type[] {
-                            Ingredient.Type.ham,
-                            Ingredient.Type.cheese,
-                            Ingredient.Type.lettuce,
-                            Ingredient.Type.tomato };
+                    ingredients = new Holdable.Type[] {
+                            Holdable.Type.ham,
+                            Holdable.Type.cheese,
+                            Holdable.Type.lettuce,
+                            Holdable.Type.tomato };
                     wantedOrders = 10;
                     break;
                 case 5:
-                    ingredients = new Ingredient.Type[] {
-                            Ingredient.Type.ham,
-                            Ingredient.Type.cheese,
-                            Ingredient.Type.lettuce,
-                            Ingredient.Type.tomato };
+                    ingredients = new Holdable.Type[] {
+                            Holdable.Type.ham,
+                            Holdable.Type.cheese,
+                            Holdable.Type.lettuce,
+                            Holdable.Type.tomato };
                     wantedOrders = 10;
                     break;
                 default:
@@ -112,7 +114,7 @@ class DayState {
         return orders.isEmpty();
     }
 
-    void mark(Ingredient.Type ing) {
+    void mark(Holdable.Type ing) {
         if (orders.isEmpty()) {
             return;
         }
@@ -121,10 +123,13 @@ class DayState {
             orders.pop();
         }
     }
-    Array<Ingredient.Type> neededIngredients() {
+    Array<Holdable.Type> neededIngredients() {
         if (orders.isEmpty()) {
-            return new Array<Ingredient.Type>();
+            return new Array<Holdable.Type>();
         }
         return orders.peek().neededIngredients();
+    }
+    int ordersCnt() {
+        return orders.size;
     }
 }

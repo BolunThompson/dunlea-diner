@@ -16,7 +16,7 @@ public class Cheese extends Ingredient {
 
     @Override
     public Type getType() {
-        return Ingredient.Type.cheese;
+        return Holdable.Type.cheese;
     }
 
     @Override

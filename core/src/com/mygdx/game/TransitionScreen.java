@@ -41,13 +41,13 @@ class TransitionScreen implements Screen {
 
     private String getMsg() {
         String msg = "";
-        if (dayState.orders >= dayState.wantedOrders) {
+        if (dayState.ordersCnt() >= dayState.wantedOrders) {
             String text = "You have completed %d orders out of %d!\nYou have completed the day!";
-            msg = String.format(text, dayState.orders, dayState.wantedOrders);
+            msg = String.format(text, dayState.ordersCnt(), dayState.wantedOrders);
             msg += "\n\nClick anywhere to continue to the next level";
         } else {
             String text = "You have completed %d orders out of %d. You have failed the day.";
-            msg = String.format(text, dayState.orders, dayState.wantedOrders);
+            msg = String.format(text, dayState.ordersCnt(), dayState.wantedOrders);
             msg += "\n\nClick anywhere to try again";
         }
         return msg;

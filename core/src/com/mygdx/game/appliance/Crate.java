@@ -12,7 +12,7 @@ import com.mygdx.game.holdable.*;
  */
 public class Crate extends Appliance {
 
-    public Crate(int x, int y, int width, int height, Ingredient.Type type)
+    public Crate(int x, int y, int width, int height, Holdable.Type type)
     {
         super(null, x, y, width, height);
 

@@ -15,8 +15,8 @@ public class Lettuce extends Ingredient {
     }
 
     @Override
-    public Ingredient.Type getType() {
-        return Ingredient.Type.lettuce;
+    public Holdable.Type getType() {
+        return Holdable.Type.lettuce;
     }
 
     @Override
