@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.holdable.*;
+import com.badlogic.gdx.audio.Sound;
 
 /**
  * Crate class (extends abstract class Appliance)
@@ -12,9 +13,13 @@ import com.mygdx.game.holdable.*;
  */
 public class Crate extends Appliance {
 
+    Sound sound;
+
     public Crate(int x, int y, int width, int height, Ingredient.Type type)
     {
         super(null, x, y, width, height);
+
+        sound = Gdx.audio.newSound(gdx.files.internal("Sounds/Crate.mp4"));
 
         this.interactRegion = new Rectangle(x + width/4f, y - height/2f, width/2f, height*2f);
 
@@ -42,6 +47,10 @@ public class Crate extends Appliance {
                 this.ingr = new Tomato();
                 break;
         }
+    }
+
+    public void dispose() {
+        sound.dispose();
     }
 
     /**
