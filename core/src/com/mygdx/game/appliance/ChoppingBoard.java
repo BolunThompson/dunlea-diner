@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.mygdx.game.holdable.*;
+import com.mygdx.game.holdable.Ingredient;
+import com.badlogic.gdx.audio.Sound;
 
 /**
  * Chopping Board class (extends abstract class Appliance)
@@ -14,11 +16,16 @@ import com.mygdx.game.holdable.*;
  */
 public class ChoppingBoard extends Appliance{
 
+    Sound sound;
     public ChoppingBoard(int x, int y, int width, int height)
     {
         super(new Texture(Gdx.files.internal("Appliances/Sprite-Cutting_Board_SPRITESHEET.png")),
                 x, y, width, height, Appliance.direction.RIGHT, 4);
+
+        sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Chopping.mp4"));
     }
+
+    public void dispose() { sound.dispose(); }
 
     @Override
     public Holdable interact(Holdable item)

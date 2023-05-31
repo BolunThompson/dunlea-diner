@@ -95,10 +95,10 @@
   <image width="32" height="32" source="../Appliances/Stove.png"/>
  </tile>
  <tile id="37">
-  <image width="32" height="32" source="../Misc/Ketchup.png"/>
+  <image width="32" height="32" source="../Ingredients/Ketchup.png"/>
  </tile>
  <tile id="38">
-  <image width="32" height="32" source="../Misc/Mustard.png"/>
+  <image width="32" height="32" source="../Ingredients/Mustard.png"/>
  </tile>
  <tile id="39">
   <image width="32" height="32" source="../Misc/MinionGirl.png"/>

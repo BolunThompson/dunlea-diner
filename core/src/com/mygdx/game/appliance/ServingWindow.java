@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.holdable.Holdable;
 import com.mygdx.game.holdable.Ingredient;
+import com.badlogic.gdx.audio.Sound;
 
 
 /**
@@ -16,11 +17,15 @@ import com.mygdx.game.holdable.Ingredient;
  */
 public class ServingWindow extends Appliance{
 
+    Sound sound;
+
     public ServingWindow(int x, int y, int width, int height)
     {
         super(new Texture(Gdx.files.internal("Appliances/ServingWindow.png")), x, y, width, height, Appliance.direction.DOWN);
 
         this.texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+
+        sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Ring.wav"));
     }
 
     /**
