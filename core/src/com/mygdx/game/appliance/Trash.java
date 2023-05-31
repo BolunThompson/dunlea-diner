@@ -2,6 +2,7 @@ package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.game.holdable.Holdable;
 import com.mygdx.game.holdable.Ingredient;
 
 /**
@@ -19,10 +20,10 @@ public class Trash extends Appliance{
     /**
      * Remove ingredient held by player
      *
-     * @param ingr - Ingredient held by the player (null if nothing held)
+     * @param ingr - Item held by the player (null if nothing held)
      */
     @Override
-    public Ingredient interact(Ingredient ingr)
+    public Holdable interact(Holdable ingr)
     {
         return null;
     }

@@ -2,6 +2,7 @@ package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.game.holdable.Holdable;
 import com.mygdx.game.holdable.Ingredient;
 
 
@@ -25,10 +26,10 @@ public class ServingWindow extends Appliance{
     /**
      * Processes a submitted sandwich order by comparing to sandwich in orders list
      *
-     * @param ingr - Ingredient held by the player (null if nothing held)
+     * @param item - Item held by the player (null if nothing held)
      */
     @Override
-    public Ingredient interact(Ingredient ingr)
+    public Holdable interact(Holdable item)
     {
         // add code for processing sandwich order
         return null;
@@ -36,12 +37,12 @@ public class ServingWindow extends Appliance{
 
     /**
      * Returns whether an item can be submitted at the serving window.
-     * TRUE if item is a sandwich. FALSE otherwise.
+     * TRUE if item is a sandwich. FALSE otherwise. (not functional yet)
      *
-     * @param ingr - Ingredient held by the player (null if nothing held)
+     * @param item - Item held by the player (null if nothing held)
      */
     @Override
-    public boolean canInteract(Ingredient ingr)
+    public boolean canInteract(Holdable item)
     {
         return true;
     }

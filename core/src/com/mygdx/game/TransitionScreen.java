@@ -26,6 +26,7 @@ class TransitionScreen implements Screen {
 
         ScreenUtils.clear(1, 1, 1, 1);
         game.batch.begin();
+        game.font.getData().setScale(1.0f);
         game.font.draw(game.batch, getMsg(), Diner.LENGTH * 0.2f, Diner.WIDTH * 0.5f);
         game.batch.end();
 

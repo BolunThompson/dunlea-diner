@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 public class Cheese extends Ingredient {
 
     public Cheese() {
-        super(new Texture(Gdx.files.internal("Ingredients/cheese.png")), 1);
+        super(new Texture(Gdx.files.internal("Ingredients/cheese_sheet.png")), 2);
     }
 
     @Override

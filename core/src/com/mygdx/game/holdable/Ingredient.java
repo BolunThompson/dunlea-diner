@@ -1,6 +1,7 @@
 package com.mygdx.game.holdable;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
@@ -8,16 +9,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  *
  * Created: May 28, 2023
  */
-public abstract class Ingredient {
+public abstract class Ingredient extends Holdable {
 
     protected Texture texture;
     protected TextureRegion[] costumes;
     protected int costumeIndex;
     final int maxIndex;
-
-    public enum Type {
-        bread, ham, cheese, lettuce, tomato
-    }
 
     public Ingredient(Texture texture, int numCostumes) {
         this.texture = texture;
@@ -62,6 +59,10 @@ public abstract class Ingredient {
 
         if(costumeIndex > maxIndex)
             costumeIndex = maxIndex;
+    }
+
+    public void draw(Batch batch, float x, float y, float width, float height) {
+        batch.draw(costumes[costumeIndex], x, y, width, height);
     }
 
     public void dispose() {

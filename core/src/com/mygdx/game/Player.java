@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.holdable.Holdable;
 import com.mygdx.game.holdable.Ingredient;
 
 /**
@@ -38,7 +39,7 @@ public class Player {
     private Animation animation, idleAnimation, leftWalkAnimation, rightWalkAnimation, upWalkAnimation, downWalkAnimation;
     private float elapsedTime;
 
-    private Ingredient ingr;
+    private Holdable item;
 
     public Player(int width, int height)
     {
@@ -77,7 +78,7 @@ public class Player {
         downWalkAnimation = new Animation(1/5f, (Object[])downWalkFrames);
         animation = idleAnimation;
 
-        ingr = null;
+        item = null;
     }
 
     /**
@@ -114,13 +115,13 @@ public class Player {
     /**
      * Interact with appliances
      *
-     * @param ingr - Ingredient held by the appliance (null if nothing held)
-     * @return Ingredient held by the player (null if nothing held)
+     * @param item - Item held by the appliance (null if nothing held)
+     * @return Item held by the player (null if nothing held)
      */
-    public Ingredient interact(Ingredient ingr)
+    public Holdable interact(Holdable item)
     {
-        Ingredient temp = this.ingr;
-        this.ingr = ingr;
+        Holdable temp = this.item;
+        this.item = item;
         return temp;
     }
 
@@ -130,15 +131,15 @@ public class Player {
     public void draw(Batch batch)
     {
         batch.draw((TextureRegion)animation.getKeyFrame(elapsedTime, true), x, y, width, height);
-        if(ingr != null)
-            batch.draw(ingr.getTexture(), x, y, width, height);
+        if(item != null)
+            item.draw(batch, x, y, width, height);
     }
 
     public void dispose()
     {
         texture.dispose();
-        if(ingr != null)
-            ingr.dispose();
+        if(item != null)
+            item.dispose();
     }
 
     /**
@@ -162,8 +163,8 @@ public class Player {
     public Rectangle getInteractRectangle() {
         return interactRect;
     }
-    public Ingredient getIngredient() {
-        return ingr;
+    public Holdable getItem() {
+        return item;
     }
 
     /**

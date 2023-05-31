@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.holdable.Holdable;
 import com.mygdx.game.holdable.Ingredient;
 
 /**
@@ -41,21 +42,21 @@ public class Counter extends Appliance {
      *
      * To be added: combine ingredients to make sandwich & add ingredient into sandwich on counter
      *
-     * @param ingr - Ingredient held by the player (null if nothing held)
-     * @return Ingredient held by counter (null if nothing held)
+     * @param item - Item held by the player (null if nothing held)
+     * @return Item held by counter (null if nothing held)
      */
     @Override
-    public Ingredient interact(Ingredient ingr)
+    public Holdable interact(Holdable item)
     {
         // add code for ingredient combination & sandwich here
-        return super.interact(ingr);
+        return super.interact(item);
     }
 
     @Override
     public void draw(Batch batch)
     {
-        // draw ingredient held by counter
-        if(ingr != null)
-            batch.draw(ingr.getTexture(), getCollisionRegion().getX(), getCollisionRegion().getY(), getCollisionRegion().getWidth(), getCollisionRegion().getHeight());
+        // draw item held by counter
+        if(item != null && item instanceof Ingredient)
+            batch.draw(((Ingredient)item).getTexture(), getCollisionRegion().getX(), getCollisionRegion().getY(), getCollisionRegion().getWidth(), getCollisionRegion().getHeight());
     }
 }
