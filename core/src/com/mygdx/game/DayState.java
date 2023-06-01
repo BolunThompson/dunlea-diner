@@ -39,8 +39,8 @@ class DayState {
             List<Holdable.Type> ingredients = Arrays.asList(wantedIngredients);
             Collections.shuffle(ingredients);
             ingredients = new ArrayList<Holdable.Type>(ingredients.subList(0, 2));
-            orders.add(new Order(ingredients));
             ingredients.add(Holdable.Type.bread);
+            orders.add(new Order(ingredients));
         }
     }
 
