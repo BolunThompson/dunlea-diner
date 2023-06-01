@@ -92,18 +92,7 @@ public class Counter extends Appliance {
     {
         // draw item held by counter
         if(item != null) {
-            // draw ingredient
-            if(item instanceof Ingredient)
-                batch.draw(((Ingredient)item).getTexture(), collisionRegion.x, collisionRegion.y, collisionRegion.width, collisionRegion.height);
-
-            // draw sandwich
-            if(item instanceof Sandwich) {
-                float i = 0;
-                for(Ingredient ingr : ((Sandwich)item).getIngredients()) {
-                    batch.draw(ingr.getTexture(), collisionRegion.x, collisionRegion.y + i, collisionRegion.width, collisionRegion.height);
-                    i += collisionRegion.height/8f;
-                }
-            }
+            item.draw(batch, collisionRegion.x, collisionRegion.y, collisionRegion.width, collisionRegion.height);
         }
     }
 
