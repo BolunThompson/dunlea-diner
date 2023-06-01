@@ -17,15 +17,7 @@ public class Diner extends Game {
     public void create() {
         batch = new SpriteBatch();
         font = new BitmapFont(Gdx.files.internal("Fonts/sh-pinscher.fnt"));
-        // for Maps/day1Map.tmx to day5Map.tmx
-        Optional<DayState> dayState = Optional.empty();
-        for (int i = 5; i >= 1; i--) {
-            String mapFile = String.format("Maps/day%dMap.tmx", i);
-            String name = String.format("Day %d", i);
-            int wantedOrders = 10; // to be changed
-            dayState = Optional.of(new DayState(mapFile, name, wantedOrders, dayState));
-        }
-        this.firstDay = dayState.get();
+        firstDay = DayState.createLevels();
         this.setScreen(new MainMenu(this));
     }
 

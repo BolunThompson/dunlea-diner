@@ -11,12 +11,12 @@ import com.badlogic.gdx.graphics.Texture;
 public class Tomato extends Ingredient {
 
     public Tomato() {
-        super(new Texture(Gdx.files.internal("Ingredients/tomato.png")), 1);
+        super(new Texture(Gdx.files.internal("Ingredients/tomato_sheet.png")), 2);
     }
 
     @Override
     public Type getType() {
-        return Ingredient.Type.tomato;
+        return Holdable.Type.tomato;
     }
 
     @Override

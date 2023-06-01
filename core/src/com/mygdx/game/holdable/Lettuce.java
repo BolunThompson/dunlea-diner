@@ -11,12 +11,12 @@ import com.badlogic.gdx.graphics.Texture;
 public class Lettuce extends Ingredient {
 
     public Lettuce() {
-        super(new Texture(Gdx.files.internal("Ingredients/lettuce.png")), 1);
+        super(new Texture(Gdx.files.internal("Ingredients/lettuce_sheet.png")), 2);
     }
 
     @Override
-    public Ingredient.Type getType() {
-        return Ingredient.Type.lettuce;
+    public Holdable.Type getType() {
+        return Holdable.Type.lettuce;
     }
 
     @Override

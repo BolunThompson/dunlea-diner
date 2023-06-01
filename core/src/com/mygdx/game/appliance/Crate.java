@@ -12,10 +12,8 @@ import com.badlogic.gdx.audio.Sound;
  * Created May 28, 2023
  */
 public class Crate extends Appliance {
-
-    Sound sound;
-
-    public Crate(int x, int y, int width, int height, Ingredient.Type type)
+    
+    public Crate(int x, int y, int width, int height, Holdable.Type type)
     {
         super(null, x, y, width, height);
 
@@ -27,24 +25,24 @@ public class Crate extends Appliance {
         {
             case bread:
             default:
-                this.texture = new Texture(Gdx.files.internal("Crates/PlainBreadCrate.png"));
-                this.ingr = new Bread();
+                //this.texture = new Texture(Gdx.files.internal("Crates/PlainBreadCrate.png"));
+                this.item = new Bread();
                 break;
             case ham:
-                this.texture = new Texture(Gdx.files.internal("Crates/HamCrate.png"));
-                this.ingr = new Ham();
+                //this.texture = new Texture(Gdx.files.internal("Crates/HamCrate.png"));
+                this.item = new Ham();
                 break;
             case cheese:
-                this.texture = new Texture(Gdx.files.internal("Crates/CheeseCrate.png"));
-                this.ingr = new Cheese();
+                //this.texture = new Texture(Gdx.files.internal("Crates/CheeseCrate.png"));
+                this.item = new Cheese();
                 break;
             case lettuce:
-                this.texture = new Texture(Gdx.files.internal("Crates/LettuceCrate.png"));
-                this.ingr = new Lettuce();
+                //this.texture = new Texture(Gdx.files.internal("Crates/LettuceCrate.png"));
+                this.item = new Lettuce();
                 break;
             case tomato:
-                this.texture = new Texture(Gdx.files.internal("Crates/TomatoCrate.png"));
-                this.ingr = new Tomato();
+                //this.texture = new Texture(Gdx.files.internal("Crates/TomatoCrate.png"));
+                this.item = new Tomato();
                 break;
         }
     }
@@ -56,14 +54,16 @@ public class Crate extends Appliance {
     /**
      * Gives the player an ingredient if not holding anything
      *
-     * @param ingr - Ingredient held by the player (null if nothing held)
+     * Precondition: Item dispensed by crate is an Ingredient
+     *
+     * @param item - Ingredient held by the player (null if nothing held)
      * @return copy of ingredient held by crate
      */
     @Override
-    public Ingredient interact(Ingredient ingr) {
-        if(ingr == null)
-            return this.ingr.copy(this.ingr);
+    public Holdable interact(Holdable item) {
+        if(item == null)
+            return ((Ingredient)(this.item)).copy((Ingredient)this.item);
         else
-            return ingr;
+            return item;
     }
 }

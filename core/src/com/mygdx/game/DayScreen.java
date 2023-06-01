@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.appliance.*;
+import com.mygdx.game.holdable.Holdable;
 import com.mygdx.game.holdable.Ingredient;
 
 /**
@@ -90,14 +91,15 @@ public class DayScreen implements Screen {
         appliances.add(new Counter(tileWidth * 11, tileHeight * 8, tileWidth, tileHeight, Appliance.direction.RIGHT)); // top right counter
 
         // ingredient containers
-        appliances.add(new Crate(tileWidth * 6, tileHeight * 5, tileWidth, tileHeight, Ingredient.Type.bread)); // bread container
-        appliances.add(new Crate(tileWidth * 7, tileHeight * 5, tileWidth, tileHeight, Ingredient.Type.ham)); // ham container
-        appliances.add(new Crate(tileWidth * 8, tileHeight * 5, tileWidth, tileHeight, Ingredient.Type.cheese)); // cheese container
-        appliances.add(new Crate(tileWidth * 9, tileHeight * 5, tileWidth, tileHeight, Ingredient.Type.lettuce)); // lettuce container
-        appliances.add(new Crate(tileWidth * 10, tileHeight * 5, tileWidth, tileHeight, Ingredient.Type.tomato)); // tomato container
+        appliances.add(new Crate(tileWidth * 6, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.bread)); // bread container
+        appliances.add(new Crate(tileWidth * 7, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.ham)); // ham container
+        appliances.add(new Crate(tileWidth * 8, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.cheese)); // cheese container
+        appliances.add(new Crate(tileWidth * 9, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.lettuce)); // lettuce container
+        appliances.add(new Crate(tileWidth * 10, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.tomato)); // tomato container
 
         // appliances
-        //appliances.add(new ChoppingBoard(tileWidth * 3, tileHeight * 4, tileWidth, tileHeight)); // bottom cutting board
+        appliances.add(new ChoppingBoard(tileWidth * 3, tileHeight * 5, tileWidth, tileHeight)); // top cutting board
+        appliances.add(new ChoppingBoard(tileWidth * 3, tileHeight * 4, tileWidth, tileHeight)); // bottom cutting board
         appliances.add(new Toaster(tileWidth * 6, tileHeight * 8, tileWidth, tileHeight)); // toaster (left)
         appliances.add(new Toaster(tileWidth * 7, tileHeight * 8, tileWidth, tileHeight)); // toaster (right)
         appliances.add(new Trash(tileWidth * 11, tileHeight * 2, tileWidth, tileHeight)); // trash
@@ -211,9 +213,9 @@ public class DayScreen implements Screen {
                 player.setY(oldY);
 
             // interaction
-            if(pressE && Intersector.overlaps(app.getInteractRegion(), player.getInteractRectangle()) && app.canInteract(player.getIngredient()))
+            if(pressE && Intersector.overlaps(app.getInteractRegion(), player.getInteractRectangle()) && app.canInteract(player.getItem()))
             {
-                player.interact(app.interact(player.getIngredient()));
+                player.interact(app.interact(player.getItem()));
             }
         }
         pressE = false;
@@ -226,11 +228,11 @@ public class DayScreen implements Screen {
 
         // draw player
         game.batch.begin();
+        player.draw(game.batch);
         for(Appliance app:appliances)
         {
             app.draw(game.batch);
         }
-        player.draw(game.batch);
         game.batch.end();
     }
 

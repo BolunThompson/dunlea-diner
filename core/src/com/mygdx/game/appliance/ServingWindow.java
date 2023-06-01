@@ -2,8 +2,10 @@ package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.game.holdable.Holdable;
 import com.mygdx.game.holdable.Ingredient;
 import com.badlogic.gdx.audio.Sound;
+import com.mygdx.game.holdable.Sandwich;
 
 
 /**
@@ -16,39 +18,43 @@ import com.badlogic.gdx.audio.Sound;
  */
 public class ServingWindow extends Appliance{
 
-    Sound sound;
-
     public ServingWindow(int x, int y, int width, int height)
     {
         super(new Texture(Gdx.files.internal("Appliances/ServingWindow.png")), x, y, width, height, Appliance.direction.DOWN);
 
         this.texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-
-        sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Ring.wav"));
+        this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Ring.mp3"));
     }
 
     /**
      * Processes a submitted sandwich order by comparing to sandwich in orders list
      *
-     * @param ingr - Ingredient held by the player (null if nothing held)
+     * @param item - Item held by the player (null if nothing held)
      */
     @Override
-    public Ingredient interact(Ingredient ingr)
+    public Holdable interact(Holdable item)
     {
+        if(sound != null)
+            sound.play(1.0f);
+
         // add code for processing sandwich order
+
         return null;
     }
 
     /**
      * Returns whether an item can be submitted at the serving window.
-     * TRUE if item is a sandwich. FALSE otherwise.
+     * TRUE if item is a sandwich. FALSE otherwise. (not functional yet)
      *
-     * @param ingr - Ingredient held by the player (null if nothing held)
+     * @param item - Item held by the player (null if nothing held)
      */
     @Override
-    public boolean canInteract(Ingredient ingr)
+    public boolean canInteract(Holdable item)
     {
-        return true;
+        if(item instanceof Sandwich)
+            return true;
+        else
+            return false;
     }
 
     /**public void draw(Batch batch)

@@ -1,12 +1,13 @@
 package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.holdable.Ingredient;
+import com.mygdx.game.holdable.Holdable;
 
 /**
  * Appliance class (abstract class)
@@ -22,11 +23,14 @@ public abstract class Appliance {
     protected Rectangle interactRegion;
 
     private TextureRegion[] frames;
+    protected TextureRegion endFrame;
     protected Animation animation;
     protected float elapsedTime;
     protected boolean doAnimation;
 
-    protected Ingredient ingr;
+    protected Sound sound;
+
+    protected Holdable item;
 
     public enum direction {
         LEFT, RIGHT, UP, DOWN
@@ -46,7 +50,8 @@ public abstract class Appliance {
         this.texture = texture;
         collisionRegion = new Rectangle(x, y, width, height);
         interactRegion = new Rectangle(x , y, 0, 0);
-        ingr = null;
+        item = null;
+
         doAnimation = false;
     }
 
@@ -81,19 +86,20 @@ public abstract class Appliance {
     /**
      * Creates an appliance with animation and interaction
      *
-     * @param defaultTexture - default texture when not animated
-     * @param sprite_sheet - frames for animation
+     * @param sprite_sheet - frames for animation & default/end frames
      */
-    public Appliance(Texture defaultTexture, Texture sprite_sheet, int x, int y, int width, int height, direction dir) // has animation
+    public Appliance(Texture sprite_sheet, int x, int y, int width, int height, direction dir, int numFrames) // has animation
     {
-        this(defaultTexture, x, y, width, height, dir);
+        this(sprite_sheet, x, y, width, height, dir);
 
         TextureRegion[][] tmpFrames = TextureRegion.split(sprite_sheet, 32, 32);
-        frames = new TextureRegion[5];
-        for(int i = 0; i < 5; i ++)
+
+        frames = new TextureRegion[numFrames - 1];
+        for(int i = 0; i < numFrames - 1; i ++)
         {
             frames[i] = tmpFrames[0][i];
         }
+        endFrame = tmpFrames[0][numFrames - 1];
 
         animation = new Animation(1f, (Object[])frames);
     }
@@ -103,22 +109,22 @@ public abstract class Appliance {
      *             (2) canInteract is true
      *             (3) E key pressed
      *
-     * @param ingr - Ingredient held by the player (null if nothing held)
-     * @return Ingredient held by the appliance (null if nothing held)
+     * @param item - Item held by the player (null if nothing held)
+     * @return Item held by the appliance (null if nothing held)
      */
-    public Ingredient interact(Ingredient ingr)
+    public Holdable interact(Holdable item)
     {
-        Ingredient temp = this.ingr;
-        this.ingr = ingr;
+        Holdable temp = this.item;
+        this.item = item;
         return temp;
     }
 
     /**
      * Returns whether the appliance can currently be interacted with by the player
      *
-     * @param ingr - Ingredient held by the player (null if nothing held)
+     * @param item - Item held by the player (null if nothing held)
      */
-    public boolean canInteract(Ingredient ingr)
+    public boolean canInteract(Holdable item)
     {
         return true;
     }
@@ -130,7 +136,7 @@ public abstract class Appliance {
     {
         if(doAnimation)
             elapsedTime += Gdx.graphics.getDeltaTime();
-        if(animation != null && animation.isAnimationFinished(elapsedTime) && ingr == null)
+        if(animation != null && animation.isAnimationFinished(elapsedTime) && item == null)
         {
             doAnimation = false;
             elapsedTime = 0;
@@ -140,7 +146,10 @@ public abstract class Appliance {
     public void draw(Batch batch)
     {
         if(doAnimation) {
-            batch.draw((TextureRegion) animation.getKeyFrame(elapsedTime, false), collisionRegion.x, collisionRegion.y, collisionRegion.width, collisionRegion.height);
+            if(animation.isAnimationFinished(elapsedTime))
+                batch.draw(endFrame, collisionRegion.x, collisionRegion.y, collisionRegion.width, collisionRegion.height);
+            else
+                batch.draw((TextureRegion) animation.getKeyFrame(elapsedTime, false), collisionRegion.x, collisionRegion.y, collisionRegion.width, collisionRegion.height);
         } //else
             //batch.draw(texture, collisionRegion.x, collisionRegion.y, collisionRegion.width, collisionRegion.height);
 
@@ -150,8 +159,10 @@ public abstract class Appliance {
 
     public void dispose() {
         texture.dispose();
-        if(ingr != null)
-            ingr.dispose();
+        if(sound != null)
+            sound.dispose();
+        if(item != null)
+            item.dispose();
     }
 
     /**
@@ -163,7 +174,7 @@ public abstract class Appliance {
     public Rectangle getInteractRegion() {
         return interactRegion;
     }
-    public Ingredient getIngredient() {
-        return ingr;
+    public Holdable getItem() {
+        return item;
     }
 }

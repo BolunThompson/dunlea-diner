@@ -26,6 +26,7 @@ class TransitionScreen implements Screen {
 
         ScreenUtils.clear(1, 1, 1, 1);
         game.batch.begin();
+        game.font.getData().setScale(1.0f);
         game.font.draw(game.batch, getMsg(), Diner.LENGTH * 0.2f, Diner.WIDTH * 0.5f);
         game.batch.end();
 
@@ -40,13 +41,13 @@ class TransitionScreen implements Screen {
 
     private String getMsg() {
         String msg = "";
-        if (dayState.orders >= dayState.wantedOrders) {
+        if (dayState.ordersCnt() >= dayState.wantedOrders) {
             String text = "You have completed %d orders out of %d!\nYou have completed the day!";
-            msg = String.format(text, dayState.orders, dayState.wantedOrders);
+            msg = String.format(text, dayState.ordersCnt(), dayState.wantedOrders);
             msg += "\n\nClick anywhere to continue to the next level";
         } else {
             String text = "You have completed %d orders out of %d. You have failed the day.";
-            msg = String.format(text, dayState.orders, dayState.wantedOrders);
+            msg = String.format(text, dayState.ordersCnt(), dayState.wantedOrders);
             msg += "\n\nClick anywhere to try again";
         }
         return msg;

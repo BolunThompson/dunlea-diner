@@ -11,12 +11,12 @@ import com.badlogic.gdx.graphics.Texture;
 public class Ham extends Ingredient {
 
     public Ham() {
-        super(new Texture(Gdx.files.internal("Ingredients/ham.png")), 1);
+        super(new Texture(Gdx.files.internal("Ingredients/ham_sheet.png")), 2);
     }
 
     @Override
     public Type getType() {
-        return Ingredient.Type.ham;
+        return Holdable.Type.ham;
     }
 
     @Override
