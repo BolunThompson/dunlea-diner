@@ -16,8 +16,8 @@ class DayState {
     final int wantedOrders;
     private Array<Order> orders;
 
-    static final float maxTime = 180;
-    float currentTime;
+    static final float maxTime = 120;
+    static float currentTime;
 
     final Optional<DayState> nextDay;
 

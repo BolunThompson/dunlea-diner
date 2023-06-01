@@ -26,8 +26,8 @@ class TransitionScreen implements Screen {
 
         ScreenUtils.clear(1, 1, 1, 1);
         game.batch.begin();
-        game.font.getData().setScale(1.0f);
-        game.font.draw(game.batch, getMsg(), Diner.LENGTH * 0.2f, Diner.WIDTH * 0.5f);
+        game.font.getData().setScale(1.2f);
+        game.font.draw(game.batch, getMsg(), Diner.LENGTH * 0.1f, Diner.WIDTH * 0.6f);
         game.batch.end();
 
         if (Gdx.input.isTouched()) {

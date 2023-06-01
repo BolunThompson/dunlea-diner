@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.mygdx.game.holdable.*;
 import com.mygdx.game.holdable.Ingredient;
-import com.badlogic.gdx.audio.Sound;
 
 /**
  * Chopping Board class (extends abstract class Appliance)

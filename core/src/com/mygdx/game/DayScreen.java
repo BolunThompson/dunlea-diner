@@ -18,6 +18,8 @@ import com.mygdx.game.appliance.*;
 import com.mygdx.game.holdable.Holdable;
 import com.mygdx.game.holdable.Ingredient;
 
+import java.text.DecimalFormat;
+
 /**
  * DayScreen class
  *
@@ -25,6 +27,8 @@ import com.mygdx.game.holdable.Ingredient;
  */
 public class DayScreen implements Screen {
     final Diner game;
+
+    private static final DecimalFormat df = new DecimalFormat("0.00");
 
     // screen dimensions in pixels (1200 x 900)
     static final int screenWidth = 100 * 12;
@@ -226,13 +230,16 @@ public class DayScreen implements Screen {
         showHitboxRender.rect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
         showHitboxRender.end();
 
-        // draw player
+        // draw screen
         game.batch.begin();
-        player.draw(game.batch);
-        for(Appliance app:appliances)
+        player.draw(game.batch); // player
+        for(Appliance app:appliances) // appliances
         {
             app.draw(game.batch);
         }
+        game.font.getData().setScale(1.5f); // timer
+        game.font.draw(game.batch, String.format("%.02f", DayState.maxTime - DayState.currentTime), tileWidth * 9.7f, tileHeight * 0.7f);
+
         game.batch.end();
     }
 

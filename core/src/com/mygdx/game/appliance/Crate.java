@@ -1,7 +1,6 @@
 package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.holdable.*;
 
@@ -17,6 +16,7 @@ public class Crate extends Appliance {
         super(null, x, y, width, height);
 
         this.interactRegion = new Rectangle(x + width/4f, y - height/2f, width/2f, height*2f);
+        this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Crate.mp3"));
 
         switch(type)
         {
@@ -54,8 +54,10 @@ public class Crate extends Appliance {
      */
     @Override
     public Holdable interact(Holdable item) {
-        if(item == null)
-            return ((Ingredient)(this.item)).copy((Ingredient)this.item);
+        if(item == null) {
+            sound.play(1.0f);
+            return ((Ingredient) (this.item)).copy((Ingredient) this.item);
+        }
         else
             return item;
     }
