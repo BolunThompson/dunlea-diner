@@ -25,6 +25,16 @@ public class Crate extends Appliance {
                 //this.texture = new Texture(Gdx.files.internal("Crates/PlainBreadCrate.png"));
                 this.item = new Bread();
                 break;
+            case wheatBread:
+                this.item = new WheatBread();
+                break;
+            case sourBread:
+                this.item = new SourBread();
+                break;
+            case minionBread:
+                this.item = new MinionBread();
+                break;
+
             case ham:
                 //this.texture = new Texture(Gdx.files.internal("Crates/HamCrate.png"));
                 this.item = new Ham();

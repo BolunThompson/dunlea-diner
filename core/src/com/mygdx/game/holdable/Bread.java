@@ -17,6 +17,11 @@ public class Bread extends Ingredient{
         toasted = false;
     }
 
+    public Bread(Texture texture) {
+        super(texture, 2);
+        toasted = false;
+    }
+
     public boolean isToasted() {
         return toasted;
     }

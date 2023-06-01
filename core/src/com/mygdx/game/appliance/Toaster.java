@@ -48,10 +48,10 @@ public class Toaster extends Appliance {
 
     /**
      * Conditions checked:
-     * (1) Ingredient being put in oven is bread
+     * (1) Item being put in oven is bread
      * (2) Oven is empty or finished toasting.
      *
-     * @param item - Ingredient held by the player (null if nothing held)
+     * @param item - Item held by the player (null if nothing held)
      */
     @Override
     public boolean canInteract(Holdable item)

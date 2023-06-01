@@ -47,21 +47,18 @@ public class FryingPan extends Appliance {
 
     /**
      * Conditions checked:
-     * (1) Ingredient being put in oven is bread
-     * (2) Oven is empty or finished toasting.
+     * (1) Item being put on frying pan is sandwich
+     * (2) Sandwich is finished
+     * (3) Frying pan is not holding an item OR finished frying current item
      *
-     * @param item - Ingredient held by the player (null if nothing held)
+     * @param item - Item held by the player (null if nothing held)
      */
     @Override
     public boolean canInteract(Holdable item) {
         if ((item == null || (item != null && item instanceof Sandwich && ((Sandwich) item).isFinished())) && (!doAnimation || animation.isAnimationFinished(elapsedTime)))
-        {
-            System.out.println("but like");
             return true;
-        }
-        else {
-            System.out.println("no way");
+        else
             return false;
-        }
     }
+
 }
