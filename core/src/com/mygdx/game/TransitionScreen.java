@@ -29,6 +29,11 @@ class TransitionScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if (dayState.nextDay.isEmpty()) {
+            game.setScreen(new FinalScreen(game));
+            return;
+        }
+
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
@@ -43,7 +48,7 @@ class TransitionScreen implements Screen {
             dayState.reset();
             Screen nextScreen = dayState.nextDay
                     .<Screen>map(v -> new DayScreen(game, v))
-                    .orElseGet(() -> new FinalScreen());
+                    .orElseGet(() -> new FinalScreen(game));
             game.setScreen(nextScreen);
         }
     }
