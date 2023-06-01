@@ -145,7 +145,6 @@ public class DayScreen implements Screen {
                         break;
                     case Input.Keys.Q: // skip day
                         dayState.currentTime = dayState.maxTime;
-                        System.out.println("wowo");
                         break;
                 }
                 return true;

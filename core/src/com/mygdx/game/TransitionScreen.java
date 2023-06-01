@@ -32,6 +32,7 @@ class TransitionScreen implements Screen {
 
         if (Gdx.input.isTouched()) {
             dispose();
+            dayState.reset();
             Screen nextScreen = dayState.nextDay
                     .<Screen>map(v -> new DayScreen(game, v))
                     .orElseGet(() -> new FinalScreen());
