@@ -142,7 +142,7 @@ public class DayScreen implements Screen {
                         proudLion.pause();
                         break;
                     case Input.Keys.Q: // skip day
-                        dayState.currentTime = dayState.maxTime;
+                        dayState.currentTime = DayState.maxTime;
                         break;
                 }
                 return true;
