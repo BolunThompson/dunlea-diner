@@ -29,7 +29,7 @@ class FinalScreen implements Screen {
 
         if (Gdx.input.isTouched()) {
             dispose();
-            game.create();
+            game.restart();
         }
     }
 

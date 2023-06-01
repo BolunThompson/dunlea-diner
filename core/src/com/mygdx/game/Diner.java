@@ -21,6 +21,11 @@ public class Diner extends Game {
         this.setScreen(new MainMenu(this));
     }
 
+    public void restart() {
+        firstDay = DayState.createLevels();
+        this.setScreen(new DayScreen(this, firstDay));
+    }
+
     public void render() {
         super.render();
     }
