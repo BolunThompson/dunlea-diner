@@ -158,7 +158,8 @@ public abstract class Appliance {
     }
 
     public void dispose() {
-        texture.dispose();
+        if(texture != null)
+            texture.dispose();
         if(sound != null)
             sound.dispose();
         if(item != null)

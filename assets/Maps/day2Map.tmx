@@ -1,200 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="12" height="9" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="1">
- <tileset firstgid="1" name="k" tilewidth="32" tileheight="32" tilecount="18" columns="0">
-  <grid orientation="orthogonal" width="1" height="1"/>
-  <tile id="1">
-   <image source="assets/FloorTile1.png"/>
-  </tile>
-  <tile id="2">
-   <image source="assets/Clock.png"/>
-  </tile>
-  <tile id="3">
-   <image source="assets/counter.png"/>
-  </tile>
-  <tile id="4">
-   <image source="assets/HamCrate.png"/>
-  </tile>
-  <tile id="5">
-   <image source="assets/LettuceCrate.png"/>
-  </tile>
-  <tile id="6">
-   <image source="assets/PlainBreadCrate.png"/>
-  </tile>
-  <tile id="7">
-   <image source="assets/ServingWindow.png"/>
-  </tile>
-  <tile id="8">
-   <image source="assets/SourdoughBreadCrate.png"/>
-  </tile>
-  <tile id="9">
-   <image source="assets/Sprite-Empty_CuttingBoard.png"/>
-  </tile>
-  <tile id="10">
-   <image source="assets/Sprite-Empty_Toaster.png"/>
-  </tile>
-  <tile id="11">
-   <image source="assets/TomatoCrate.png"/>
-  </tile>
-  <tile id="12">
-   <image source="assets/WheatBreadCrate.png"/>
-  </tile>
-  <tile id="13">
-   <image source="assets/CheeseCrate.png"/>
-  </tile>
-  <tile id="15">
-   <image source="assets/Trash.png"/>
-  </tile>
-  <tile id="16">
-   <image source="assets/Appliances/Wrap.png"/>
-  </tile>
-  <tile id="17">
-   <image source="assets/Appliances/Pan.png"/>
-  </tile>
-  <tile id="19">
-   <image source="assets/Appliances/Stove.png"/>
-  </tile>
-  <tile id="20">
-   <image source="assets/Misc/BananaPeel.png"/>
-  </tile>
- </tileset>
- <tileset firstgid="22" name="sprites" tilewidth="32" tileheight="32" tilecount="33" columns="0">
-  <grid orientation="orthogonal" width="1" height="1"/>
-  <tile id="1">
-   <image source="assets/BananaBreadCrate - Copy.png"/>
-  </tile>
-  <tile id="2">
-   <image source="assets/BananaBreadCrate.png"/>
-  </tile>
-  <tile id="3">
-   <image source="assets/HamCrate - Copy.png"/>
-  </tile>
-  <tile id="4">
-   <image source="assets/HamCrate.png"/>
-  </tile>
-  <tile id="5">
-   <image source="assets/LettuceCrate - Copy.png"/>
-  </tile>
-  <tile id="6">
-   <image source="assets/LettuceCrate.png"/>
-  </tile>
-  <tile id="7">
-   <image source="assets/MinionBreadCrate.png"/>
-  </tile>
-  <tile id="8">
-   <image source="assets/PlainBreadCrate.png"/>
-  </tile>
-  <tile id="9">
-   <image source="assets/SourdoughBreadCrate.png"/>
-  </tile>
-  <tile id="10">
-   <image source="assets/Sprite-Burnt_Toaster.png"/>
-  </tile>
-  <tile id="11">
-   <image source="assets/Sprite-Cooking_Toaster1.png"/>
-  </tile>
-  <tile id="12">
-   <image source="assets/Sprite-Cooking_Toaster2.png"/>
-  </tile>
-  <tile id="13">
-   <image source="assets/Sprite-Cooking_Toaster3.png"/>
-  </tile>
-  <tile id="14">
-   <image source="assets/Sprite-Cooking_Toaster4.png"/>
-  </tile>
-  <tile id="15">
-   <image source="assets/Sprite-DoneCooking_Toaster.png"/>
-  </tile>
-  <tile id="16">
-   <image source="assets/Sprite-Empty_CuttingBoard.png"/>
-  </tile>
-  <tile id="17">
-   <image source="assets/Sprite-Empty_Toaster.png"/>
-  </tile>
-  <tile id="18">
-   <image source="assets/Sprite-Wood_Floor.png"/>
-  </tile>
-  <tile id="19">
-   <image source="assets/TomatoCrate.png"/>
-  </tile>
-  <tile id="20">
-   <image source="assets/WheatBreadCrate.png"/>
-  </tile>
-  <tile id="21">
-   <image source="assets/CheeseCrate.png"/>
-  </tile>
-  <tile id="25">
-   <image source="../../DunleasDeli/FloorTile1.png"/>
-  </tile>
-  <tile id="27">
-   <image source="../../DunleasDeli/Clock.png"/>
-  </tile>
-  <tile id="29">
-   <image source="../../DunleasDeli/ServingWindow.png"/>
-  </tile>
-  <tile id="30">
-   <image source="../../DunleasDeli/counter.png"/>
-  </tile>
-  <tile id="31">
-   <image source="assets/Sprite-Minion.png"/>
-  </tile>
-  <tile id="32">
-   <image source="assets/Appliances/Wrap.png"/>
-  </tile>
-  <tile id="33">
-   <image source="assets/Appliances/Trash.png"/>
-  </tile>
-  <tile id="34">
-   <image source="assets/Misc/BananaPeel.png"/>
-  </tile>
-  <tile id="35">
-   <image source="assets/Appliances/Pan.png"/>
-  </tile>
-  <tile id="36">
-   <image source="assets/Appliances/Stove.png"/>
-  </tile>
-  <tile id="37">
-   <image source="assets/Misc/Ketchup.png"/>
-  </tile>
-  <tile id="38">
-   <image source="assets/Misc/Mustard.png"/>
-  </tile>
- </tileset>
- <tileset firstgid="61" source="sprites.tsx"/>
+ <tileset firstgid="1" source="sprites.tsx"/>
  <layer id="1" name="Tile Layer 1" width="12" height="9">
   <data encoding="csv">
-86,86,86,86,86,86,86,86,86,86,86,86,
-86,86,86,86,86,86,86,86,86,86,86,86,
-86,86,86,86,86,86,86,86,86,86,86,86,
-86,86,86,86,86,86,86,86,86,86,86,86,
-86,86,86,86,86,86,86,86,86,86,86,86,
-86,86,86,86,86,86,86,86,86,86,86,86,
-86,86,86,86,86,86,86,86,86,86,86,86,
-86,86,86,86,86,86,86,86,86,86,86,86,
-86,86,86,86,86,86,86,86,86,86,86,86
+26,26,26,26,26,26,26,26,26,26,26,26,
+26,26,26,26,26,26,26,26,26,26,26,26,
+26,26,26,26,26,26,26,26,26,26,26,26,
+26,26,26,26,26,26,26,26,26,26,26,26,
+26,26,26,26,26,26,26,26,26,26,26,26,
+26,26,26,26,26,26,26,26,26,26,26,26,
+26,26,26,26,26,26,26,26,26,26,26,26,
+26,26,26,26,26,26,26,26,26,26,26,26,
+26,26,26,26,26,26,26,26,26,26,26,26
+</data>
+ </layer>
+ <layer id="3" name="Copy of Tile Layer 1" width="12" height="9">
+  <data encoding="csv">
+0,0,0,0,0,9,21,18,18,30,30,31,
+0,0,0,17,0,0,0,0,0,0,0,0,
+0,0,0,17,0,0,0,0,0,0,0,0,
+0,0,0,31,0,0,0,4,22,6,20,0,
+0,0,0,37,0,0,0,0,0,0,0,0,
+0,0,0,37,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,31,31,31,31,31,31,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,28
 </data>
  </layer>
  <layer id="2" name="Tile Layer 2" width="12" height="9">
   <data encoding="csv">
-0,0,0,0,0,0,0,78,78,90,90,91,
-0,0,0,10,0,95,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,
-0,92,0,4,0,0,65,82,66,80,0,0,
-0,0,0,97,0,0,0,0,0,0,0,0,
-0,0,0,97,0,0,0,0,0,95,0,0,
-0,0,92,0,0,91,91,91,91,91,91,91,
 0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,88
-</data>
- </layer>
- <layer id="3" name="Tile Layer 3" width="12" height="9">
-  <data encoding="csv">
-0,0,0,0,0,69,81,0,0,0,0,0,
-0,0,0,77,0,0,0,0,0,0,0,0,
-0,0,0,77,0,0,0,0,0,0,0,0,
-0,0,0,91,47,0,0,0,0,0,0,0,
-0,0,0,96,47,0,0,0,0,0,0,0,
-0,0,0,96,0,0,0,0,0,0,0,0,
-0,0,0,0,0,93,0,0,0,0,0,94,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,32,0,0,0,0,0,0,0,0,0,0,
+0,0,0,36,0,0,0,0,0,0,0,0,
+0,0,0,36,0,0,0,0,0,0,0,0,
+0,0,32,0,0,0,0,0,0,0,0,34,
 0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0
 </data>

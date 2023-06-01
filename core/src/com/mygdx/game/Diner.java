@@ -4,12 +4,12 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Gdx;
-import java.util.Optional;
 
 public class Diner extends Game {
-    static final int LENGTH = 768;
-    static final int WIDTH = 576;
+    static final int LENGTH = 1200;
+    static final int WIDTH = 900;
     DayState firstDay;
+    int highScore;
 
     public SpriteBatch batch;
     public BitmapFont font;
@@ -19,6 +19,11 @@ public class Diner extends Game {
         font = new BitmapFont(Gdx.files.internal("Fonts/sh-pinscher.fnt"));
         firstDay = DayState.createLevels();
         this.setScreen(new MainMenu(this));
+    }
+
+    public void restart() {
+        firstDay = DayState.createLevels();
+        this.setScreen(new DayScreen(this, firstDay));
     }
 
     public void render() {

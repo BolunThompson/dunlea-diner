@@ -11,10 +11,6 @@ import com.badlogic.gdx.audio.Sound;
  * Toaster class (extends abstract class Appliance)
  *
  * Created: May 25, 2023
- *
- * Notes:
- * Currently can only remove item from toasting after waiting 1 second after "DONE" shows up.
- * Need to alter so that bread can be removed from toaster as soon as "DONE" shows up.
  */
 public class Toaster extends Appliance {
 
@@ -52,10 +48,10 @@ public class Toaster extends Appliance {
 
     /**
      * Conditions checked:
-     * (1) Ingredient being put in oven is bread
+     * (1) Item being put in oven is bread
      * (2) Oven is empty or finished toasting.
      *
-     * @param item - Ingredient held by the player (null if nothing held)
+     * @param item - Item held by the player (null if nothing held)
      */
     @Override
     public boolean canInteract(Holdable item)

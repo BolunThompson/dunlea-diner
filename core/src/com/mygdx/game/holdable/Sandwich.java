@@ -36,6 +36,15 @@ public class Sandwich extends Holdable{
         }
     }
 
+    // Change appearance of sandwich to be grilled
+    public void nextCostume() {
+        for(Ingredient ingr:ingredients) {
+            if(ingr instanceof Bread)
+                ingr.nextCostume();
+        }
+    }
+
+    // Returns true if sandwich has 2 slices of bread
     public boolean isFinished() {
         return finished;
     }
@@ -49,14 +58,9 @@ public class Sandwich extends Holdable{
         return ingredients.containsAll(temp.ingredients, false) && temp.ingredients.containsAll(ingredients, false);
     }
 
-    /**
-     *  Unused - was trying to use it in Counter.java and Player.java to draw sandwich, but it didn't work for unknown reasons
-     *  Should probably fix this later
-     */
-    public void draw(Batch batch, int x, int y, int width, int height) {
-        System.out.println("too cool for school"); // testing (does not print)
-
-
+    // Draws the sandwich on screen
+    @Override
+    public void draw(Batch batch, float x, float y, float width, float height) {
         float i = 0;
         for(Ingredient ingr : ingredients) {
             batch.draw(ingr.getTexture(), x, y + i, width, height);
@@ -65,6 +69,7 @@ public class Sandwich extends Holdable{
 
     }
 
+    @Override
     public void dispose() {
         for(Ingredient ingr : ingredients) {
             ingr.dispose();

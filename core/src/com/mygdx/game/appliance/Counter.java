@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Array.ArrayIterator;
 import com.mygdx.game.holdable.Bread;
 import com.mygdx.game.holdable.Holdable;
 import com.mygdx.game.holdable.Ingredient;
@@ -48,13 +50,21 @@ public class Counter extends Appliance {
     @Override
     public Holdable interact(Holdable item)
     {
-        // switch items with player
-        if((this.item instanceof Sandwich && ((Sandwich)this.item).isFinished()) || (item instanceof Sandwich && ((Sandwich)item).isFinished()))
-            return super.interact(item);
-
         // add ingredient held by player into sandwich on counter
         if(this.item instanceof Sandwich && item instanceof Ingredient) {
             ((Sandwich)this.item).addIngr((Ingredient)item);
+            return null;
+        }
+
+        // combine two sandwich halves
+        else if(this.item instanceof Sandwich && item instanceof Sandwich && !((Sandwich)this.item).isFinished() && !((Sandwich)item).isFinished()) {
+            Array<Ingredient> temp = ((Sandwich) item).getIngredients();
+            temp.reverse();
+
+            ArrayIterator<Ingredient> iter = new ArrayIterator<Ingredient>(temp);
+            while(iter.hasNext()) {
+                ((Sandwich)this.item).addIngr(iter.next());
+            }
             return null;
         }
 
@@ -62,7 +72,7 @@ public class Counter extends Appliance {
         // (to be implemented here & in Player.java class)
 
         // create sandwich from bread on counter & ingredient held by player
-        if(this.item instanceof Bread && item instanceof Ingredient) {
+        else if(this.item instanceof Bread && item instanceof Ingredient) {
             this.item =  new Sandwich((Bread) this.item, (Ingredient) item);
             return null;
         }
@@ -73,6 +83,7 @@ public class Counter extends Appliance {
             return null;
         }
 
+        // switch items with player
         return super.interact(item);
     }
 
@@ -81,18 +92,7 @@ public class Counter extends Appliance {
     {
         // draw item held by counter
         if(item != null) {
-            // draw ingredient
-            if(item instanceof Ingredient)
-                batch.draw(((Ingredient)item).getTexture(), collisionRegion.x, collisionRegion.y, collisionRegion.width, collisionRegion.height);
-
-            // draw sandwich
-            if(item instanceof Sandwich) {
-                float i = 0;
-                for(Ingredient ingr : ((Sandwich)item).getIngredients()) {
-                    batch.draw(ingr.getTexture(), collisionRegion.x, collisionRegion.y + i, collisionRegion.width, collisionRegion.height);
-                    i += collisionRegion.height/8f;
-                }
-            }
+            item.draw(batch, collisionRegion.x, collisionRegion.y, collisionRegion.width, collisionRegion.height);
         }
     }
 

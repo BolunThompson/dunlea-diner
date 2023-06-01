@@ -29,7 +29,9 @@ public class ServingWindow extends Appliance{
     /**
      * Processes a submitted sandwich order by comparing to sandwich in orders list
      *
-     * @param item - Item held by the player (null if nothing held)
+     * Precondition: item is a Sandwich
+     *
+     * @param item - Sandwich held by the player (null if nothing held)
      */
     @Override
     public Holdable interact(Holdable item)
@@ -38,6 +40,9 @@ public class ServingWindow extends Appliance{
             sound.play(1.0f);
 
         // add code for processing sandwich order
+        // pseudocode: if DayScreen.currentOrder.equals((Sandwich)item)
+        //                  increment number of correct orders
+        //                  currentOrder = (generate a new order)
 
         return null;
     }
