@@ -143,6 +143,10 @@ public class DayScreen implements Screen {
                     case Input.Keys.M: // test music
                         proudLion.pause();
                         break;
+                    case Input.Keys.Q: // skip day
+                        dayState.currentTime = dayState.maxTime;
+                        System.out.println("wowo");
+                        break;
                 }
                 return true;
             }
@@ -237,8 +241,11 @@ public class DayScreen implements Screen {
         {
             app.draw(game.batch);
         }
+
+        game.font.getData().setScale(1.1f); // orders remaining
+        game.font.draw(game.batch, "Orders left: ", tileWidth * 9.2f, tileHeight * 1.4f);
         game.font.getData().setScale(1.5f); // timer
-        game.font.draw(game.batch, String.format("%.02f", DayState.maxTime - DayState.currentTime), tileWidth * 9.7f, tileHeight * 0.7f);
+        game.font.draw(game.batch, String.format("%.02f", dayState.maxTime - dayState.currentTime), tileWidth * 9.4f, tileHeight * 0.7f);
 
         game.batch.end();
     }
