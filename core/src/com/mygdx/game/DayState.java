@@ -12,12 +12,13 @@ import java.util.Optional;
 class DayState {
     final String mapFile;
     final String name;
-    
+    final int level;
+
     final int wantedOrders;
     private Array<Order> orders;
 
     static final float maxTime = 120;
-    static float currentTime;
+    float currentTime;
 
     final Optional<DayState> nextDay;
 
@@ -26,11 +27,13 @@ class DayState {
             String name,
             Optional<DayState> nextDay,
             int wantedOrders,
-            Holdable.Type[] wantedIngredients) {
+            Holdable.Type[] wantedIngredients,
+            int level) {
         this.mapFile = mapFile;
         this.name = name;
         this.nextDay = nextDay;
         this.wantedOrders = wantedOrders;
+        this.level = level;
         orders = new Array<Order>();
         for (int i = 0; i < wantedOrders; i++) {
             List<Holdable.Type> ingredients = Arrays.asList(wantedIngredients);
@@ -97,7 +100,7 @@ class DayState {
                 default:
                     throw new RuntimeException("Invalid level");
             }
-            dayState = Optional.of(new DayState(mapFile, name, dayState, wantedOrders, ingredients));
+            dayState = Optional.of(new DayState(mapFile, name, dayState, wantedOrders, ingredients, level));
         }
         return dayState.get();
     }
@@ -123,13 +126,19 @@ class DayState {
             orders.pop();
         }
     }
+
     Array<Holdable.Type> neededIngredients() {
         if (orders.isEmpty()) {
             return new Array<Holdable.Type>();
         }
         return orders.peek().neededIngredients();
     }
+
     int ordersCnt() {
         return orders.size;
+    }
+
+    int score() {
+        return 1 + (int) ((100 + (maxTime - currentTime) / maxTime * 1000) * (1 + (double) (level - 1) / 2));
     }
 }
