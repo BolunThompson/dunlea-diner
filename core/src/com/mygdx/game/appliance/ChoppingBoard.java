@@ -17,7 +17,7 @@ public class ChoppingBoard extends Appliance{
 
     public ChoppingBoard(int x, int y, int width, int height)
     {
-        super(new Texture(Gdx.files.internal("Appliances/Sprite-Cutting_Board_SPRITESHEET.png")),
+        super(new Texture(Gdx.files.internal("Appliances/Sprite-Cutting_Board_SPRITESHEET2.png")),
                 x, y, width, height, Appliance.direction.RIGHT, 4);
 
         this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Chopping.wav"));
@@ -30,20 +30,21 @@ public class ChoppingBoard extends Appliance{
         this.item = item;
 
         if(this.item != null) {
+            if(sound != null)
+                sound.play(1.0f);
+
             elapsedTime = 0;
             doAnimation = true;
-            ((Ingredient)(this.item)).nextCostume(); // cuts item
         }
 
-        if(sound != null)
-            sound.play(1.0f);
+
 
         return temp;
     }
 
     /**
      * Conditions checked:
-     * (1) Item being put on cutting board is cheese, lettuce, or tomato
+     * (1) Item being put on cutting board is ham, cheese, lettuce, or tomato
      * (2) Cutting board is empty or finished cutting.
      *
      * @param item - Ingredient held by the player (null if nothing held)
@@ -58,11 +59,18 @@ public class ChoppingBoard extends Appliance{
     }
 
     @Override
+    public void update(float delta) {
+        super.update(delta);
+        if(animation.isAnimationFinished(elapsedTime))
+            ((Ingredient)(this.item)).nextCostume(); // change ingredient to have sliced sprite
+    }
+
+    @Override
     public void draw(Batch batch)
     {
-        super.draw(batch);
         if(item != null && item instanceof Ingredient)
-            batch.draw(((Ingredient)item).getTexture(), getCollisionRegion().getX(), getCollisionRegion().getY(), getCollisionRegion().getWidth(), getCollisionRegion().getHeight());
+            batch.draw(((Ingredient)item).getTexture(), collisionRegion.x + collisionRegion.width*0.2f, collisionRegion.y + collisionRegion.height * 0.1f, collisionRegion.width, collisionRegion.height);
+        super.draw(batch);
     }
 
 }

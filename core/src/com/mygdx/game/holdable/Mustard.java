@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.Texture;
 public class Mustard extends Ingredient {
 
     public Mustard() {
-        super(new Texture(Gdx.files.internal("Ingredients/MustardSquiggle.png")), 1);
+        super(new Texture(Gdx.files.internal("Ingredients/MustardLine.png")), 1);
     }
 
 }

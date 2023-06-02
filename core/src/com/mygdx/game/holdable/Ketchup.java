@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.Texture;
 public class Ketchup extends Ingredient {
 
     public Ketchup() {
-        super(new Texture(Gdx.files.internal("Ingredients/KetchupSquiggle.png")), 1);
+        super(new Texture(Gdx.files.internal("Ingredients/KetchupLine.png")), 1);
     }
 
 }

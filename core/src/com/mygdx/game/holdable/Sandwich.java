@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Array;
 public class Sandwich extends Holdable{
 
     private Array<Ingredient> ingredients;
-    private boolean finished;
+    private boolean finished, toasted;
 
     public Sandwich(Bread ingr1, Ingredient ingr2) {
         ingredients = new Array<Ingredient>();
@@ -21,6 +21,7 @@ public class Sandwich extends Holdable{
 
         if(ingr2 instanceof Bread)
             finished = true;
+        toasted = false;
     }
 
     /**
@@ -41,6 +42,7 @@ public class Sandwich extends Holdable{
         for(Ingredient ingr:ingredients) {
             if(ingr instanceof Bread)
                 ingr.nextCostume();
+            toasted = true;
         }
     }
 
@@ -64,7 +66,7 @@ public class Sandwich extends Holdable{
         float i = 0;
         for(Ingredient ingr : ingredients) {
             batch.draw(ingr.getTexture(), x, y + i, width, height);
-            i += height/8f;
+            i += height/16f;
         }
 
     }
@@ -81,6 +83,10 @@ public class Sandwich extends Holdable{
      */
     public Array<Ingredient> getIngredients() {
         return ingredients;
+    }
+
+    public boolean isToasted() {
+        return toasted;
     }
 
 }

@@ -38,6 +38,13 @@ public abstract class Ingredient extends Holdable {
         {
             case bread:
                 return new Bread();
+            case wheatBread:
+                return new WheatBread();
+            case sourBread:
+                return new SourBread();
+            case minionBread:
+                return new MinionBread();
+
             case ham:
                 return new Ham();
             case cheese:

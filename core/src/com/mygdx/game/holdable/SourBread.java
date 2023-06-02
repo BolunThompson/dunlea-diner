@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 public class SourBread extends Bread {
 
     public SourBread() {
-        super(new Texture(Gdx.files.internal("Ingredients/.png")));
+        super(new Texture(Gdx.files.internal("Ingredients/sourBread_sheet.png")));
     }
 
     @Override

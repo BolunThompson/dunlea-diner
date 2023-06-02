@@ -1,9 +1,7 @@
 package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
-import com.mygdx.game.holdable.Holdable;
-import com.mygdx.game.holdable.Mustard;
-import com.mygdx.game.holdable.Sandwich;
+import com.mygdx.game.holdable.*;
 
 /**
  * MustardBottle class (extends abstract class Appliance)
@@ -15,7 +13,7 @@ public class MustardBottle extends Appliance{
     public MustardBottle(int x, int y, int width, int height) {
         super(null, x, y, width, height, Appliance.direction.UP);
 
-        this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Ketchup.wav"));
+        this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Ketchup.mp3"));
     }
 
     /**
@@ -28,9 +26,13 @@ public class MustardBottle extends Appliance{
     public Holdable interact(Holdable item)
     {
         if(sound != null)
-            sound.play(1.0f);
+            sound.play(0.2f);
 
-        ((Sandwich)item).addIngr(new Mustard());
+        if(item instanceof Sandwich)
+            ((Sandwich)item).addIngr(new Mustard());
+        else if(item instanceof Bread) {
+            item = new Sandwich((Bread)item, new Mustard());
+        }
         return item;
     }
 
@@ -43,7 +45,7 @@ public class MustardBottle extends Appliance{
      */
     @Override
     public boolean canInteract(Holdable item) {
-        if ((item == null || (item != null && item instanceof Sandwich && !((Sandwich) item).isFinished())))
+        if (item != null && ((item instanceof Sandwich && !((Sandwich) item).isFinished()) || (item instanceof Bread && ((Bread)item).isBaked())))
             return true;
         else
             return false;

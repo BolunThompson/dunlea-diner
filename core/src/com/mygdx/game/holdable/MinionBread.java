@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 public class MinionBread extends Bread {
 
     public MinionBread() {
-        super(new Texture(Gdx.files.internal("Ingredients/.png")));
+        super(new Texture(Gdx.files.internal("Ingredients/minionBread_sheet.png")));
     }
 
     @Override
