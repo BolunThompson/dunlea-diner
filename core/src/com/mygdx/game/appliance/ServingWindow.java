@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.holdable.Holdable;
 import com.mygdx.game.holdable.Sandwich;
+import com.mygdx.game.DayState;
 
 
 /**
@@ -15,9 +16,12 @@ import com.mygdx.game.holdable.Sandwich;
  */
 public class ServingWindow extends Appliance{
 
-    public ServingWindow(int x, int y, int width, int height)
+    private final DayState day; 
+    
+    public ServingWindow(int x, int y, int width, int height, final DayState day)
     {
         super(new Texture(Gdx.files.internal("Appliances/ServingWindow.png")), x, y, width, height, Appliance.direction.DOWN);
+        this.day = day;
 
         this.texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
         this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Ring.mp3"));
@@ -35,9 +39,6 @@ public class ServingWindow extends Appliance{
     {
         if(sound != null)
             sound.play(1.0f);
-
-
-
         // add code for processing sandwich order
         // pseudocode: if DayScreen.currentOrder.equals((Sandwich)item)
         //                  increment number of correct orders
