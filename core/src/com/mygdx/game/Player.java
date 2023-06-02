@@ -42,17 +42,17 @@ public class Player {
 
     private Holdable item;
 
-    public Player(int width, int height)
+    public Player(Texture texture, int width, int height)
     {
         // position & size
         this.width = width;
         this.height = height;
-        rectangle = new Rectangle(startX,startY, width, height);
+        rectangle = new Rectangle(startX + width*0.2f,startY, width*0.6f, height*0.9f);
         interactRect = new Rectangle(startX + width/4f, startY + height/4f, width/2f, height/2f);
         setPosition(startX,startY);
 
         // sprite texture & animation
-        this.texture = new Texture(Gdx.files.internal("Misc/Sprite-Chef_WalkALL.png"));
+        this.texture = texture;
         TextureRegion[][] tmpFrames = TextureRegion.split(texture, 32, 32);
 
         idleFrames = new TextureRegion[2];
@@ -176,12 +176,12 @@ public class Player {
         this.x = x;
         this.y = y;
 
-        rectangle.setPosition(x, y);
+        rectangle.setPosition(x+0.2f*width, y);
         interactRect.setPosition(x + width/4f, y + height/4f);
     }
     public void setX(float x) {
         this.x = x;
-        rectangle.setX(x);
+        rectangle.setX(x+0.2f*width);
         interactRect.setX(x + width/4f);
     }
     public void setY(float y) {

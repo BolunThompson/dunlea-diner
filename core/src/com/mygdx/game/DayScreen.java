@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -50,8 +51,8 @@ public class DayScreen implements Screen {
     private TiledMap tiledMap;
     private TiledMapRenderer tiledMapRenderer;
 
-    Player player;
-    private boolean pressE;
+    Player player, playerTwo;
+    private boolean pressE, pressShift;
     private Array<Appliance> appliances;
 
     // order stuff
@@ -71,7 +72,7 @@ public class DayScreen implements Screen {
         this.game = game;
         this.dayState = dayState;
 
-        appliances = dayState.todayApps;
+        appliances = dayState.apps;
         orderTex = new Texture(Gdx.files.internal("Orders/Sprite-Order_Blank.png"));
 
         camera = new OrthographicCamera();
@@ -95,8 +96,10 @@ public class DayScreen implements Screen {
         /**
          * PLAYER & CONTROLS
          */
-        player = new Player((int)(tileWidth - 4), (int)(tileHeight - 4));
+        player = new Player(new Texture(Gdx.files.internal("Misc/Sprite-Chef_WalkALL.png")), (int)(tileWidth), (int)(tileHeight));
+        playerTwo = new Player(new Texture(Gdx.files.internal("Misc/Sprite-Chef_WalkALLP2.png")), (int)(tileWidth), (int)(tileHeight));
         pressE = false;
+        pressShift = false;
         Gdx.input.setInputProcessor(new InputAdapter() {
             public boolean keyDown(int keycode)
             {
@@ -116,6 +119,22 @@ public class DayScreen implements Screen {
                         break;
                     case Input.Keys.E: // interact key
                         pressE = true;
+                        break;
+
+                    case Input.Keys.LEFT:
+                        playerTwo.moveLeft = true;
+                        break;
+                    case Input.Keys.RIGHT:
+                        playerTwo.moveRight = true;
+                        break;
+                    case Input.Keys.UP:
+                        playerTwo.moveUp = true;
+                        break;
+                    case Input.Keys.DOWN:
+                        playerTwo.moveDown = true;
+                        break;
+                    case Input.Keys.SHIFT_RIGHT: // interact key
+                        pressShift = true;
                         break;
 
                         // TEST STUFF (delete later)
@@ -144,6 +163,19 @@ public class DayScreen implements Screen {
                     case Input.Keys.S:
                         player.moveDown = false;
                         break;
+
+                    case Input.Keys.LEFT:
+                        playerTwo.moveLeft = false;
+                        break;
+                    case Input.Keys.RIGHT:
+                        playerTwo.moveRight = false;
+                        break;
+                    case Input.Keys.UP:
+                        playerTwo.moveUp = false;
+                        break;
+                    case Input.Keys.DOWN:
+                        playerTwo.moveDown = false;
+                        break;
                 }
                 return true;
             }
@@ -170,8 +202,11 @@ public class DayScreen implements Screen {
         // if collision, player position is set to (oldX, oldY)
         float oldX = player.getX();
         float oldY = player.getY();
+        float oldX2 = playerTwo.getX();
+        float oldY2 = playerTwo.getY();
 
         player.update(delta); // update player position & animation frame
+        playerTwo.update(delta);
 
         // check if player is past screen border
         if(player.getX() < 0)
@@ -198,54 +233,43 @@ public class DayScreen implements Screen {
                     Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY() + appRect.getHeight()-1, appRect.getWidth(), 1), player.getBoundingRectangle()))
                 player.setY(oldY);
 
+            if(Intersector.overlaps(new Rectangle(appRect.getX()+appRect.getWidth()-1, appRect.getY(), 1, appRect.getHeight()), playerTwo.getBoundingRectangle())
+                    || Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY(), 1, appRect.getHeight()), playerTwo.getBoundingRectangle()))
+                playerTwo.setX(oldX2);
+            if(Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY(), appRect.getWidth(), 1), playerTwo.getBoundingRectangle()) ||
+                    Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY() + appRect.getHeight()-1, appRect.getWidth(), 1), playerTwo.getBoundingRectangle()))
+                playerTwo.setY(oldY2);
+
             // interaction
             if(pressE && Intersector.overlaps(app.getInteractRegion(), player.getInteractRectangle()) && app.canInteract(player.getItem()))
             {
                 player.interact(app.interact(player.getItem()));
             }
+
+            if(pressShift && Intersector.overlaps(app.getInteractRegion(), playerTwo.getInteractRectangle()) && app.canInteract(playerTwo.getItem()))
+            {
+                playerTwo.interact(app.interact(playerTwo.getItem()));
+            }
         }
         pressE = false;
+        pressShift = false;
 
         // TEST STUFF (delete later)
         showHitboxRender.begin(ShapeRenderer.ShapeType.Filled);
         showHitboxRender.setColor(0.1f, 1f, 0.3f, 1f);
-        showHitboxRender.rect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
+        showHitboxRender.rect(player.getBoundingRectangle().getX(), player.getBoundingRectangle().getY(), player.getBoundingRectangle().getWidth(), player.getBoundingRectangle().getHeight());
         showHitboxRender.end();
 
         // draw screen
         game.batch.begin();
         player.draw(game.batch); // player
+        playerTwo.draw(game.batch);
         for(Appliance app:appliances) { // appliances
             app.draw(game.batch);
         }
 
-        // draw order paper (sorry this looks a mess)
-        float tempX = -30;
-        float tempY = 670;
-        float tempWidth = tileWidth * 1.5f;
-        float tempHeight = tileHeight * 1.5f;
-        game.batch.draw(orderTex, tempX+30, tempY-20, tileWidth*2.5f, tileHeight*2.5f);
-        Order order = dayState.orders.get(dayState.orderIndex);
-        for(Holdable.Type ingredient : order.ingredients.keys()) {
-            switch(ingredient) {
-                case bread:
-                    game.batch.draw(breadTex, tempX, tempY, tempWidth, tempHeight);
-                    break;
-                case ham:
-                    game.batch.draw(hamTex, tempX, tempY, tempWidth, tempHeight);
-                    break;
-                case cheese:
-                    game.batch.draw(cheeseTex, tempX, tempY, tempWidth, tempHeight);
-                    break;
-                case lettuce:
-                    game.batch.draw(lettuceTex, tempX, tempY, tempWidth, tempHeight);
-                    break;
-                case tomato:
-                    game.batch.draw(tomatoTex, tempX, tempY, tempWidth, tempHeight);
-                    break;
-            }
-            tempX += tileWidth * 0.8f;
-        }
+        // draw order paper
+        drawOrder(game.batch);
 
         // draw timer & # orders remaining
         game.font.getData().setScale(1.1f);
@@ -262,9 +286,41 @@ public class DayScreen implements Screen {
         game.setScreen(new TransitionScreen(game, dayState));
     }
 
+    public void drawOrder(Batch batch) {
+        float tempX = -30;
+        float tempY = 670;
+        float tempWidth = tileWidth * 1.5f;
+        float tempHeight = tileHeight * 1.5f;
+
+        batch.draw(orderTex, tempX+30, tempY-20, tempWidth/1.5f*2.5f, tileHeight*2.5f);
+        Order order = dayState.orders.get(dayState.orderIndex);
+        for(Holdable.Type ingredient : order.ingredients.keys()) {
+            switch(ingredient) {
+                case bread:
+                    batch.draw(breadTex, tempX, tempY, tempWidth, tempHeight);
+                    break;
+                case ham:
+                    batch.draw(hamTex, tempX, tempY, tempWidth, tempHeight);
+                    break;
+                case cheese:
+                    batch.draw(cheeseTex, tempX, tempY, tempWidth, tempHeight);
+                    break;
+                case lettuce:
+                    batch.draw(lettuceTex, tempX, tempY, tempWidth, tempHeight);
+                    break;
+                case tomato:
+                    batch.draw(tomatoTex, tempX, tempY, tempWidth, tempHeight);
+                    break;
+            }
+            tempX += tileWidth * 0.8f;
+        }
+
+    }
+
     @Override
     public void dispose() {
         player.dispose();
+        playerTwo.dispose();
         for(Appliance app:appliances) {
             app.dispose();
         }

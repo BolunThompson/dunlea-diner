@@ -20,7 +20,7 @@ public class DayState {
     int orderIndex; // current, I think
 
     private static Array<Appliance> day1apps, day2apps, day3apps, day4apps, day5apps;
-    static Array<Appliance> todayApps;
+    Array<Appliance> apps;
 
     static final float maxTime = 120;
     float currentTime;
@@ -55,6 +55,7 @@ public class DayState {
         day3apps = getDay3Apps();
         day4apps = getDay4Apps();
         day5apps = getDay5Apps();
+        this.apps = apps;
     }
 
     static DayState createLevels() {
@@ -63,6 +64,7 @@ public class DayState {
             String mapFile = String.format("Maps/day%dMap.tmx", level);
             String name = String.format("Day %d", level);
             Holdable.Type[] ingredients;
+            Array<Appliance> todayApps;
             int wantedOrders;
             // right now the only ingredients are ham, cheese, lettuce, and tomato
             // bread is not included since bread is always available
