@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 public abstract class Holdable {
 
     public enum Type {
-        sandwich, bread, ham, cheese, lettuce, tomato, wheatBread, sourBread, minionBread, ketchup, mustard
+        sandwich, bread, ham, cheese, lettuce, tomato, wheatBread, sourBread, minionBread, ketchup, mustard;
     }
 
     public void draw(Batch batch, float x, float y, float width, float height) {

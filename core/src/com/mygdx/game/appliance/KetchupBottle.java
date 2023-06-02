@@ -1,6 +1,7 @@
 package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
+import com.mygdx.game.holdable.Bread;
 import com.mygdx.game.holdable.Holdable;
 import com.mygdx.game.holdable.Ketchup;
 import com.mygdx.game.holdable.Sandwich;
@@ -15,7 +16,7 @@ public class KetchupBottle extends Appliance {
     public KetchupBottle(int x, int y, int width, int height) {
         super(null, x, y, width, height, Appliance.direction.UP);
 
-        this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Ketchup.wav"));
+        this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Ketchup.mp3"));
     }
 
     /**
@@ -28,22 +29,26 @@ public class KetchupBottle extends Appliance {
     public Holdable interact(Holdable item)
     {
         if(sound != null)
-            sound.play(1.0f);
+            sound.play(0.2f);
 
-        ((Sandwich)item).addIngr(new Ketchup());
+        if(item instanceof Sandwich)
+            ((Sandwich)item).addIngr(new Ketchup());
+        else if(item instanceof Bread) {
+            item = new Sandwich((Bread)item, new Ketchup());
+        }
         return item;
     }
 
     /**
      * Conditions checked:
-     * (1) Ingredient held by player is sandwich
-     * (2) Sandwich is not finished
+     * (1) Item held by player is sandwich OR bread
+     * (2) If item is sandwich, sandwich is not finished
      *
      * @param item - Item held by the player (null if nothing held)
      */
     @Override
     public boolean canInteract(Holdable item) {
-        if ((item == null || (item != null && item instanceof Sandwich && !((Sandwich) item).isFinished())))
+        if (item != null && ((item instanceof Sandwich && !((Sandwich) item).isFinished()) || (item instanceof Bread && ((Bread)item).isBaked())))
             return true;
         else
             return false;

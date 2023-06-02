@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 public class WheatBread extends Bread {
 
     public WheatBread() {
-        super(new Texture(Gdx.files.internal("Ingredients/.png")));
+        super(new Texture(Gdx.files.internal("Ingredients/wheatBread_sheet.png")));
     }
 
     @Override

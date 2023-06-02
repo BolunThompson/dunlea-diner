@@ -7,7 +7,7 @@ import java.util.List;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IdentityMap;
 
-class Order {
+public class Order {
     IdentityMap<Holdable.Type, Boolean> ingredients;
 
     Order(List<Holdable.Type> ing) {

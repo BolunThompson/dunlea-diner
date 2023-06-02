@@ -23,7 +23,7 @@ public class Player {
 
     final private int startX = 100 * 8;
     final private int startY = 100 * 3;
-    final private int speed = 300;
+    final private int speed = 350;
 
     private float x, y, width, height;
     public boolean moveLeft, moveRight, moveUp, moveDown;
@@ -133,7 +133,7 @@ public class Player {
     {
         batch.draw((TextureRegion)animation.getKeyFrame(elapsedTime, true), x, y, width, height);
         if(item != null) {
-            item.draw(batch, x, y, width, height);
+            item.draw(batch, x, y + width*0.4f, width, height);
         }
     }
 

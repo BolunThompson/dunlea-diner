@@ -34,13 +34,13 @@ public class FryingPan extends Appliance {
         this.item = item;
 
         if(this.item != null) {
+            if(sound != null)
+                sound.play(1.0f);
+
             elapsedTime = 0;
             doAnimation = true;
             ((Sandwich)(this.item)).nextCostume(); // toasts bread
         }
-
-        if(sound != null)
-            sound.play(1.0f);
 
         return temp;
     }
@@ -55,7 +55,7 @@ public class FryingPan extends Appliance {
      */
     @Override
     public boolean canInteract(Holdable item) {
-        if ((item == null || (item != null && item instanceof Sandwich && ((Sandwich) item).isFinished())) && (!doAnimation || animation.isAnimationFinished(elapsedTime)))
+        if ((item == null || (item != null && item instanceof Sandwich && ((Sandwich) item).isFinished()) && !((Sandwich)item).isToasted()) && (!doAnimation || animation.isAnimationFinished(elapsedTime)))
             return true;
         else
             return false;

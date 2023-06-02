@@ -16,8 +16,6 @@ public class Crate extends Appliance {
     {
         super(null, x, y, width, height);
 
-        sound = Gdx.audio.newSound(gdx.files.internal("Sounds/Crate.mp4"));
-
         this.interactRegion = new Rectangle(x + width/4f, y - height/2f, width/2f, height*2f);
         this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Crate.mp3"));
 
@@ -57,16 +55,12 @@ public class Crate extends Appliance {
         }
     }
 
-    public void dispose() {
-        sound.dispose();
-    }
-
     /**
      * Gives the player an ingredient if not holding anything
      *
      * Precondition: Item dispensed by crate is an Ingredient
      *
-     * @param item - Ingredient held by the player (null if nothing held)
+     * @param item - Item held by the player (null if nothing held)
      * @return copy of ingredient held by crate
      */
     @Override

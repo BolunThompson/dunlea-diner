@@ -9,13 +9,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-class DayState {
+public class DayState {
     final String mapFile;
     final String name;
     final int level;
 
     final int wantedOrders;
-    private Array<Order> orders;
+    Array<Order> orders;
+    int orderIndex; // current, I think
 
     static final float maxTime = 120;
     float currentTime;
@@ -109,36 +110,51 @@ class DayState {
         this.currentTime = 0;
     }
 
-    boolean isOver() {
+    public boolean isOver() {
         return orders.isEmpty() || currentTime >= maxTime;
     }
 
-    boolean isWon() {
+    public boolean isWon() {
         return orders.isEmpty();
     }
 
-    void mark(Holdable.Type ing) {
+    public void mark(Holdable.Type ing) {
         if (orders.isEmpty()) {
             return;
         }
-        orders.peek().mark(ing);
-        if (orders.peek().complete()) {
-            orders.pop();
-        }
+        orders.get(orderIndex).mark(ing);
     }
 
-    Array<Holdable.Type> neededIngredients() {
+    public boolean orderIsComplete() {
+        if (orders.isEmpty()) {
+            return true;
+        }
+        return orders.get(orderIndex).complete();
+    }
+
+    public void nextOrder() {
+        if (orders.isEmpty()) {
+            return;
+        }
+        orderIndex++;
+    }
+
+    public int ordersLeft() {
+        return orders.size - orderIndex;
+    }
+
+    public Array<Holdable.Type> neededIngredients() {
         if (orders.isEmpty()) {
             return new Array<Holdable.Type>();
         }
-        return orders.peek().neededIngredients();
+        return orders.get(orderIndex).neededIngredients();
     }
 
-    int ordersCnt() {
+    public int ordersCnt() {
         return orders.size;
     }
 
-    int score() {
+    public int score() {
         return 1 + (int) ((100 + (maxTime - currentTime) / maxTime * 1000) * (1 + (double) (level - 1) / 2));
     }
 }

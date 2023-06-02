@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -42,6 +43,7 @@ public class DayScreen implements Screen {
     static final int tileWidth = screenWidth / numWidthTiles;
     static final int tileHeight = screenHeight / numHeightTiles;
 
+
     DayState dayState;
 
     OrthographicCamera camera;
@@ -49,18 +51,28 @@ public class DayScreen implements Screen {
     private TiledMapRenderer tiledMapRenderer;
 
     Player player;
-    boolean pressE;
-    Array<Appliance> appliances;
+    private boolean pressE;
+    private Array<Appliance> appliances;
+
+    // order stuff
+    Texture breadTex = new Texture(Gdx.files.internal("Ingredients/breadSlice.png"));
+    Texture hamTex = new Texture(Gdx.files.internal("Ingredients/ham.png"));
+    Texture cheeseTex = new Texture(Gdx.files.internal("Ingredients/cheese.png"));
+    Texture lettuceTex = new Texture(Gdx.files.internal("Ingredients/lettuce.png"));
+    Texture tomatoTex = new Texture(Gdx.files.internal("Ingredients/tomato.png"));
+    Texture orderTex;
 
     // delete later - for testing purposes
     exampleMusic proudLion;
-    exampleSound tallgiraffe;
     ShapeRenderer showHitboxRender;
 
     DayScreen(Diner game, DayState dayState)
     {
         this.game = game;
         this.dayState = dayState;
+
+        appliances = dayState.apps;
+        orderTex = new Texture(Gdx.files.internal("Orders/Sprite-Order_Blank.png"));
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, numWidthTiles, numHeightTiles);
@@ -76,36 +88,8 @@ public class DayScreen implements Screen {
          * License (CC BY 4.0): https://filmmusic.io/standard-license
          */
         proudLion = new exampleMusic(Gdx.audio.newMusic((Gdx.files.internal("Sounds/local-forecast-slower-by-kevin-macleod-from-filmmusic-io.mp3"))));
-        tallgiraffe = new exampleSound(Gdx.audio.newSound(Gdx.files.internal("Sounds/Toaster-pop-up.wav")));
         showHitboxRender = new ShapeRenderer();
 
-
-        /**
-         * APPLIANCES
-         */
-        appliances = new Array<Appliance>();
-
-        appliances.add(new Counter(tileWidth * 11, tileHeight * 8, tileWidth, tileHeight, Appliance.direction.RIGHT)); // top right counter
-        appliances.add(new Counter(tileWidth * 3, tileHeight * 5, tileWidth, tileHeight, Appliance.direction.UP)); // mid left counter
-        for(int i = 0; i < 5; i++) {                                                        // bottom counters
-            appliances.add(new Counter(tileWidth * (6+i), tileHeight * 2, tileWidth, tileHeight, Appliance.direction.RIGHT));
-        }
-
-        appliances.add(new Crate(tileWidth * 5, tileHeight * 8, tileWidth, tileHeight, Holdable.Type.bread)); // bread container
-        appliances.add(new Crate(tileWidth * 6, tileHeight * 8, tileWidth, tileHeight, Holdable.Type.wheatBread)); // wheat bread container
-        appliances.add(new Crate(tileWidth * 7, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.ham)); // ham container
-        appliances.add(new Crate(tileWidth * 8, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.cheese)); // cheese container
-        appliances.add(new Crate(tileWidth * 9, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.lettuce)); // lettuce container
-        appliances.add(new Crate(tileWidth * 10, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.tomato)); // tomato container
-
-        appliances.add(new Toaster(tileWidth * 7, tileHeight * 8, tileWidth, tileHeight)); // left toaster
-        appliances.add(new Toaster(tileWidth * 8, tileHeight * 8, tileWidth, tileHeight)); // right toaster
-        appliances.add(new ServingWindow(tileWidth * 9, tileHeight * 8, tileWidth * 2, tileHeight)); // serving windows (2x1)
-        appliances.add(new ChoppingBoard(tileWidth * 3, tileHeight * 7, tileWidth, tileHeight)); // top cutting board
-        appliances.add(new ChoppingBoard(tileWidth * 3, tileHeight * 6, tileWidth, tileHeight)); // top cutting board
-        appliances.add(new FryingPan(tileWidth * 3, tileHeight * 4, tileWidth, tileHeight)); // top frying pan
-        appliances.add(new FryingPan(tileWidth * 3, tileHeight * 3, tileWidth, tileHeight)); // bottom frying pan
-        appliances.add(new Trash(tileWidth * 11, tileHeight * 2, tileWidth, tileHeight)); // trash
 
 
         /**
@@ -135,9 +119,6 @@ public class DayScreen implements Screen {
                         break;
 
                         // TEST STUFF (delete later)
-                    case Input.Keys.SPACE: // test sound
-                        tallgiraffe.playSound();
-                        break;
                     case Input.Keys.M: // test music
                         proudLion.pause();
                         break;
@@ -234,14 +215,42 @@ public class DayScreen implements Screen {
         // draw screen
         game.batch.begin();
         player.draw(game.batch); // player
-        for(Appliance app:appliances) // appliances
-        {
+        for(Appliance app:appliances) { // appliances
             app.draw(game.batch);
         }
 
-        game.font.getData().setScale(1.1f); // orders remaining
+        // draw order paper (sorry this looks a mess)
+        float tempX = -30;
+        float tempY = 670;
+        float tempWidth = tileWidth * 1.5f;
+        float tempHeight = tileHeight * 1.5f;
+        game.batch.draw(orderTex, tempX+30, tempY-20, tileWidth*2.5f, tileHeight*2.5f);
+        Order order = dayState.orders.get(dayState.orderIndex);
+        for(Holdable.Type ingredient : order.ingredients.keys()) {
+            switch(ingredient) {
+                case bread:
+                    game.batch.draw(breadTex, tempX, tempY, tempWidth, tempHeight);
+                    break;
+                case ham:
+                    game.batch.draw(hamTex, tempX, tempY, tempWidth, tempHeight);
+                    break;
+                case cheese:
+                    game.batch.draw(cheeseTex, tempX, tempY, tempWidth, tempHeight);
+                    break;
+                case lettuce:
+                    game.batch.draw(lettuceTex, tempX, tempY, tempWidth, tempHeight);
+                    break;
+                case tomato:
+                    game.batch.draw(tomatoTex, tempX, tempY, tempWidth, tempHeight);
+                    break;
+            }
+            tempX += tileWidth * 0.8f;
+        }
+
+        // draw timer & # orders remaining
+        game.font.getData().setScale(1.1f);
         game.font.draw(game.batch, "Orders left: ", tileWidth * 9.2f, tileHeight * 1.4f);
-        game.font.getData().setScale(1.5f); // timer
+        game.font.getData().setScale(1.5f);
         game.font.draw(game.batch, String.format("%.02f", dayState.maxTime - dayState.currentTime), tileWidth * 9.4f, tileHeight * 0.7f);
 
         game.batch.end();
@@ -259,10 +268,15 @@ public class DayScreen implements Screen {
         for(Appliance app:appliances) {
             app.dispose();
         }
+        orderTex.dispose();
+        breadTex.dispose();
+        hamTex.dispose();
+        cheeseTex.dispose();
+        lettuceTex.dispose();
+        tomatoTex.dispose();
 
         // TEST STUFF (delete later)
         proudLion.dispose();
-        tallgiraffe.dispose();
     }
     @Override
     public void resize(int width, int height) {}
