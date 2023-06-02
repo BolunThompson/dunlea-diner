@@ -50,6 +50,11 @@ public class Counter extends Appliance {
     @Override
     public Holdable interact(Holdable item)
     {
+        if((this.item instanceof Bread && !((Bread)this.item).isBaked()) || (item instanceof Bread && !((Bread)item).isBaked())) { // no sandwich if raw dough
+            // switch items with player
+            return super.interact(item);
+        }
+
         // add ingredient held by player into sandwich on counter
         if(this.item instanceof Sandwich && item instanceof Ingredient) {
             ((Sandwich)this.item).addIngr((Ingredient)item);
@@ -67,9 +72,6 @@ public class Counter extends Appliance {
             }
             return null;
         }
-
-        // add ingredient on counter into sandwich held by player
-        // (to be implemented here & in Player.java class)
 
         // create sandwich from bread on counter & ingredient held by player
         else if(this.item instanceof Bread && ((Bread)this.item).isBaked() && item instanceof Ingredient) {
