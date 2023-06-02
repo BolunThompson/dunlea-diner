@@ -71,7 +71,7 @@ public class DayScreen implements Screen {
         this.game = game;
         this.dayState = dayState;
 
-        appliances = dayState.apps;
+        appliances = dayState.todayApps;
         orderTex = new Texture(Gdx.files.internal("Orders/Sprite-Order_Blank.png"));
 
         camera = new OrthographicCamera();
