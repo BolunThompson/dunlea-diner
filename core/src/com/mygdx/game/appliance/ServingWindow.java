@@ -3,6 +3,7 @@ package com.mygdx.game.appliance;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.holdable.Holdable;
+import com.mygdx.game.holdable.Ingredient;
 import com.mygdx.game.holdable.Sandwich;
 import com.mygdx.game.DayState;
 
@@ -39,13 +40,22 @@ public class ServingWindow extends Appliance{
     {
         if(sound != null)
             sound.play(1.0f);
-        // add code for processing sandwich order
+
         // pseudocode: if DayScreen.currentOrder.equals((Sandwich)item)
         //                  increment number of correct orders
         //                  currentOrder = (generate a new order)
+        // feels like a hack
+        if (item instanceof Sandwich) {
+            Sandwich sandwich = (Sandwich) item;
+            for (Ingredient ingredient : sandwich.getIngredients()) {
+                day.mark(ingredient.getType());
+            }
+            if (day.orderIsComplete()) {
+                day.nextOrder();
+            }
+        }
 
-
-        return null;
+        return item;
     }
 
     /**

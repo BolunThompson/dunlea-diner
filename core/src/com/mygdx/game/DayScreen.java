@@ -55,7 +55,6 @@ public class DayScreen implements Screen {
     private Array<Appliance> appliances;
 
     // order stuff
-    private int orderIndex;
     Texture breadTex = new Texture(Gdx.files.internal("Ingredients/breadSlice.png"));
     Texture hamTex = new Texture(Gdx.files.internal("Ingredients/ham.png"));
     Texture cheeseTex = new Texture(Gdx.files.internal("Ingredients/cheese.png"));
@@ -73,7 +72,6 @@ public class DayScreen implements Screen {
         this.dayState = dayState;
 
         appliances = dayState.apps;
-        orderIndex = 0;
         orderTex = new Texture(Gdx.files.internal("Orders/Sprite-Order_Blank.png"));
 
         camera = new OrthographicCamera();
@@ -227,7 +225,7 @@ public class DayScreen implements Screen {
         float tempWidth = tileWidth * 1.5f;
         float tempHeight = tileHeight * 1.5f;
         game.batch.draw(orderTex, tempX+30, tempY-20, tileWidth*2.5f, tileHeight*2.5f);
-        Order order = DayState.orders.get(orderIndex);
+        Order order = dayState.orders.get(dayState.orderIndex);
         for(Holdable.Type ingredient : order.ingredients.keys()) {
             switch(ingredient) {
                 case bread:
