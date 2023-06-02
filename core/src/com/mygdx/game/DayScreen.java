@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -42,6 +43,7 @@ public class DayScreen implements Screen {
     static final int tileWidth = screenWidth / numWidthTiles;
     static final int tileHeight = screenHeight / numHeightTiles;
 
+
     DayState dayState;
 
     OrthographicCamera camera;
@@ -49,8 +51,17 @@ public class DayScreen implements Screen {
     private TiledMapRenderer tiledMapRenderer;
 
     Player player;
-    boolean pressE;
-    Array<Appliance> appliances;
+    private boolean pressE;
+    private Array<Appliance> appliances;
+
+    // order stuff
+    private int orderIndex;
+    Texture breadTex = new Texture(Gdx.files.internal("Ingredients/breadSlice.png"));
+    Texture hamTex = new Texture(Gdx.files.internal("Ingredients/ham.png"));
+    Texture cheeseTex = new Texture(Gdx.files.internal("Ingredients/cheese.png"));
+    Texture lettuceTex = new Texture(Gdx.files.internal("Ingredients/lettuce.png"));
+    Texture tomatoTex = new Texture(Gdx.files.internal("Ingredients/tomato.png"));
+    Texture orderTex;
 
     // delete later - for testing purposes
     exampleMusic proudLion;
@@ -62,6 +73,8 @@ public class DayScreen implements Screen {
         this.dayState = dayState;
 
         appliances = dayState.apps;
+        orderIndex = 0;
+        orderTex = new Texture(Gdx.files.internal("Orders/Sprite-Order_Blank.png"));
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, numWidthTiles, numHeightTiles);
@@ -79,7 +92,7 @@ public class DayScreen implements Screen {
         proudLion = new exampleMusic(Gdx.audio.newMusic((Gdx.files.internal("Sounds/local-forecast-slower-by-kevin-macleod-from-filmmusic-io.mp3"))));
         showHitboxRender = new ShapeRenderer();
 
-        DayState.orders;
+
 
         /**
          * PLAYER & CONTROLS
@@ -204,14 +217,42 @@ public class DayScreen implements Screen {
         // draw screen
         game.batch.begin();
         player.draw(game.batch); // player
-        for(Appliance app:appliances) // appliances
-        {
+        for(Appliance app:appliances) { // appliances
             app.draw(game.batch);
         }
 
-        game.font.getData().setScale(1.1f); // orders remaining
+        // draw order paper (sorry this looks a mess)
+        float tempX = -30;
+        float tempY = 670;
+        float tempWidth = tileWidth * 1.5f;
+        float tempHeight = tileHeight * 1.5f;
+        game.batch.draw(orderTex, tempX+30, tempY-20, tileWidth*2.5f, tileHeight*2.5f);
+        Order order = DayState.orders.get(orderIndex);
+        for(Holdable.Type ingredient : order.ingredients.keys()) {
+            switch(ingredient) {
+                case bread:
+                    game.batch.draw(breadTex, tempX, tempY, tempWidth, tempHeight);
+                    break;
+                case ham:
+                    game.batch.draw(hamTex, tempX, tempY, tempWidth, tempHeight);
+                    break;
+                case cheese:
+                    game.batch.draw(cheeseTex, tempX, tempY, tempWidth, tempHeight);
+                    break;
+                case lettuce:
+                    game.batch.draw(lettuceTex, tempX, tempY, tempWidth, tempHeight);
+                    break;
+                case tomato:
+                    game.batch.draw(tomatoTex, tempX, tempY, tempWidth, tempHeight);
+                    break;
+            }
+            tempX += tileWidth * 0.8f;
+        }
+
+        // draw timer & # orders remaining
+        game.font.getData().setScale(1.1f);
         game.font.draw(game.batch, "Orders left: ", tileWidth * 9.2f, tileHeight * 1.4f);
-        game.font.getData().setScale(1.5f); // timer
+        game.font.getData().setScale(1.5f);
         game.font.draw(game.batch, String.format("%.02f", dayState.maxTime - dayState.currentTime), tileWidth * 9.4f, tileHeight * 0.7f);
 
         game.batch.end();
@@ -229,6 +270,12 @@ public class DayScreen implements Screen {
         for(Appliance app:appliances) {
             app.dispose();
         }
+        orderTex.dispose();
+        breadTex.dispose();
+        hamTex.dispose();
+        cheeseTex.dispose();
+        lettuceTex.dispose();
+        tomatoTex.dispose();
 
         // TEST STUFF (delete later)
         proudLion.dispose();

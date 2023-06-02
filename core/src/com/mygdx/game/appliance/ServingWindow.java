@@ -3,8 +3,6 @@ package com.mygdx.game.appliance;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.holdable.Holdable;
-import com.mygdx.game.holdable.Ingredient;
-import com.badlogic.gdx.audio.Sound;
 import com.mygdx.game.holdable.Sandwich;
 
 
@@ -14,7 +12,6 @@ import com.mygdx.game.holdable.Sandwich;
  * Created May 28, 2023
  *
  * The serving window is a 2x1 tile
- * NOT FUNCTIONAL YET
  */
 public class ServingWindow extends Appliance{
 
@@ -39,10 +36,13 @@ public class ServingWindow extends Appliance{
         if(sound != null)
             sound.play(1.0f);
 
+
+
         // add code for processing sandwich order
         // pseudocode: if DayScreen.currentOrder.equals((Sandwich)item)
         //                  increment number of correct orders
         //                  currentOrder = (generate a new order)
+
 
         return null;
     }

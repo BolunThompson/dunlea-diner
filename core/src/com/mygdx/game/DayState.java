@@ -16,7 +16,7 @@ class DayState {
     final int level;
 
     final int wantedOrders;
-    private Array<Order> orders;
+    static Array<Order> orders; // idk what im doing but text editor said to make this static so i did
 
     Array<Appliance> apps;
 
@@ -152,6 +152,9 @@ class DayState {
     int score() {
         return 1 + (int) ((100 + (maxTime - currentTime) / maxTime * 1000) * (1 + (double) (level - 1) / 2));
     }
+
+
+
 
     // putting this mess down here
     public static Array<Appliance> getDay1Apps() {

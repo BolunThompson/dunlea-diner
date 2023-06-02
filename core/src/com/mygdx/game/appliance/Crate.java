@@ -28,7 +28,6 @@ public class Crate extends Appliance {
                 break;
             case wheatBread:
                 this.item = new WheatBread();
-                System.out.println("I exist");
                 break;
             case sourBread:
                 this.item = new SourBread();
