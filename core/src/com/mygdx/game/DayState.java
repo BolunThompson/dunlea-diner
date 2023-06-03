@@ -82,19 +82,19 @@ public class DayState {
             }
             switch (level) {
                 case 5:
-                    wantedOrders = 10;
+                    wantedOrders = 6;
                     break;
                 case 4:
-                    wantedOrders = 10;
+                    wantedOrders = 5;
                     break;
                 case 3:
-                    wantedOrders = 10;
+                    wantedOrders = 5;
                     break;
                 case 2:
-                    wantedOrders = 10;
+                    wantedOrders = 5;
                     break;
                 case 1:
-                    wantedOrders = 10;
+                    wantedOrders = 4;
                     break;
                 default:
                     throw new RuntimeException("Invalid level");
