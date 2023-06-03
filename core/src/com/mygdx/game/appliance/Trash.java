@@ -16,11 +16,11 @@ public class Trash extends Appliance{
     public Trash(int x, int y, int width, int height)
     {
         super(new Texture(Gdx.files.internal("Appliances/Trash.png")), x, y, width, height, Appliance.direction.UP);
-        this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Trash.wav"));
+        this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Trash.mp3"));
     }
 
     /**
-     * Remove ingredient held by player
+     * Remove item held by player
      *
      * @param ingr - Item held by the player (null if nothing held)
      */

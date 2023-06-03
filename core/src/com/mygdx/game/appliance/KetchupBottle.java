@@ -29,7 +29,7 @@ public class KetchupBottle extends Appliance {
     public Holdable interact(Holdable item)
     {
         if(sound != null)
-            sound.play(0.2f);
+            sound.play(0.6f);
 
         if(item instanceof Sandwich)
             ((Sandwich)item).addIngr(new Ketchup());

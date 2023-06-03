@@ -23,7 +23,6 @@ public class Crate extends Appliance {
         {
             case bread:
             default:
-                //this.texture = new Texture(Gdx.files.internal("Crates/PlainBreadCrate.png"));
                 this.item = new Bread();
                 break;
             case wheatBread:
@@ -37,19 +36,15 @@ public class Crate extends Appliance {
                 break;
 
             case ham:
-                //this.texture = new Texture(Gdx.files.internal("Crates/HamCrate.png"));
                 this.item = new Ham();
                 break;
             case cheese:
-                //this.texture = new Texture(Gdx.files.internal("Crates/CheeseCrate.png"));
                 this.item = new Cheese();
                 break;
             case lettuce:
-                //this.texture = new Texture(Gdx.files.internal("Crates/LettuceCrate.png"));
                 this.item = new Lettuce();
                 break;
             case tomato:
-                //this.texture = new Texture(Gdx.files.internal("Crates/TomatoCrate.png"));
                 this.item = new Tomato();
                 break;
         }

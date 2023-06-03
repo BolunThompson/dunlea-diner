@@ -30,8 +30,8 @@ public abstract class Ingredient extends Holdable {
     }
 
     /**
-     * This doesn't actually copy the ingredient passed into this method, it just creates a new one of the same ingredient type.
-     * This method is used only for creating new ingredients to be dispensed from crates.
+     * This doesn't make a copy of the ingredient passed into this method, it just creates a new object of the same ingredient type.
+     * This method is used ONLY for creating new ingredients to be dispensed from crates.
      */
     public Ingredient copy(Ingredient orig) {
         switch(orig.getType())
@@ -81,6 +81,9 @@ public abstract class Ingredient extends Holdable {
      */
     public TextureRegion getTexture() {
         return costumes[costumeIndex];
+    }
+    public int getCostumeIndex() {
+        return costumeIndex;
     }
     public Type getType() {
         return null;

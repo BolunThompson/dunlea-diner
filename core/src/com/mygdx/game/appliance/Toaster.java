@@ -14,12 +14,16 @@ import com.badlogic.gdx.audio.Sound;
  */
 public class Toaster extends Appliance {
 
+    Sound sound2;
+
     public Toaster(int x, int y, int width, int height)
     {
         super(new Texture(Gdx.files.internal("Appliances/Sprite-Cooking_Toaster_SPRITESHEET.png")),
                 x, y, width, height, Appliance.direction.DOWN, 5);
 
-        this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Toaster-pop-up.wav"));
+
+        this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Oven.mp3"));
+        sound2 = Gdx.audio.newSound(Gdx.files.internal("Sounds/Toaster-pop-up.wav"));
     }
 
     /**
@@ -35,13 +39,16 @@ public class Toaster extends Appliance {
         this.item = item;
 
         if(this.item != null) {
+            if(sound != null)
+                sound.play(0.5f);
+
             elapsedTime = 0;
             doAnimation = true;
             ((Ingredient)(this.item)).nextCostume(); // toasts bread
         }
 
-        if(sound != null)
-            sound.play(1.0f);
+        if(sound2 != null)
+            sound2.play(1.0f);
 
         return temp;
     }
@@ -49,6 +56,7 @@ public class Toaster extends Appliance {
     /**
      * Conditions checked:
      * (1) Item being put in oven is bread
+     * (2) Bread is raw dough (NOT baked)
      * (2) Oven is empty or finished toasting.
      *
      * @param item - Item held by the player (null if nothing held)
@@ -60,6 +68,12 @@ public class Toaster extends Appliance {
                 return true;
         else
             return false;
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        sound2.dispose();
     }
 
 }

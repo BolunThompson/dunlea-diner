@@ -10,8 +10,6 @@ import com.mygdx.game.holdable.Ingredient;
  * Chopping Board class (extends abstract class Appliance)
  *
  * Created: May 25, 2023
- *
- * No functions yet.
  */
 public class ChoppingBoard extends Appliance{
 
@@ -44,15 +42,16 @@ public class ChoppingBoard extends Appliance{
 
     /**
      * Conditions checked:
-     * (1) Item being put on cutting board is ham, cheese, lettuce, or tomato
-     * (2) Cutting board is empty or finished cutting.
+     * (1) Cutting board is empty or finished cutting.
+     * (2) Item being put on cutting board is ham, cheese, lettuce, or tomato
+     * (3) Item being put on cutting board is not already cut
      *
      * @param item - Ingredient held by the player (null if nothing held)
      */
     @Override
     public boolean canInteract(Holdable item)
     {
-        if((item == null || (item != null && (item instanceof Ham || item instanceof Cheese || item instanceof Lettuce || item instanceof Tomato))) && (!doAnimation || animation.isAnimationFinished(elapsedTime)))
+        if((item == null || (item != null && (item instanceof Ham || item instanceof Cheese || item instanceof Lettuce || item instanceof Tomato) && ((Ingredient)item).getCostumeIndex() == 0)) && (!doAnimation || animation.isAnimationFinished(elapsedTime)))
             return true;
         else
             return false;
@@ -62,7 +61,7 @@ public class ChoppingBoard extends Appliance{
     public void update(float delta) {
         super.update(delta);
         if(animation.isAnimationFinished(elapsedTime))
-            ((Ingredient)(this.item)).nextCostume(); // change ingredient to have sliced sprite
+            ((Ingredient)(this.item)).nextCostume(); // change ingredient to sliced sprite
     }
 
     @Override

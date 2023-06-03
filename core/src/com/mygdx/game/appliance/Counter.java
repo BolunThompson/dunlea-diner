@@ -12,18 +12,16 @@ import com.mygdx.game.holdable.Ingredient;
 import com.mygdx.game.holdable.Sandwich;
 
 /**
- * Toaster class (extends abstract class Appliance)
+ * Counter class (extends abstract class Appliance)
  *
  * Created: May 25, 2023
- *
- * Notes:
- * Need to add sprites for middle counters & edge counters in tilemap
  */
 public class Counter extends Appliance {
 
     public Counter(int x, int y, int width, int height, Appliance.direction dir)
     {
         super(new Texture(Gdx.files.internal("Appliances/Counter.png")), x, y, width, height);
+        this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Counter.mp3"));
 
         switch(dir)
         {
@@ -50,18 +48,21 @@ public class Counter extends Appliance {
     @Override
     public Holdable interact(Holdable item)
     {
-        if((this.item instanceof Bread && !((Bread)this.item).isBaked()) || (item instanceof Bread && !((Bread)item).isBaked())) { // no sandwich if raw dough
-            // switch items with player
+        if(this.sound != null)
+            sound.play(0.5f);
+
+        // switch items with player (no Sandwich made if bread is raw dough)
+        if((this.item instanceof Bread && !((Bread)this.item).isBaked()) || (item instanceof Bread && !((Bread)item).isBaked())) {
             return super.interact(item);
         }
 
         // add ingredient held by player into sandwich on counter
-        if(this.item instanceof Sandwich && item instanceof Ingredient) {
+        if(this.item instanceof Sandwich && !((Sandwich)this.item).isFinished() && item instanceof Ingredient && ((Ingredient)item).getCostumeIndex() > 0) {
             ((Sandwich)this.item).addIngr((Ingredient)item);
             return null;
         }
 
-        // combine two sandwich halves
+        // combine two sandwich halves into one sandwich
         else if(this.item instanceof Sandwich && item instanceof Sandwich && !((Sandwich)this.item).isFinished() && !((Sandwich)item).isFinished()) {
             Array<Ingredient> temp = ((Sandwich) item).getIngredients();
             temp.reverse();
@@ -74,13 +75,13 @@ public class Counter extends Appliance {
         }
 
         // create sandwich from bread on counter & ingredient held by player
-        else if(this.item instanceof Bread && ((Bread)this.item).isBaked() && item instanceof Ingredient) {
+        else if(this.item instanceof Bread && ((Bread)this.item).isBaked() && item instanceof Ingredient && ((Ingredient)item).getCostumeIndex() > 0) {
             this.item =  new Sandwich((Bread) this.item, (Ingredient) item);
             return null;
         }
 
         // create sandwich from bread held by player & ingredient on counter
-        else if(item instanceof Bread && ((Bread)item).isBaked() && this.item instanceof Ingredient) {
+        else if(item instanceof Bread && ((Bread)item).isBaked() && this.item instanceof Ingredient && ((Ingredient)this.item).getCostumeIndex() > 0) {
             this.item = new Sandwich((Bread) item, (Ingredient) this.item);
             return null;
         }

@@ -15,6 +15,8 @@ public class exampleMusic {
     public exampleMusic(Music music)
     {
         this.music = music;
+        music.setVolume(0.2f);
+        music.play();
     }
 
     public void pause()

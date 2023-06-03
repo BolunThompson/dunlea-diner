@@ -39,7 +39,7 @@ public abstract class Appliance {
     /**
      * Creates an appliance with no interaction
      *
-     * @param texture - SHOULD PROBABLY DELETE THIS PARAMETER
+     * @param texture - sprite sheet for animations (null if no animation)
      * @param x - x-coordinate of collision box's bottom left corner (in pixels)
      * @param y - y-coordinate of collision box's bottom left corner (in pixels)
      * @param width - width of collision box (in pixels)
@@ -88,7 +88,7 @@ public abstract class Appliance {
      *
      * @param sprite_sheet - frames for animation & default/end frames
      */
-    public Appliance(Texture sprite_sheet, int x, int y, int width, int height, direction dir, int numFrames) // has animation
+    public Appliance(Texture sprite_sheet, int x, int y, int width, int height, direction dir, int numFrames)
     {
         this(sprite_sheet, x, y, width, height, dir);
 
@@ -107,7 +107,7 @@ public abstract class Appliance {
     /**
      * Called when (1) Player is within appliance's interact region
      *             (2) canInteract is true
-     *             (3) E key pressed
+     *             (3) E key or SHIFT key pressed
      *
      * @param item - Item held by the player (null if nothing held)
      * @return Item held by the appliance (null if nothing held)

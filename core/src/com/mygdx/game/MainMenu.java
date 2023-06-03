@@ -6,6 +6,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 class MainMenu implements Screen {
@@ -16,6 +18,9 @@ class MainMenu implements Screen {
     private TextureRegion[] menuFrames;
     private int menuIndex;
 
+    ShapeRenderer shapeRender;
+    Rectangle tutorialButton, creditsButton;
+
     MainMenu(final Diner game) {
         this.game = game;
         camera = new OrthographicCamera();
@@ -24,46 +29,97 @@ class MainMenu implements Screen {
         // create texture for "misc/title.png"
         title = new Texture(Gdx.files.internal("Misc/menu_sheet.png")); // original screen size: 800 x 480
         TextureRegion[][] temp = TextureRegion.split(title, 1200, 900);
-        menuFrames = new TextureRegion[4];
-        for(int i = 0; i < 4; i++) {
+        menuFrames = new TextureRegion[5];
+        for(int i = 0; i < 5; i++) {
             menuFrames[i] = temp[0][i];
         }
         menuIndex = 0;
+
+        shapeRender = new ShapeRenderer();
+        tutorialButton = new Rectangle(750, 430, 300, 100);
+        creditsButton = new Rectangle(750, 300, 300, 100);
     }
 
     @Override
     public void render(float delta) {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
-
         ScreenUtils.clear(1, 1, 1, 1);
+
         game.batch.begin();
 
         // sandwich
         game.batch.draw(menuFrames[menuIndex], 0, 0, 1200, 900);
 
-        // text
+        // start screen text
         if (menuIndex == 0) {
             game.font.setColor(0, 0, 0, 1);
             game.font.getData().setScale(1.5f);
-            game.font.draw(game.batch, "Welcome to Dunlea's Diner!", 460, 800);
+            game.font.draw(game.batch, "Welcome to Dunlea's Deli!", 460, 800);
             game.font.draw(game.batch, "Click anywhere to begin", 520, 700);
-            game.font.draw(game.batch, "Press space for tutorial", 520, 600);
+        }
+
+        // credits text
+        if(menuIndex == 4) {
+            int x = 200;
+            int y = 650;
+
+            game.font.setColor(0, 0, 0, 1);
+            game.font.getData().setScale(1.0f);
+            game.font.draw(game.batch, "Music - 'Local Forecast - Slower by Kevin MacLeod'", x, y);
+            game.font.draw(game.batch, "Sound Effects - Universal Production Music", x, y - 130);
+            game.font.draw(game.batch, "Art - Kaitlyn Nguy & Leonardo Emmanuel Pimentel", x, y - 230);
+            game.font.draw(game.batch, "Scripting - Bolun Thompson & Erica Wang", x, y - 330);
+            game.font.draw(game.batch, "Made with LibGDX", x, y - 470);
+            game.font.draw(game.batch, "Special Thanks to Mr. Dunlea & Mr. Mez", x, y - 550);
+
+            game.font.getData().setScale(0.6f);
+            game.font.draw(game.batch, "Free download: https://filmmusic.io/song/3988-local-forecast-slower", x + 150, y - 50);
+            game.font.draw(game.batch, "License (CC BY 4.0): https://filmmusic.io/standard-license", x + 150, y - 75);
         }
 
         game.batch.end();
 
-        if(Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-            if(menuIndex < 4)
-                menuIndex++;
-            if(menuIndex == 4)
-                menuIndex = 0;
+        // buttons
+        if(menuIndex == 0) {
+            shapeRender.setProjectionMatrix(camera.combined);
+            shapeRender.setColor(0.8f, 0.8f, 0.8f, 1.0f);
+
+            shapeRender.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRender.rect(tutorialButton.x, tutorialButton.y, tutorialButton.width, tutorialButton.height);
+            shapeRender.rect(creditsButton.x, creditsButton.y, creditsButton.width, creditsButton.height);
+            shapeRender.end();
         }
 
+        game.batch.begin();
+
+        // buttons text
+        if(menuIndex == 0) {
+            game.font.setColor(0.2f, 0.2f, 0.2f, 1.0f);
+            game.font.draw(game.batch, "TUTORIAL", 790, 505);
+            game.font.draw(game.batch, "CREDITS", 810, 375);
+        }
+
+        game.batch.end();
+
+        // input to view tutorial/credits & start game
         if (Gdx.input.justTouched()) {
-            if(menuIndex == 0) {
+            System.out.println("my x is " + Gdx.input.getX() + "and y is " + (900 - Gdx.input.getY()));
+            if(menuIndex == 0 && tutorialButton.contains(Gdx.input.getX(), 900 - Gdx.input.getY())) {
+                menuIndex = 1;
+            }
+            else if (menuIndex == 0 && creditsButton.contains(Gdx.input.getX(), 900 - Gdx.input.getY())) {
+                menuIndex = 4;
+            }
+            else if(menuIndex == 0) {
                 game.setScreen(new DayScreen(game, game.firstDay));
                 dispose();
+            }
+            else {
+                menuIndex ++;
+                // reset to start screen after tutorial/credits frames(s) done
+                if(menuIndex == 4 || menuIndex == 5)
+                    menuIndex = 0;
             }
         }
     }

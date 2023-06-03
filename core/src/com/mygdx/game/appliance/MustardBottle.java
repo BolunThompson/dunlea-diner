@@ -26,7 +26,7 @@ public class MustardBottle extends Appliance{
     public Holdable interact(Holdable item)
     {
         if(sound != null)
-            sound.play(0.2f);
+            sound.play(0.6f);
 
         if(item instanceof Sandwich)
             ((Sandwich)item).addIngr(new Mustard());
@@ -38,8 +38,8 @@ public class MustardBottle extends Appliance{
 
     /**
      * Conditions checked:
-     * (1) Ingredient held by player is sandwich
-     * (2) Sandwich is not finished
+     * (1) Item held by player is sandwich OR bread
+     * (2) If item is sandwich, sandwich is not finished
      *
      * @param item - Item held by the player (null if nothing held)
      */
