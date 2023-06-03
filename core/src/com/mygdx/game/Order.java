@@ -34,12 +34,9 @@ public class Order {
     }
 
     void mark(Ingredient ingredient) {
-        System.out.("edible:" + ingredient.edible());
-        if (ingredient.toString().equals("lettuce")) {
-           System.out.(ingredients.get(ingredient));
-        }
-        System.out.("get key:" + (ingredients.get(ingredient)));
-
+                if (ingredient.toString().equals("lettuce")) {
+                   }
+        
         if (ingredient.edible()) {
             // feels like bad code
             if (ingredient instanceof Bread) {

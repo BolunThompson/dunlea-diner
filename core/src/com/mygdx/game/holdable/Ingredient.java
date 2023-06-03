@@ -95,6 +95,9 @@ public abstract class Ingredient extends Holdable {
         return costumes[0];
     }
     
+    public int getCostumeIndex() {
+        return costumeIndex;
+    }
 
     public boolean edible() {
         return edible;

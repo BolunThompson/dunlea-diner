@@ -60,11 +60,10 @@ public class DayState {
             String name = String.format("Day %d", level);
             ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
             ArrayList<Bread> breads = new ArrayList<Bread>();
-            Array<Appliance> todayApps;
             int wantedOrders;
             // might be bad code
             // but two switches: the first is fallthrough on purpose
-=======
+            switch (level) {
                 case 5:
                 case 4:
                     breads.add(new MinionBread());
@@ -151,6 +150,9 @@ public class DayState {
         return 1 + (int) ((100 + (maxTime - currentTime) / maxTime * 1000) * (1 + (double) (level - 1) / 2));
     }
 
+    public Array<Appliance> getDay1Apps() {
+        int tileWidth = 100;
+        int tileHeight = 100;
 
         Array<Appliance> apps = new Array<Appliance>();
 
