@@ -52,12 +52,13 @@ public class Counter extends Appliance {
             sound.play(0.5f);
 
         // switch items with player (no Sandwich made if bread is raw dough)
-        if((this.item instanceof Bread && !((Bread)this.item).isBaked()) || (item instanceof Bread && !((Bread)item).isBaked())) {
+        if((this.item instanceof Bread && !((Bread)this.item).edible()) || (item instanceof Bread && !((Bread)item).edible())) { // no sandwich if raw dough
+            // switch items with player
             return super.interact(item);
         }
 
         // add ingredient held by player into sandwich on counter
-        if(this.item instanceof Sandwich && !((Sandwich)this.item).isFinished() && item instanceof Ingredient && ((Ingredient)item).getCostumeIndex() > 0) {
+        if(this.item instanceof Sandwich && item instanceof Ingredient && !((Sandwich) this.item).isFinished()) {
             ((Sandwich)this.item).addIngr((Ingredient)item);
             return null;
         }
@@ -75,13 +76,13 @@ public class Counter extends Appliance {
         }
 
         // create sandwich from bread on counter & ingredient held by player
-        else if(this.item instanceof Bread && ((Bread)this.item).isBaked() && item instanceof Ingredient && ((Ingredient)item).getCostumeIndex() > 0) {
+        else if(this.item instanceof Bread && ((Bread)this.item).edible() && item instanceof Ingredient) {
             this.item =  new Sandwich((Bread) this.item, (Ingredient) item);
             return null;
         }
 
         // create sandwich from bread held by player & ingredient on counter
-        else if(item instanceof Bread && ((Bread)item).isBaked() && this.item instanceof Ingredient && ((Ingredient)this.item).getCostumeIndex() > 0) {
+        else if(item instanceof Bread && ((Bread)item).edible() && this.item instanceof Ingredient) {
             this.item = new Sandwich((Bread) item, (Ingredient) this.item);
             return null;
         }

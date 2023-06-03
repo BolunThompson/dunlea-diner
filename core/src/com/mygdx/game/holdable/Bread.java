@@ -10,27 +10,12 @@ import com.badlogic.gdx.graphics.Texture;
  */
 public class Bread extends Ingredient{
 
-    private boolean baked;
-
     public Bread() {
-        super(new Texture(Gdx.files.internal("Ingredients/bread_sheet.png")), 3);
-        baked = false;
+        super(new Texture(Gdx.files.internal("Ingredients/bread_sheet.png")), 3, false);
     }
 
     public Bread(Texture texture) {
-        super(texture, 2);
-        baked = false;
-    }
-
-    public boolean isBaked() {
-        return baked;
-    }
-
-    @Override
-    public void nextCostume() {
-        super.nextCostume();
-        if(!baked)
-            baked = true;
+        super(texture, 2, false);
     }
 
     @Override

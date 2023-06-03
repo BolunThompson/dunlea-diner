@@ -15,12 +15,14 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.appliance.*;
 import com.mygdx.game.holdable.Holdable;
 import com.mygdx.game.holdable.Ingredient;
 
 import java.text.DecimalFormat;
+import java.util.Iterator;
 
 /**
  * DayScreen class
@@ -44,7 +46,6 @@ public class DayScreen implements Screen {
     static final int tileWidth = screenWidth / numWidthTiles;
     static final int tileHeight = screenHeight / numHeightTiles;
 
-
     DayState dayState;
 
     OrthographicCamera camera;
@@ -55,20 +56,13 @@ public class DayScreen implements Screen {
     private boolean pressE, pressShift;
     private Array<Appliance> appliances;
 
-    // order stuff
-    Texture breadTex = new Texture(Gdx.files.internal("Ingredients/breadSlice.png"));
-    Texture hamTex = new Texture(Gdx.files.internal("Ingredients/ham.png"));
-    Texture cheeseTex = new Texture(Gdx.files.internal("Ingredients/cheese.png"));
-    Texture lettuceTex = new Texture(Gdx.files.internal("Ingredients/lettuce.png"));
-    Texture tomatoTex = new Texture(Gdx.files.internal("Ingredients/tomato.png"));
     Texture orderTex;
 
     // delete later - for testing purposes
     exampleMusic proudLion;
     ShapeRenderer showHitboxRender;
 
-    DayScreen(Diner game, DayState dayState)
-    {
+    DayScreen(Diner game, DayState dayState) {
         this.game = game;
         this.dayState = dayState;
 
@@ -97,7 +91,7 @@ public class DayScreen implements Screen {
         camera.update();
 
         tiledMap = new TmxMapLoader().load(dayState.mapFile);
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/32f); // unit scale is probably wrong
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1 / 32f); // unit scale is probably wrong
 
         /**
          * The following music was used for this media project:
@@ -105,23 +99,22 @@ public class DayScreen implements Screen {
          * Free download: https://filmmusic.io/song/3988-local-forecast-slower
          * License (CC BY 4.0): https://filmmusic.io/standard-license
          */
-        proudLion = new exampleMusic(Gdx.audio.newMusic((Gdx.files.internal("Sounds/local-forecast-slower-by-kevin-macleod-from-filmmusic-io.mp3"))));
+        proudLion = new exampleMusic(Gdx.audio
+                .newMusic((Gdx.files.internal("Sounds/local-forecast-slower-by-kevin-macleod-from-filmmusic-io.mp3"))));
         showHitboxRender = new ShapeRenderer();
-
-
 
         /**
          * PLAYER & CONTROLS
          */
-        player = new Player(new Texture(Gdx.files.internal("Misc/Sprite-Chef_WalkAll.png")), (int)(tileWidth), (int)(tileHeight));
-        playerTwo = new Player(new Texture(Gdx.files.internal("Misc/Sprite-Chef_WalkAllP2.png")), (int)(tileWidth), (int)(tileHeight));
+        player = new Player(new Texture(Gdx.files.internal("Misc/Sprite-Chef_WalkAll.png")), (int) (tileWidth),
+                (int) (tileHeight));
+        playerTwo = new Player(new Texture(Gdx.files.internal("Misc/Sprite-Chef_WalkAllP2.png")), (int) (tileWidth),
+                (int) (tileHeight));
         pressE = false;
         pressShift = false;
         Gdx.input.setInputProcessor(new InputAdapter() {
-            public boolean keyDown(int keycode)
-            {
-                switch(keycode)
-                {
+            public boolean keyDown(int keycode) {
+                switch (keycode) {
                     case Input.Keys.A:
                         player.moveLeft = true;
                         break;
@@ -154,7 +147,7 @@ public class DayScreen implements Screen {
                         pressShift = true;
                         break;
 
-                        // TEST STUFF (delete later)
+                    // TEST STUFF (delete later)
                     case Input.Keys.M: // test music
                         proudLion.pause();
                         break;
@@ -164,10 +157,9 @@ public class DayScreen implements Screen {
                 }
                 return true;
             }
-            public boolean keyUp(int keycode)
-            {
-                switch(keycode)
-                {
+
+            public boolean keyUp(int keycode) {
+                switch (keycode) {
                     case Input.Keys.A:
                         player.moveLeft = false;
                         break;
@@ -196,21 +188,19 @@ public class DayScreen implements Screen {
                 }
                 return true;
             }
-        });  // there may be a better way to do input, but this functions
+        }); // there may be a better way to do input, but this functions
     }
 
     @Override
-    public void render(float delta)
-    {
-        ScreenUtils.clear(0,0,0,1);
+    public void render(float delta) {
+        ScreenUtils.clear(0, 0, 0, 1);
 
         camera.update();
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
 
         dayState.currentTime += delta;
-        if (dayState.isOver())
-        {
+        if (dayState.isOver()) {
             nextLevel();
             return;
         }
@@ -226,45 +216,53 @@ public class DayScreen implements Screen {
         playerTwo.update(delta);
 
         // check if player is past screen border
-        if(player.getX() < 0)
+        if (player.getX() < 0)
             player.setX(0);
-        if(player.getX() > screenWidth - player.getWidth())
+        if (player.getX() > screenWidth - player.getWidth())
             player.setX(screenWidth - player.getWidth());
-        if(player.getY() < 0)
+        if (player.getY() < 0)
             player.setY(0);
-        if(player.getY() > screenHeight - player.getHeight())
+        if (player.getY() > screenHeight - player.getHeight())
             player.setY(screenHeight - player.getHeight());
 
-
         // appliance collision & interaction
-        for(Appliance app:appliances)
-        {
+        for (Appliance app : appliances) {
             app.update(delta); // update time info for appliance animation
 
             // collision
             Rectangle appRect = app.getCollisionRegion();
-            if(Intersector.overlaps(new Rectangle(appRect.getX()+appRect.getWidth()-1, appRect.getY(), 1, appRect.getHeight()), player.getBoundingRectangle())
-                    || Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY(), 1, appRect.getHeight()), player.getBoundingRectangle()))
+            if (Intersector
+                    .overlaps(new Rectangle(appRect.getX() + appRect.getWidth() - 1, appRect.getY(), 1,
+                            appRect.getHeight()), player.getBoundingRectangle())
+                    || Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY(), 1, appRect.getHeight()),
+                            player.getBoundingRectangle()))
                 player.setX(oldX);
-            if(Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY(), appRect.getWidth(), 1), player.getBoundingRectangle()) ||
-                    Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY() + appRect.getHeight()-1, appRect.getWidth(), 1), player.getBoundingRectangle()))
+            if (Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY(), appRect.getWidth(), 1),
+                    player.getBoundingRectangle()) ||
+                    Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY() + appRect.getHeight() - 1,
+                            appRect.getWidth(), 1), player.getBoundingRectangle()))
                 player.setY(oldY);
 
-            if(Intersector.overlaps(new Rectangle(appRect.getX()+appRect.getWidth()-1, appRect.getY(), 1, appRect.getHeight()), playerTwo.getBoundingRectangle())
-                    || Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY(), 1, appRect.getHeight()), playerTwo.getBoundingRectangle()))
+            if (Intersector
+                    .overlaps(new Rectangle(appRect.getX() + appRect.getWidth() - 1, appRect.getY(), 1,
+                            appRect.getHeight()), playerTwo.getBoundingRectangle())
+                    || Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY(), 1, appRect.getHeight()),
+                            playerTwo.getBoundingRectangle()))
                 playerTwo.setX(oldX2);
-            if(Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY(), appRect.getWidth(), 1), playerTwo.getBoundingRectangle()) ||
-                    Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY() + appRect.getHeight()-1, appRect.getWidth(), 1), playerTwo.getBoundingRectangle()))
+            if (Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY(), appRect.getWidth(), 1),
+                    playerTwo.getBoundingRectangle()) ||
+                    Intersector.overlaps(new Rectangle(appRect.getX(), appRect.getY() + appRect.getHeight() - 1,
+                            appRect.getWidth(), 1), playerTwo.getBoundingRectangle()))
                 playerTwo.setY(oldY2);
 
             // interaction
-            if(pressE && Intersector.overlaps(app.getInteractRegion(), player.getInteractRectangle()) && app.canInteract(player.getItem()))
-            {
+            if (pressE && Intersector.overlaps(app.getInteractRegion(), player.getInteractRectangle())
+                    && app.canInteract(player.getItem())) {
                 player.interact(app.interact(player.getItem()));
             }
 
-            if(pressShift && Intersector.overlaps(app.getInteractRegion(), playerTwo.getInteractRectangle()) && app.canInteract(playerTwo.getItem()))
-            {
+            if (pressShift && Intersector.overlaps(app.getInteractRegion(), playerTwo.getInteractRectangle())
+                    && app.canInteract(playerTwo.getItem())) {
                 playerTwo.interact(app.interact(playerTwo.getItem()));
             }
         }
@@ -274,14 +272,15 @@ public class DayScreen implements Screen {
         // TEST STUFF (delete later)
         showHitboxRender.begin(ShapeRenderer.ShapeType.Filled);
         showHitboxRender.setColor(0.1f, 1f, 0.3f, 1f);
-        showHitboxRender.rect(player.getBoundingRectangle().getX(), player.getBoundingRectangle().getY(), player.getBoundingRectangle().getWidth(), player.getBoundingRectangle().getHeight());
+        showHitboxRender.rect(player.getBoundingRectangle().getX(), player.getBoundingRectangle().getY(),
+                player.getBoundingRectangle().getWidth(), player.getBoundingRectangle().getHeight());
         showHitboxRender.end();
 
         // draw screen
         game.batch.begin();
         player.draw(game.batch); // player
         playerTwo.draw(game.batch);
-        for(Appliance app:appliances) { // appliances
+        for (Appliance app : appliances) { // appliances
             app.draw(game.batch);
         }
 
@@ -292,13 +291,13 @@ public class DayScreen implements Screen {
         game.font.getData().setScale(1.1f);
         game.font.draw(game.batch, "Orders left: ", tileWidth * 9.2f, tileHeight * 1.4f);
         game.font.getData().setScale(1.5f);
-        game.font.draw(game.batch, String.format("%.02f", dayState.maxTime - dayState.currentTime), tileWidth * 9.4f, tileHeight * 0.7f);
+        game.font.draw(game.batch, String.format("%.02f", DayState.maxTime - dayState.currentTime), tileWidth * 9.4f,
+                tileHeight * 0.7f);
 
         game.batch.end();
     }
 
-    public void nextLevel()
-    {
+    public void nextLevel() {
         dispose();
         game.setScreen(new TransitionScreen(game, dayState));
     }
@@ -306,29 +305,20 @@ public class DayScreen implements Screen {
     public void drawOrder(Batch batch) {
         float tempX = -30;
         float tempY = 670;
-        float tempWidth = tileWidth * 1.5f;
-        float tempHeight = tileHeight * 1.5f;
+        final float tempWidth = tileWidth * 1.5f;
+        final float tempHeight = tileHeight * 1.5f;
 
-        batch.draw(orderTex, tempX+30, tempY-20, tempWidth/1.5f*2.5f, tileHeight*2.5f);
+        batch.draw(orderTex, tempX + 30, tempY - 20, tempWidth / 1.5f * 2.5f, tileHeight * 2.5f);
         Order order = dayState.orders.get(dayState.orderIndex);
-        for(Holdable.Type ingredient : order.ingredients.keys()) {
-            switch(ingredient) {
-                case bread:
-                    batch.draw(breadTex, tempX, tempY, tempWidth, tempHeight);
-                    break;
-                case ham:
-                    batch.draw(hamTex, tempX, tempY, tempWidth, tempHeight);
-                    break;
-                case cheese:
-                    batch.draw(cheeseTex, tempX, tempY, tempWidth, tempHeight);
-                    break;
-                case lettuce:
-                    batch.draw(lettuceTex, tempX, tempY, tempWidth, tempHeight);
-                    break;
-                case tomato:
-                    batch.draw(tomatoTex, tempX, tempY, tempWidth, tempHeight);
-                    break;
+        Array<Ingredient> ingredients = order.ingredients.keys().toArray();
+        ingredients.add(order.bread);
+        for (int i = 0; i < ingredients.size; i++) {
+            if (i != 0 && i % 3 == 0) {
+                tempY -= tileHeight * 0.6;
+                tempX -= tileWidth * 0.8 * 3;
             }
+            Ingredient ingredient = ingredients.get(i);
+            batch.draw(ingredient.getIcon(), tempX, tempY, tempWidth, tempHeight);
             tempX += tileWidth * 0.8f;
         }
 
@@ -338,33 +328,33 @@ public class DayScreen implements Screen {
     public void dispose() {
         player.dispose();
         playerTwo.dispose();
-        for(Appliance app:appliances) {
+        for (Appliance app : appliances) {
             app.dispose();
         }
         orderTex.dispose();
-        breadTex.dispose();
-        hamTex.dispose();
-        cheeseTex.dispose();
-        lettuceTex.dispose();
-        tomatoTex.dispose();
 
         // TEST STUFF (delete later)
         proudLion.dispose();
     }
+
     @Override
-    public void resize(int width, int height) {}
+    public void resize(int width, int height) {
+    }
+
     @Override
-    public void show() {} // runs upon screen shown
+    public void show() {
+    } // runs upon screen shown
+
     @Override
-    public void hide() {}
+    public void hide() {
+    }
+
     @Override
-    public void pause() {}
+    public void pause() {
+    }
+
     @Override
     public void resume() {}
-
-
-
-
 
     // putting this mess down here
     public Array<Appliance> getDay1Apps() {
@@ -520,7 +510,5 @@ public class DayScreen implements Screen {
         apps.add(new Trash(tileWidth * 10, tileHeight, tileWidth, tileHeight)); // trash
 
         return apps;
-
-        // sorry for creating like 100 objects at the start that don't do anything for half the game
     }
 }

@@ -29,7 +29,7 @@ public class Player {
     public boolean moveLeft, moveRight, moveUp, moveDown;
 
     private Rectangle rectangle; // collision hitbox
-    private Rectangle interactRect; // the area checked to determine if player is close enough to interact with appliance
+    private Rectangle interactRect; // the area checked to determine if player is close enough to interact with DayScreen.java
 
     private Texture texture;
     private TextureRegion[] idleFrames;
@@ -114,9 +114,9 @@ public class Player {
     }
 
     /**
-     * Interact with appliances
+     * Interact with DayScreen.javas
      *
-     * @param item - Item held by the appliance (null if nothing held)
+     * @param item - Item held by the DayScreen.java (null if nothing held)
      * @return Item held by the player (null if nothing held)
      */
     public Holdable interact(Holdable item)

@@ -2,11 +2,12 @@ package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.game.holdable.Bread;
+import com.mygdx.game.holdable.Cheese;
 import com.mygdx.game.holdable.Holdable;
 import com.mygdx.game.holdable.Ingredient;
 import com.mygdx.game.holdable.Sandwich;
 import com.mygdx.game.DayState;
-
 
 /**
  * ServingWindow class (extends abstract class Appliance)
@@ -15,13 +16,13 @@ import com.mygdx.game.DayState;
  *
  * The serving window is a 2x1 tile
  */
-public class ServingWindow extends Appliance{
+public class ServingWindow extends Appliance {
 
-    private final DayState day; 
-    
-    public ServingWindow(int x, int y, int width, int height, final DayState day)
-    {
-        super(new Texture(Gdx.files.internal("Appliances/ServingWindow.png")), x, y, width, height, Appliance.direction.DOWN);
+    private final DayState day;
+
+    public ServingWindow(int x, int y, int width, int height, final DayState day) {
+        super(new Texture(Gdx.files.internal("Appliances/ServingWindow.png")), x, y, width, height,
+                Appliance.direction.DOWN);
         this.day = day;
 
         this.texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
@@ -36,23 +37,27 @@ public class ServingWindow extends Appliance{
      * @param item - Sandwich held by the player (null if nothing held)
      */
     @Override
-    public Holdable interact(Holdable item)
-    {
-        if(sound != null)
+    public Holdable interact(Holdable item) {
+        if (sound != null)
             sound.play(1.0f);
 
         // pseudocode: if DayScreen.currentOrder.equals((Sandwich)item)
-        //                  increment number of correct orders
-        //                  currentOrder = (generate a new order)
+        // increment number of correct orders
+        // currentOrder = (generate a new order)
         // feels like a hack
         if (item instanceof Sandwich) {
+            System.out.println(item);
             Sandwich sandwich = (Sandwich) item;
             for (Ingredient ingredient : sandwich.getIngredients()) {
-                day.mark(ingredient.getType());
+                day.mark(ingredient);
             }
+            System.out.println(day.orderIsComplete());
+            System.out.println(day.orders.get(day.orderIndex));
             if (day.orderIsComplete()) {
                 day.nextOrder();
+                System.out.println(day.orderIndex);
             }
+            return null;
         }
 
         return item;
@@ -65,17 +70,24 @@ public class ServingWindow extends Appliance{
      * @param item - Item held by the player (null if nothing held)
      */
     @Override
-    public boolean canInteract(Holdable item)
-    {
-        if(item instanceof Sandwich)
+    public boolean canInteract(Holdable item) {
+        if (item instanceof Sandwich)
             return true;
-        else
+        else {
+            System.out.println(day.orders);
+            System.out.println(day.orderIndex);
+            System.out.println(day.orders.get(day.orderIndex));
             return false;
+        }
     }
 
-    /**public void draw(Batch batch)
-    {
-        if(ingr != null)
-            batch.draw(ingr.getTexture(), getCollisionRegion().getX(), getCollisionRegion().getY(), getCollisionRegion().getWidth(), getCollisionRegion().getHeight());
-    }**/
+    /**
+     * public void draw(Batch batch)
+     * {
+     * if(ingr != null)
+     * batch.draw(ingr.getTexture(), getCollisionRegion().getX(),
+     * getCollisionRegion().getY(), getCollisionRegion().getWidth(),
+     * getCollisionRegion().getHeight());
+     * }
+     **/
 }

@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 public class Ham extends Ingredient {
 
     public Ham() {
-        super(new Texture(Gdx.files.internal("Ingredients/ham_sheet.png")), 2);
+        super(new Texture(Gdx.files.internal("Ingredients/ham_sheet.png")), 2, false);
     }
 
     @Override

@@ -1,18 +1,25 @@
 package com.mygdx.game;
 
-import com.mygdx.game.holdable.Holdable;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.mygdx.game.holdable.Bread;
+import com.mygdx.game.holdable.Ingredient;
+import com.mygdx.game.holdable.Lettuce;
 
+import java.util.HashMap;
 import java.util.List;
 
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.IdentityMap;
 
 public class Order {
-    IdentityMap<Holdable.Type, Boolean> ingredients;
+    // should be all private in principle, but idc to refactor it
+    ObjectMap<Ingredient, Boolean> ingredients;
+    // seems a bit janky -- is there a better way to handle bread?
+    Bread bread;
+    int breadCnt;
 
-    Order(List<Holdable.Type> ing) {
-        ingredients = new IdentityMap<Holdable.Type, Boolean>();
-        for (Holdable.Type ingredient : ing) {
+    Order(List<Ingredient> ing, Bread bread) {
+        this.bread = bread;
+        ingredients = new ObjectMap<Ingredient, Boolean>();
+        for (Ingredient ingredient : ing) {
             ingredients.put(ingredient, false);
         }
     }
@@ -23,21 +30,36 @@ public class Order {
                 return false;
             }
         }
-        return true;
+        return breadCnt >= 2;
     }
 
-    void mark(Holdable.Type ingredient) {
-        if (ingredients.containsKey(ingredient)) {
-            ingredients.put(ingredient, true);
+    void mark(Ingredient ingredient) {
+        System.out.println("edible:" + ingredient.edible());
+        if (ingredient.toString().equals("lettuce")) {
+           System.out.println(ingredients.get(ingredient));
         }
-    }
-    Array<Holdable.Type> neededIngredients() {
-        Array<Holdable.Type> needed = new Array<Holdable.Type>();
-        for (Holdable.Type ingredient : ingredients.keys()) {
-            if (!ingredients.get(ingredient)) {
-                needed.add(ingredient);
+        System.out.println("get key:" + (ingredients.get(ingredient)));
+
+        if (ingredient.edible()) {
+            // feels like bad code
+            if (ingredient instanceof Bread) {
+                if (this.bread.getType() == bread.getType()) {
+                    breadCnt++;
+                }
+            } else if (ingredients.containsKey(ingredient)) {
+                ingredients.put(ingredient, true);
             }
         }
-        return needed;
+
+    }
+
+    public String toString() {
+        String str = "";
+        for (Ingredient ingredient : ingredients.keys()) {
+            str += ingredient + ":" + ingredients.get(ingredient) + ", ";
+        }
+        str += " | " + bread + ":" + breadCnt;
+        str += "-END";
+        return str;
     }
 }

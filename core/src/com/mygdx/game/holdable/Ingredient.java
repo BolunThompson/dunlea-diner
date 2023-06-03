@@ -14,6 +14,7 @@ public abstract class Ingredient extends Holdable {
     protected Texture texture;
     protected TextureRegion[] costumes;
     protected int costumeIndex;
+    private boolean edible = true; // whether it has been toasted, sliced, etc
     final int maxIndex;
 
     public Ingredient(Texture texture, int numCostumes) {
@@ -23,10 +24,14 @@ public abstract class Ingredient extends Holdable {
         maxIndex = numCostumes - 1;
 
         TextureRegion[][] tmpFrames = TextureRegion.split(texture, 32, 32);
-        for(int i = 0; i < numCostumes; i++)
-        {
+        for (int i = 0; i < numCostumes; i++) {
             costumes[i] = tmpFrames[0][i];
         }
+    }
+
+    protected Ingredient(Texture texture, int numCostumes, boolean edible) {
+        this(texture, numCostumes);
+        this.edible = edible;
     }
 
     /**
@@ -34,8 +39,7 @@ public abstract class Ingredient extends Holdable {
      * This method is used ONLY for creating new ingredients to be dispensed from crates.
      */
     public Ingredient copy(Ingredient orig) {
-        switch(orig.getType())
-        {
+        switch (orig.getType()) {
             case bread:
                 return new Bread();
             case wheatBread:
@@ -64,8 +68,12 @@ public abstract class Ingredient extends Holdable {
     public void nextCostume() {
         costumeIndex++;
 
-        if(costumeIndex > maxIndex)
+        if (costumeIndex > maxIndex)
             costumeIndex = maxIndex;
+
+        // assuming that switch in texture means that it has been processed
+        edible = true;
+
     }
 
     public void draw(Batch batch, float x, float y, float width, float height) {
@@ -82,14 +90,37 @@ public abstract class Ingredient extends Holdable {
     public TextureRegion getTexture() {
         return costumes[costumeIndex];
     }
-    public int getCostumeIndex() {
-        return costumeIndex;
+
+    public TextureRegion getIcon() {
+        return costumes[0];
     }
+    
+
+    public boolean edible() {
+        return edible;
+    }
+    
+
     public Type getType() {
         return null;
     }
+
     public String toString() {
         return "ingredient";
+    }
+
+    public boolean equals(Object o) {
+        if (o instanceof Ingredient) {
+            Ingredient i = (Ingredient) o;
+            return this.getType() == i.getType();
+        }
+        return false;
+    }
+
+    public int hashCode() {
+        if (getType() == null)
+            return 0;
+        return getType().hashCode();
     }
 
 }

@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 public class Lettuce extends Ingredient {
 
     public Lettuce() {
-        super(new Texture(Gdx.files.internal("Ingredients/lettuce_sheet.png")), 2);
+        super(new Texture(Gdx.files.internal("Ingredients/lettuce_sheet.png")), 2, false);
     }
 
     @Override

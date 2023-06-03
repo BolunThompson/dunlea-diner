@@ -89,4 +89,12 @@ public class Sandwich extends Holdable{
         return toasted;
     }
 
+    public String toString() {
+        String str = "";
+        for(Ingredient ingr : ingredients) {
+            str += ingr.toString() + " ";
+        }
+        return str;
+    }
+
 }
