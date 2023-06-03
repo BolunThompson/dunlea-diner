@@ -96,8 +96,8 @@ public class DayScreen implements Screen {
         /**
          * PLAYER & CONTROLS
          */
-        player = new Player(new Texture(Gdx.files.internal("Misc/Sprite-Chef_WalkALL.png")), (int)(tileWidth), (int)(tileHeight));
-        playerTwo = new Player(new Texture(Gdx.files.internal("Misc/Sprite-Chef_WalkALLP2.png")), (int)(tileWidth), (int)(tileHeight));
+        player = new Player(new Texture(Gdx.files.internal("Misc/Sprite-Chef_WalkAll.png")), (int)(tileWidth), (int)(tileHeight));
+        playerTwo = new Player(new Texture(Gdx.files.internal("Misc/Sprite-Chef_WalkAllP2.png")), (int)(tileWidth), (int)(tileHeight));
         pressE = false;
         pressShift = false;
         Gdx.input.setInputProcessor(new InputAdapter() {
