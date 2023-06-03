@@ -114,9 +114,9 @@ public class Player {
     }
 
     /**
-     * Interact with DayScreen.javas
+     * Interact with appliancess
      *
-     * @param item - Item held by the DayScreen.java (null if nothing held)
+     * @param item - Item held by the appliance (null if nothing held)
      * @return Item held by the player (null if nothing held)
      */
     public Holdable interact(Holdable item)
