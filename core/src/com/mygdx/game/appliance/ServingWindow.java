@@ -46,13 +46,14 @@ public class ServingWindow extends Appliance {
         // currentOrder = (generate a new order)
         // feels like a hack
         if (item instanceof Sandwich) {
-                        Sandwich sandwich = (Sandwich) item;
+            Sandwich sandwich = (Sandwich) item;
             for (Ingredient ingredient : sandwich.getIngredients()) {
                 day.mark(ingredient);
             }
-                                    if (day.orderIsComplete()) {
+            day.grilled(sandwich.isToasted());
+            if (day.orderIsComplete()) {
                 day.nextOrder();
-                            }
+            }
             return null;
         }
 
@@ -70,7 +71,7 @@ public class ServingWindow extends Appliance {
         if (item instanceof Sandwich)
             return true;
         else {
-                                                return false;
+            return false;
         }
     }
 

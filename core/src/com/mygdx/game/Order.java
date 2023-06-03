@@ -3,9 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.mygdx.game.holdable.Bread;
 import com.mygdx.game.holdable.Ingredient;
-import com.mygdx.game.holdable.Lettuce;
 
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -15,9 +13,13 @@ public class Order {
     // seems a bit janky -- is there a better way to handle bread?
     Bread bread;
     int breadCnt;
+    // also janky
+    boolean shouldBeGrilled;
+    boolean grilled = false;
 
-    Order(List<Ingredient> ing, Bread bread) {
+    Order(List<Ingredient> ing, Bread bread, boolean shouldBeGrilled) {
         this.bread = bread;
+        this.shouldBeGrilled = shouldBeGrilled;
         ingredients = new ObjectMap<Ingredient, Boolean>();
         for (Ingredient ingredient : ing) {
             ingredients.put(ingredient, false);
@@ -30,13 +32,10 @@ public class Order {
                 return false;
             }
         }
-        return breadCnt >= 2;
+        return (!shouldBeGrilled || (shouldBeGrilled && grilled)) && breadCnt >= 2;
     }
 
     void mark(Ingredient ingredient) {
-                if (ingredient.toString().equals("lettuce")) {
-                   }
-        
         if (ingredient.edible()) {
             // feels like bad code
             if (ingredient instanceof Bread) {
@@ -47,7 +46,6 @@ public class Order {
                 ingredients.put(ingredient, true);
             }
         }
-
     }
 
     public String toString() {

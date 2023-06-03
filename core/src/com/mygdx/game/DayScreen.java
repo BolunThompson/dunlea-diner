@@ -321,7 +321,9 @@ public class DayScreen implements Screen {
             batch.draw(ingredient.getIcon(), tempX, tempY, tempWidth, tempHeight);
             tempX += tileWidth * 0.8f;
         }
-
+        if (order.shouldBeGrilled) {
+            game.font.draw(batch, "Grill!", 115, 710);
+        }
     }
 
     @Override
