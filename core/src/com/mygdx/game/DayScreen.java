@@ -289,7 +289,7 @@ public class DayScreen implements Screen {
 
         // draw timer & # orders remaining
         game.font.getData().setScale(1.1f);
-        game.font.draw(game.batch, "Orders left: ", tileWidth * 9.2f, tileHeight * 1.4f);
+        game.font.draw(game.batch, "Orders left: " + dayState.ordersLeft(), tileWidth * 9.2f, tileHeight * 1.4f);
         game.font.getData().setScale(1.5f);
         game.font.draw(game.batch, String.format("%.02f", DayState.maxTime - dayState.currentTime), tileWidth * 9.4f,
                 tileHeight * 0.7f);
