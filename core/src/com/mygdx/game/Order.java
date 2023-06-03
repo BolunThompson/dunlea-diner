@@ -34,11 +34,11 @@ public class Order {
     }
 
     void mark(Ingredient ingredient) {
-        System.out.println("edible:" + ingredient.edible());
+        System.out.("edible:" + ingredient.edible());
         if (ingredient.toString().equals("lettuce")) {
-           System.out.println(ingredients.get(ingredient));
+           System.out.(ingredients.get(ingredient));
         }
-        System.out.println("get key:" + (ingredients.get(ingredient)));
+        System.out.("get key:" + (ingredients.get(ingredient)));
 
         if (ingredient.edible()) {
             // feels like bad code

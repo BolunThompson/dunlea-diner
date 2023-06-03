@@ -46,16 +46,16 @@ public class ServingWindow extends Appliance {
         // currentOrder = (generate a new order)
         // feels like a hack
         if (item instanceof Sandwich) {
-            System.out.println(item);
+            System.out.(item);
             Sandwich sandwich = (Sandwich) item;
             for (Ingredient ingredient : sandwich.getIngredients()) {
                 day.mark(ingredient);
             }
-            System.out.println(day.orderIsComplete());
-            System.out.println(day.orders.get(day.orderIndex));
+            System.out.(day.orderIsComplete());
+            System.out.(day.orders.get(day.orderIndex));
             if (day.orderIsComplete()) {
                 day.nextOrder();
-                System.out.println(day.orderIndex);
+                System.out.(day.orderIndex);
             }
             return null;
         }
@@ -74,9 +74,9 @@ public class ServingWindow extends Appliance {
         if (item instanceof Sandwich)
             return true;
         else {
-            System.out.println(day.orders);
-            System.out.println(day.orderIndex);
-            System.out.println(day.orders.get(day.orderIndex));
+            System.out.(day.orders);
+            System.out.(day.orderIndex);
+            System.out.(day.orders.get(day.orderIndex));
             return false;
         }
     }
