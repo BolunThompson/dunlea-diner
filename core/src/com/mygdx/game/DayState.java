@@ -46,7 +46,8 @@ public class DayState {
             ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>(
                     wantedIngredients.subList(0, numIngredients));
             Bread bread = breads.get((int) (Math.random() * breads.size()));
-            orders.add(new Order(ingredients, bread));
+            boolean grilled = level >= 2 ? Math.random() < 0.5 : false;
+            orders.add(new Order(ingredients, bread, grilled));
         }
     }
 
@@ -141,6 +142,13 @@ public class DayState {
 
     public int ordersCnt() {
         return orders.size;
+    }
+
+    public void grilled(boolean grill) {
+        if (orders.isEmpty()) {
+            return;
+        }
+        orders.get(orderIndex).grilled = grill;
     }
 
     public int score() {
