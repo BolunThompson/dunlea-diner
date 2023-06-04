@@ -292,8 +292,8 @@ public class DayScreen implements Screen {
         pressShift = false;
 
         // draw hitboxes
-        hitboxDrawer.drawCollision();
-        hitboxDrawer.drawInteraction();
+        //hitboxDrawer.drawCollision();
+        //hitboxDrawer.drawInteraction();
 
         // draw screen
         game.batch.begin();
