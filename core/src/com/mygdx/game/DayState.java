@@ -136,7 +136,7 @@ public class DayState {
     }
 
     public int ordersCnt() {
-        return orderIndex + 1;
+        return orderIndex;
     }
 
     public void grilled(boolean grill) {
