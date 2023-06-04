@@ -39,8 +39,15 @@ class MainMenu implements Screen {
         }
         menuIndex = 0;
 
+        /**
+         * The following music was used for this media project:
+         * Music: Airport Lounge by Kevin MacLeod
+         * Free download: https://filmmusic.io/song/3347-airport-lounge
+         * License (CC BY 4.0): https://filmmusic.io/standard-license
+         */
         music = Gdx.audio.newMusic(Gdx.files.internal("Sounds/airport-lounge-by-kevin-macleod-from-filmmusic-io.mp3"));
         music.setVolume(0.8f);
+        music.setLooping(true);
         music.play();
 
         shapeRender = new ShapeRenderer();
@@ -70,21 +77,24 @@ class MainMenu implements Screen {
 
         // credits text
         if(menuIndex == 4) {
-            int x = 200;
-            int y = 650;
+            int x = 190;
+            int y = 700;
 
             game.font.setColor(0, 0, 0, 1);
             game.font.getData().setScale(1.0f);
-            game.font.draw(game.batch, "Music - 'Local Forecast - Slower by Kevin MacLeod'", x, y);
-            game.font.draw(game.batch, "Sound Effects - Universal Production Music", x, y - 130);
-            game.font.draw(game.batch, "Art - Kaitlyn Nguy & Leonardo Emmanuel Pimentel", x, y - 230);
-            game.font.draw(game.batch, "Scripting - Bolun Thompson & Erica Wang", x, y - 330);
-            game.font.draw(game.batch, "Made with LibGDX", x, y - 470);
-            game.font.draw(game.batch, "Special Thanks to Mr. Dunlea & Mr. Mez", x, y - 550);
+            game.font.draw(game.batch, "Music - 'Local Forecast - Slower' by Kevin MacLeod", x, y);
+            game.font.draw(game.batch, "        'Airport Lounge' by Kevin MacLeod", x, y - 130);
+            game.font.draw(game.batch, "Sound Effects - Universal Production Music", x, y - 270);
+            game.font.draw(game.batch, "Art - Kaitlyn Nguy & Leonardo Emmanuel Pimentel", x, y - 360);
+            game.font.draw(game.batch, "Scripting - Bolun Thompson & Erica Wang", x, y - 450);
+            game.font.draw(game.batch, "Made with LibGDX", x, y - 570);
+            game.font.draw(game.batch, "Special Thanks to Mr. Dunlea & Mr. Mez", x, y - 640);
 
             game.font.getData().setScale(0.6f);
             game.font.draw(game.batch, "Free download: https://filmmusic.io/song/3988-local-forecast-slower", x + 150, y - 50);
             game.font.draw(game.batch, "License (CC BY 4.0): https://filmmusic.io/standard-license", x + 150, y - 75);
+            game.font.draw(game.batch, "Free download: https://filmmusic.io/song/3347-airport-lounge", x + 150, y - 180);
+            game.font.draw(game.batch, "License (CC BY 4.0): https://filmmusic.io/standard-license", x + 150, y - 205);
         }
 
         game.batch.end();

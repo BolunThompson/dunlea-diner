@@ -18,25 +18,10 @@ import com.mygdx.game.holdable.Sandwich;
  */
 public class Counter extends Appliance {
 
-    public Counter(int x, int y, int width, int height, Appliance.direction dir)
+    public Counter(int x, int y)
     {
-        super(new Texture(Gdx.files.internal("Appliances/Counter.png")), x, y, width, height);
+        super(new Texture(Gdx.files.internal("Appliances/Counter.png")), x, y, true);
         this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Counter.mp3"));
-
-        switch(dir)
-        {
-            // horizontal counters (interact from above or below)
-            case LEFT:
-            case RIGHT:
-                interactRegion = new Rectangle(x + width/4f, y - height/2f, width/2f, height*2f);
-                break;
-
-            // vertical counters (interact from left or right)
-            case UP:
-            case DOWN:
-                interactRegion = new Rectangle(x - width/2f, y + height/4f, width*2f, height/2f);
-                break;
-        }
     }
 
     /**

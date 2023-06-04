@@ -3,7 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.audio.Music;
 
 /**
- * (To be deleted later)
+ * Background music class
  *
  * More info here:
  * https://libgdx.com/wiki/audio/streaming-music
@@ -16,6 +16,15 @@ public class exampleMusic {
     {
         this.music = music;
         music.setVolume(0.2f);
+        music.setLooping(true);
+        music.play();
+    }
+
+    public exampleMusic(Music music, float volume)
+    {
+        this.music = music;
+        music.setVolume(volume);
+        music.setLooping(true);
         music.play();
     }
 

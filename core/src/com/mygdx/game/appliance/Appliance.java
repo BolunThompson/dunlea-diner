@@ -18,9 +18,13 @@ import com.mygdx.game.holdable.Holdable;
  */
 public abstract class Appliance {
 
+    // from DayScreen tileWidth & tileHeight
+    final int width = 100;
+    final int height = 100;
+
     protected Texture texture;
     protected Rectangle collisionRegion;
-    protected Rectangle interactRegion;
+    protected Rectangle interactRegion, interactRegion2;
 
     private TextureRegion[] frames;
     protected TextureRegion endFrame;
@@ -32,55 +36,36 @@ public abstract class Appliance {
 
     protected Holdable item;
 
-    public enum direction {
-        LEFT, RIGHT, UP, DOWN
-    }
-
     /**
      * Creates an appliance with no interaction
      *
      * @param texture - sprite sheet for animations (null if no animation)
-     * @param x - x-coordinate of collision box's bottom left corner (in pixels)
-     * @param y - y-coordinate of collision box's bottom left corner (in pixels)
-     * @param width - width of collision box (in pixels)
-     * @param height - height of collision box (in pixels)
+     * @param x - x-coordinate of collision box's bottom left corner (in tiles)
+     * @param y - y-coordinate of collision box's bottom left corner (in tiles)
      */
-    public Appliance(Texture texture, int x, int y, int width, int height)
+    public Appliance(Texture texture, int x, int y)
     {
         this.texture = texture;
-        collisionRegion = new Rectangle(x, y, width, height);
-        interactRegion = new Rectangle(x , y, 0, 0);
+        collisionRegion = new Rectangle(x * width, y * height, width, height);
+        interactRegion = new Rectangle(x * width, y * height, 0, 0);
+        interactRegion2 = new Rectangle(x * width, y * height, 0, 0);
         item = null;
 
         doAnimation = false;
     }
 
     /**
-     * Creates an appliance with interaction box in 1 of 4 directions
-     *
-     * @param dir - sets interaction box to left, right, above, or below appliance
+     * Creates an appliance with interaction box in 4 directions
      */
-    public Appliance(Texture texture, int x, int y, int width, int height, direction dir) // interaction
+    public Appliance(Texture texture, int x, int y, boolean hasInteract) // interaction
     {
-        this(texture, x, y, width, height);
+        this(texture, x, y);
 
-        switch(dir) { // from what direction the player interacts from
-            case LEFT:
-                interactRegion = new Rectangle(x - width/2f, y + height/4f, width/2f, height/2f);
-                break;
-            case RIGHT:
-                interactRegion = new Rectangle(x + width, y + height/4f, width/2f, height/2f);
-                break;
-            case UP:
-                interactRegion = new Rectangle(x + width/4f, y + height, width/2f, height/2f);
-                break;
-            case DOWN:
-                interactRegion = new Rectangle(x + width/4f, y - height/2f, width/2f, height/2f);
-                break;
-            default: // invalid direction
-                interactRegion = new Rectangle(0, 0, 0, 0);
-                break;
-        }
+        if(!hasInteract)
+            return;
+
+        interactRegion = new Rectangle(x * width + width/4f, y * height - height/2f, width/2f, height*2f); // vert
+        interactRegion2 = new Rectangle(x * width - width/2f, y * height + height/4f, width*2f, height/2f); // horiz
     }
 
     /**
@@ -88,9 +73,9 @@ public abstract class Appliance {
      *
      * @param sprite_sheet - frames for animation & default/end frames
      */
-    public Appliance(Texture sprite_sheet, int x, int y, int width, int height, direction dir, int numFrames)
+    public Appliance(Texture sprite_sheet, int x, int y, boolean hasInteract, int numFrames)
     {
-        this(sprite_sheet, x, y, width, height, dir);
+        this(sprite_sheet, x, y, hasInteract);
 
         TextureRegion[][] tmpFrames = TextureRegion.split(sprite_sheet, 32, 32);
 
@@ -174,6 +159,9 @@ public abstract class Appliance {
     }
     public Rectangle getInteractRegion() {
         return interactRegion;
+    }
+    public Rectangle getInteractRegion2() {
+        return interactRegion2;
     }
     public Holdable getItem() {
         return item;

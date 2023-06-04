@@ -16,12 +16,9 @@ public class Toaster extends Appliance {
 
     Sound sound2;
 
-    public Toaster(int x, int y, int width, int height)
+    public Toaster(int x, int y)
     {
-        super(new Texture(Gdx.files.internal("Appliances/Sprite-Cooking_Toaster_SPRITESHEET.png")),
-                x, y, width, height, Appliance.direction.DOWN, 5);
-
-
+        super(new Texture(Gdx.files.internal("Appliances/Sprite-Cooking_Toaster_SPRITESHEET.png")), x, y, true, 5);
         this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Oven.mp3"));
         sound2 = Gdx.audio.newSound(Gdx.files.internal("Sounds/Toaster-pop-up.wav"));
     }

@@ -13,9 +13,8 @@ import com.mygdx.game.holdable.Sandwich;
  */
 public class KetchupBottle extends Appliance {
 
-    public KetchupBottle(int x, int y, int width, int height) {
-        super(null, x, y, width, height, Appliance.direction.UP);
-
+    public KetchupBottle(int x, int y) {
+        super(null, x, y, true);
         this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Ketchup.mp3"));
     }
 

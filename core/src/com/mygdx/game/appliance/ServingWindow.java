@@ -2,6 +2,7 @@ package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.holdable.Bread;
 import com.mygdx.game.holdable.Cheese;
 import com.mygdx.game.holdable.Holdable;
@@ -20,10 +21,12 @@ public class ServingWindow extends Appliance {
 
     private final DayState day;
 
-    public ServingWindow(int x, int y, int width, int height, final DayState day) {
-        super(new Texture(Gdx.files.internal("Appliances/ServingWindow.png")), x, y, width, height,
-                Appliance.direction.DOWN);
+    public ServingWindow(int x, int y, final DayState day) {
+        super(new Texture(Gdx.files.internal("Appliances/ServingWindow.png")), x, y, true);
         this.day = day;
+
+        this.collisionRegion = new Rectangle(x * width, y * height, width * 2, height);
+        this.interactRegion = new Rectangle(x * width + width/4f, y * height - height/2f, width*2f, height*2f); // vert
 
         this.texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
         this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Ring.mp3"));
@@ -70,17 +73,7 @@ public class ServingWindow extends Appliance {
         if (item instanceof Sandwich)
             return true;
         else {
-                                                return false;
+            return false;
         }
     }
-
-    /**
-     * public void draw(Batch batch)
-     * {
-     * if(ingr != null)
-     * batch.draw(ingr.getTexture(), getCollisionRegion().getX(),
-     * getCollisionRegion().getY(), getCollisionRegion().getWidth(),
-     * getCollisionRegion().getHeight());
-     * }
-     **/
 }

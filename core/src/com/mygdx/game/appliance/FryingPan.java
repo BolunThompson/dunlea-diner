@@ -2,9 +2,7 @@ package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.mygdx.game.holdable.Bread;
 import com.mygdx.game.holdable.Holdable;
-import com.mygdx.game.holdable.Ingredient;
 import com.mygdx.game.holdable.Sandwich;
 
 /**
@@ -14,10 +12,8 @@ import com.mygdx.game.holdable.Sandwich;
  */
 public class FryingPan extends Appliance {
 
-    public FryingPan(int x, int y, int width, int height) {
-        super(new Texture(Gdx.files.internal("Appliances/FryingPan_SPRITESHEET.png")),
-                x, y, width, height, Appliance.direction.RIGHT, 5);
-
+    public FryingPan(int x, int y) {
+        super(new Texture(Gdx.files.internal("Appliances/FryingPan_SPRITESHEET.png")), x, y, true, 5);
         this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Frying.mp3"));
     }
 

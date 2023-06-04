@@ -13,9 +13,9 @@ import com.badlogic.gdx.audio.Sound;
  */
 public class Trash extends Appliance{
 
-    public Trash(int x, int y, int width, int height)
+    public Trash(int x, int y)
     {
-        super(new Texture(Gdx.files.internal("Appliances/Trash.png")), x, y, width, height, Appliance.direction.UP);
+        super(new Texture(Gdx.files.internal("Appliances/Trash.png")), x, y, true);
         this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Trash.mp3"));
     }
 

@@ -13,11 +13,9 @@ import com.mygdx.game.holdable.Ingredient;
  */
 public class ChoppingBoard extends Appliance{
 
-    public ChoppingBoard(int x, int y, int width, int height)
+    public ChoppingBoard(int x, int y)
     {
-        super(new Texture(Gdx.files.internal("Appliances/Sprite-Cutting_Board_SPRITESHEET2.png")),
-                x, y, width, height, Appliance.direction.RIGHT, 4);
-
+        super(new Texture(Gdx.files.internal("Appliances/Sprite-Cutting_Board_SPRITESHEET2.png")), x, y, true,4);
         this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Chopping.wav"));
     }
 

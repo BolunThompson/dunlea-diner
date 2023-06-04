@@ -56,11 +56,16 @@ public class DayScreen implements Screen {
     private boolean pressE, pressShift;
     private Array<Appliance> appliances;
 
+    // for drawing orders
+    Texture breadTex = new Texture(Gdx.files.internal("Ingredients/breadSlice.png"));
+    Texture hamTex = new Texture(Gdx.files.internal("Ingredients/ham.png"));
+    Texture cheeseTex = new Texture(Gdx.files.internal("Ingredients/cheese.png"));
+    Texture lettuceTex = new Texture(Gdx.files.internal("Ingredients/lettuce.png"));
+    Texture tomatoTex = new Texture(Gdx.files.internal("Ingredients/tomato.png"));
+
     Texture orderTex;
 
-    // delete later - for testing purposes
-    exampleMusic proudLion;
-    ShapeRenderer showHitboxRender;
+    exampleMusic bgMusic;
 
     DayScreen(Diner game, DayState dayState) {
         this.game = game;
@@ -99,9 +104,7 @@ public class DayScreen implements Screen {
          * Free download: https://filmmusic.io/song/3988-local-forecast-slower
          * License (CC BY 4.0): https://filmmusic.io/standard-license
          */
-        proudLion = new exampleMusic(Gdx.audio
-                .newMusic((Gdx.files.internal("Sounds/local-forecast-slower-by-kevin-macleod-from-filmmusic-io.mp3"))));
-        showHitboxRender = new ShapeRenderer();
+        bgMusic = new exampleMusic(Gdx.audio.newMusic((Gdx.files.internal("Sounds/local-forecast-slower-by-kevin-macleod-from-filmmusic-io.mp3"))));
 
         /**
          * PLAYER & CONTROLS
@@ -147,9 +150,9 @@ public class DayScreen implements Screen {
                         pressShift = true;
                         break;
 
-                    // TEST STUFF (delete later)
-                    case Input.Keys.M: // test music
-                        proudLion.pause();
+                        // TEST STUFF (delete later)
+                    case Input.Keys.P: // pause music
+                        bgMusic.pause();
                         break;
                     case Input.Keys.Q: // skip day
                         dayState.currentTime = DayState.maxTime;
@@ -212,11 +215,11 @@ public class DayScreen implements Screen {
         float oldX2 = playerTwo.getX();
         float oldY2 = playerTwo.getY();
 
-        player.update(delta); // update player position & animation frame
+        player.update(delta); // update player positions & animation frame
         playerTwo.update(delta);
 
-        // check if player is past screen border
-        if (player.getX() < 0)
+        // check if player 1 is past screen border
+        if(player.getX() < 0)
             player.setX(0);
         if (player.getX() > screenWidth - player.getWidth())
             player.setX(screenWidth - player.getWidth());
@@ -224,6 +227,17 @@ public class DayScreen implements Screen {
             player.setY(0);
         if (player.getY() > screenHeight - player.getHeight())
             player.setY(screenHeight - player.getHeight());
+
+        // check if player 2 is past screen border
+        if(playerTwo.getX() < 0)
+            playerTwo.setX(0);
+        if(playerTwo.getX() > screenWidth - playerTwo.getWidth())
+            playerTwo.setX(screenWidth - playerTwo.getWidth());
+        if(playerTwo.getY() < 0)
+            playerTwo.setY(0);
+        if(playerTwo.getY() > screenHeight - playerTwo.getHeight())
+            playerTwo.setY(screenHeight - playerTwo.getHeight());
+
 
         // appliance collision & interaction
         for (Appliance app : appliances) {
@@ -256,25 +270,20 @@ public class DayScreen implements Screen {
                 playerTwo.setY(oldY2);
 
             // interaction
-            if (pressE && Intersector.overlaps(app.getInteractRegion(), player.getInteractRectangle())
+            if (pressE && (Intersector.overlaps(app.getInteractRegion(), player.getInteractRectangle())
+                    || Intersector.overlaps(app.getInteractRegion2(), player.getInteractRectangle()))
                     && app.canInteract(player.getItem())) {
                 player.interact(app.interact(player.getItem()));
             }
 
-            if (pressShift && Intersector.overlaps(app.getInteractRegion(), playerTwo.getInteractRectangle())
+            if (pressShift && (Intersector.overlaps(app.getInteractRegion(), playerTwo.getInteractRectangle())
+                    || Intersector.overlaps(app.getInteractRegion2(), playerTwo.getInteractRectangle()))
                     && app.canInteract(playerTwo.getItem())) {
                 playerTwo.interact(app.interact(playerTwo.getItem()));
             }
         }
         pressE = false;
         pressShift = false;
-
-        // TEST STUFF (delete later)
-        showHitboxRender.begin(ShapeRenderer.ShapeType.Filled);
-        showHitboxRender.setColor(0.1f, 1f, 0.3f, 1f);
-        showHitboxRender.rect(player.getBoundingRectangle().getX(), player.getBoundingRectangle().getY(),
-                player.getBoundingRectangle().getWidth(), player.getBoundingRectangle().getHeight());
-        showHitboxRender.end();
 
         // draw screen
         game.batch.begin();
@@ -289,7 +298,7 @@ public class DayScreen implements Screen {
 
         // draw timer & # orders remaining
         game.font.getData().setScale(1.1f);
-        game.font.draw(game.batch, "Orders left: " + dayState.ordersLeft(), tileWidth * 9.2f, tileHeight * 1.4f);
+        game.font.draw(game.batch, "Orders left: " + (dayState.wantedOrders - dayState.orderIndex), tileWidth * 9.2f, tileHeight * 1.4f);
         game.font.getData().setScale(1.5f);
         game.font.draw(game.batch, String.format("%.02f", DayState.maxTime - dayState.currentTime), tileWidth * 9.4f,
                 tileHeight * 0.7f);
@@ -331,10 +340,15 @@ public class DayScreen implements Screen {
         for (Appliance app : appliances) {
             app.dispose();
         }
+
+        breadTex.dispose();
+        hamTex.dispose();
+        cheeseTex.dispose();
+        lettuceTex.dispose();
+        tomatoTex.dispose();
         orderTex.dispose();
 
-        // TEST STUFF (delete later)
-        proudLion.dispose();
+        bgMusic.dispose();
     }
 
     @Override
@@ -358,156 +372,148 @@ public class DayScreen implements Screen {
 
     // putting this mess down here
     public Array<Appliance> getDay1Apps() {
-        int tileWidth = 100;
-        int tileHeight = 100;
-
         Array<Appliance> apps = new Array<Appliance>();
 
-        apps.add(new Counter(tileWidth * 3, tileHeight * 6, tileWidth, tileHeight, Appliance.direction.UP)); // left top counter
-        apps.add(new Counter(tileWidth * 3, tileHeight * 3, tileWidth, tileHeight, Appliance.direction.UP)); // left bottom counter
-        for (int i = 0; i < 5; i++) {                                                                                                    // bottom counters
-            apps.add(new Counter(tileWidth * (6 + i), tileHeight * 2, tileWidth, tileHeight, Appliance.direction.RIGHT));
+        apps.add(new Counter(8, 8)); // top counters
+        apps.add(new Counter(11, 8));
+        apps.add(new Counter(3, 6)); // left counters
+        apps.add(new Counter(3, 3));
+        for(int i = 0; i < 5; i++) {      // bottom counters
+            apps.add(new Counter(6 + i, 2));
         }
-        apps.add(new Counter(tileWidth * 8, tileHeight * 8, tileWidth, tileHeight, Appliance.direction.RIGHT)); // top left counter
-        apps.add(new Counter(tileWidth * 11, tileHeight * 8, tileWidth, tileHeight, Appliance.direction.RIGHT)); // top right counter
 
-        apps.add(new Crate(tileWidth * 6, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.bread)); // bread container
-        apps.add(new Crate(tileWidth * 7, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.ham)); // ham container
-        apps.add(new Crate(tileWidth * 8, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.cheese)); // cheese container
-        apps.add(new Crate(tileWidth * 9, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.lettuce)); // lettuce container
-        apps.add(new Crate(tileWidth * 10, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.tomato)); // tomato container
+        apps.add(new Crate(6, 5, Holdable.Type.bread)); // bread container
+        apps.add(new Crate(7, 5, Holdable.Type.ham)); // ham container
+        apps.add(new Crate(8, 5, Holdable.Type.cheese)); // cheese container
+        apps.add(new Crate(9, 5, Holdable.Type.lettuce)); // lettuce container
+        apps.add(new Crate(10, 5, Holdable.Type.tomato)); // tomato container
 
-        apps.add(new ChoppingBoard(tileWidth * 3, tileHeight * 5, tileWidth, tileHeight)); // top cutting board
-        apps.add(new ChoppingBoard(tileWidth * 3, tileHeight * 4, tileWidth, tileHeight)); // bottom cutting board
-        apps.add(new Toaster(tileWidth * 6, tileHeight * 8, tileWidth, tileHeight)); // toaster (left)
-        apps.add(new Toaster(tileWidth * 7, tileHeight * 8, tileWidth, tileHeight)); // toaster (right)
-        apps.add(new Trash(tileWidth * 11, tileHeight * 2, tileWidth, tileHeight)); // trash
-        apps.add(new ServingWindow(tileWidth * 9, tileHeight * 8, tileWidth * 2, tileHeight, this.dayState)); // serving windows (2x1)
+        apps.add(new ChoppingBoard(3, 5)); // top cutting board
+        apps.add(new ChoppingBoard(3, 4)); // bottom cutting board
+        apps.add(new Toaster(6, 8)); // toaster (left)
+        apps.add(new Toaster(7, 8)); // toaster (right)
+        apps.add(new Trash(11, 2)); // trash
+        apps.add(new ServingWindow(9, 8, this.dayState)); // serving windows (2x1)
 
         return apps;
     }
 
     public Array<Appliance> getDay2Apps() {
-        int tileWidth = 100;
-        int tileHeight = 100;
-
         Array<Appliance> apps = new Array<Appliance>();
 
-        apps.add(new Counter(tileWidth * 11, tileHeight * 8, tileWidth, tileHeight, Appliance.direction.RIGHT)); // top right counter
-        apps.add(new Counter(tileWidth * 3, tileHeight * 5, tileWidth, tileHeight, Appliance.direction.UP)); // mid left counter
-        for (int i = 0; i < 5; i++) {                                                        // bottom counters
-            apps.add(new Counter(tileWidth * (6 + i), tileHeight * 2, tileWidth, tileHeight, Appliance.direction.RIGHT));
+        apps.add(new Counter(11, 8)); // top counter
+        apps.add(new Counter(3, 5));  // left counter
+        for (int i = 0; i < 5; i++) {      // bottom counters
+            apps.add(new Counter(6 + i, 2));
         }
 
-        apps.add(new Crate(tileWidth * 5, tileHeight * 8, tileWidth, tileHeight, Holdable.Type.bread)); // bread container
-        apps.add(new Crate(tileWidth * 6, tileHeight * 8, tileWidth, tileHeight, Holdable.Type.wheatBread)); // wheat bread container
-        apps.add(new Crate(tileWidth * 7, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.ham)); // ham container
-        apps.add(new Crate(tileWidth * 8, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.cheese)); // cheese container
-        apps.add(new Crate(tileWidth * 9, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.lettuce)); // lettuce container
-        apps.add(new Crate(tileWidth * 10, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.tomato)); // tomato container
+        apps.add(new Crate(5, 8, Holdable.Type.bread)); // bread container
+        apps.add(new Crate(6, 8, Holdable.Type.wheatBread)); // wheat bread container
+        apps.add(new Crate(7, 5, Holdable.Type.ham)); // ham container
+        apps.add(new Crate(8, 5, Holdable.Type.cheese)); // cheese container
+        apps.add(new Crate(9, 5, Holdable.Type.lettuce)); // lettuce container
+        apps.add(new Crate(10, 5, Holdable.Type.tomato)); // tomato container
 
-        apps.add(new Toaster(tileWidth * 7, tileHeight * 8, tileWidth, tileHeight)); // left toaster
-        apps.add(new Toaster(tileWidth * 8, tileHeight * 8, tileWidth, tileHeight)); // right toaster
-        apps.add(new ServingWindow(tileWidth * 9, tileHeight * 8, tileWidth * 2, tileHeight, this.dayState)); // serving windows (2x1)
-        apps.add(new ChoppingBoard(tileWidth * 3, tileHeight * 7, tileWidth, tileHeight)); // top cutting board
-        apps.add(new ChoppingBoard(tileWidth * 3, tileHeight * 6, tileWidth, tileHeight)); // top cutting board
-        apps.add(new FryingPan(tileWidth * 3, tileHeight * 4, tileWidth, tileHeight)); // top frying pan
-        apps.add(new FryingPan(tileWidth * 3, tileHeight * 3, tileWidth, tileHeight)); // bottom frying pan
-        apps.add(new Trash(tileWidth * 11, tileHeight * 2, tileWidth, tileHeight)); // trash
+        apps.add(new Toaster(7, 8)); // left toaster
+        apps.add(new Toaster(8, 8)); // right toaster
+        apps.add(new ServingWindow(9, 8, this.dayState)); // serving windows (2x1)
+        apps.add(new ChoppingBoard(3, 7)); // top cutting board
+        apps.add(new ChoppingBoard(3, 6)); // top cutting board
+        apps.add(new FryingPan(3, 4)); // top frying pan
+        apps.add(new FryingPan(3, 3)); // bottom frying pan
+        apps.add(new Trash(11, 2)); // trash
 
         return apps;
     }
 
     public Array<Appliance> getDay3Apps() {
-        int tileWidth = 100;
-        int tileHeight = 100;
-
         Array<Appliance> apps = new Array<Appliance>();
 
-        apps.add(new Counter(tileWidth * 11, tileHeight * 8, tileWidth, tileHeight, Appliance.direction.RIGHT)); // top right counter
-        apps.add(new Counter(tileWidth * 6, tileHeight * 2, tileWidth, tileHeight, Appliance.direction.RIGHT)); // bottom left counter
-        for (int i = 0; i < 2; i++) {                                                        // bottom right counters
-            apps.add(new Counter(tileWidth * (9 + i), tileHeight * 2, tileWidth, tileHeight, Appliance.direction.RIGHT));
+        apps.add(new Counter(11, 8)); // top right counter
+        apps.add(new Counter(6, 2)); // bottom counters
+        for (int i = 0; i < 2; i++) {
+            apps.add(new Counter(9 + i, 2));
         }
 
-        apps.add(new Crate(tileWidth * 4, tileHeight * 8, tileWidth, tileHeight, Holdable.Type.bread)); // bread container
-        apps.add(new Crate(tileWidth * 5, tileHeight * 8, tileWidth, tileHeight, Holdable.Type.wheatBread)); // wheat bread container
-        apps.add(new Crate(tileWidth * 6, tileHeight * 8, tileWidth, tileHeight, Holdable.Type.sourBread)); // sour bread container
-        apps.add(new Crate(tileWidth * 6, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.ham)); // ham container
-        apps.add(new Crate(tileWidth * 7, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.cheese)); // cheese container
-        apps.add(new Crate(tileWidth * 8, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.lettuce)); // lettuce container
-        apps.add(new Crate(tileWidth * 9, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.tomato)); // tomato container
+        apps.add(new Crate(4, 8, Holdable.Type.bread)); // bread container
+        apps.add(new Crate(5, 8, Holdable.Type.wheatBread)); // wheat bread container
+        apps.add(new Crate(6, 8, Holdable.Type.sourBread)); // sour bread container
+        apps.add(new Crate(6, 5, Holdable.Type.ham)); // ham container
+        apps.add(new Crate(7, 5, Holdable.Type.cheese)); // cheese container
+        apps.add(new Crate(8, 5, Holdable.Type.lettuce)); // lettuce container
+        apps.add(new Crate(9, 5, Holdable.Type.tomato)); // tomato container
 
-        apps.add(new Toaster(tileWidth * 7, tileHeight * 8, tileWidth, tileHeight)); // left toaster
-        apps.add(new Toaster(tileWidth * 8, tileHeight * 8, tileWidth, tileHeight)); // right toaster
-        apps.add(new ServingWindow(tileWidth * 9, tileHeight * 8, tileWidth * 2, tileHeight, this.dayState)); // serving windows (2x1)
-        apps.add(new ChoppingBoard(tileWidth * 3, tileHeight * 6, tileWidth, tileHeight)); // top cutting board
-        apps.add(new ChoppingBoard(tileWidth * 3, tileHeight * 5, tileWidth, tileHeight)); // top cutting board
-        apps.add(new FryingPan(tileWidth * 3, tileHeight * 4, tileWidth, tileHeight)); // top frying pan
-        apps.add(new FryingPan(tileWidth * 3, tileHeight * 3, tileWidth, tileHeight)); // bottom frying pan
-        apps.add(new KetchupBottle(tileWidth * 7, tileHeight * 2, tileWidth, tileHeight)); // ketchup
-        apps.add(new MustardBottle(tileWidth * 8, tileHeight * 2, tileWidth, tileHeight)); // mustard
-        apps.add(new Trash(tileWidth * 11, tileHeight * 2, tileWidth, tileHeight)); // trash
+        apps.add(new Toaster(7, 8)); // left toaster
+        apps.add(new Toaster(8, 8)); // right toaster
+        apps.add(new ServingWindow(9, 8, this.dayState)); // serving windows (2x1)
+        apps.add(new ChoppingBoard(3, 6)); // top cutting board
+        apps.add(new ChoppingBoard(3, 5)); // top cutting board
+        apps.add(new FryingPan(3, 4)); // top frying pan
+        apps.add(new FryingPan(3, 3)); // bottom frying pan
+        apps.add(new KetchupBottle(7, 2)); // ketchup
+        apps.add(new MustardBottle(8, 2)); // mustard
+        apps.add(new Trash(11, 2)); // trash
 
         return apps;
     }
 
     public Array<Appliance> getDay4Apps() {
-        int tileWidth = 100;
-        int tileHeight = 100;
-
         Array<Appliance> apps = new Array<Appliance>();
 
-        apps.add(new Counter(tileWidth * 11, tileHeight * 8, tileWidth, tileHeight, Appliance.direction.RIGHT)); // top right counter
-        apps.add(new Counter(tileWidth * 6, tileHeight * 2, tileWidth, tileHeight, Appliance.direction.RIGHT)); // bottom left counter
-        apps.add(new Counter(tileWidth * 10, tileHeight * 2, tileWidth, tileHeight, Appliance.direction.RIGHT)); // bottom right counter
+        apps.add(new Counter(11, 8)); // top right counter
+        apps.add(new Counter(6, 2)); // bottom left counter
+        apps.add(new Counter(10, 2)); // bottom right counter
 
-        apps.add(new Crate(tileWidth * 4, tileHeight * 8, tileWidth, tileHeight, Holdable.Type.bread)); // bread container
-        apps.add(new Crate(tileWidth * 5, tileHeight * 8, tileWidth, tileHeight, Holdable.Type.wheatBread)); // wheat bread container
-        apps.add(new Crate(tileWidth * 6, tileHeight * 8, tileWidth, tileHeight, Holdable.Type.sourBread)); // sour bread container
-        apps.add(new Crate(tileWidth * 5, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.ham)); // ham container
-        apps.add(new Crate(tileWidth * 6, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.cheese)); // cheese container
-        apps.add(new Crate(tileWidth * 7, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.lettuce)); // lettuce container
-        apps.add(new Crate(tileWidth * 8, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.tomato)); // tomato container
-        apps.add(new Crate(tileWidth * 9, tileHeight * 5, tileWidth, tileHeight, Holdable.Type.minionBread)); // minion bread container
+        apps.add(new Crate(4, 8, Holdable.Type.bread)); // bread container
+        apps.add(new Crate(5, 8, Holdable.Type.wheatBread)); // wheat bread container
+        apps.add(new Crate(6, 8, Holdable.Type.sourBread)); // sour bread container
+        apps.add(new Crate(5, 5, Holdable.Type.ham)); // ham container
+        apps.add(new Crate(6, 5, Holdable.Type.cheese)); // cheese container
+        apps.add(new Crate(7, 5, Holdable.Type.lettuce)); // lettuce container
+        apps.add(new Crate(8, 5, Holdable.Type.tomato)); // tomato container
+        apps.add(new Crate(9, 5, Holdable.Type.minionBread)); // minion bread container
 
-        apps.add(new Toaster(tileWidth * 8, tileHeight * 8, tileWidth, tileHeight)); // right toaster
-        apps.add(new ServingWindow(tileWidth * 9, tileHeight * 8, tileWidth * 2, tileHeight, this.dayState)); // serving windows (2x1)
-        apps.add(new ChoppingBoard(tileWidth * 2, tileHeight * 6, tileWidth, tileHeight)); // top cutting board
-        apps.add(new ChoppingBoard(tileWidth * 2, tileHeight * 5, tileWidth, tileHeight)); // top cutting board
-        apps.add(new FryingPan(tileWidth * 2, tileHeight * 4, tileWidth, tileHeight)); // top frying pan
-        apps.add(new KetchupBottle(tileWidth * 7, tileHeight * 2, tileWidth, tileHeight)); // ketchup
-        apps.add(new MustardBottle(tileWidth * 8, tileHeight * 2, tileWidth, tileHeight)); // mustard
-        apps.add(new Trash(tileWidth * 11, tileHeight * 2, tileWidth, tileHeight)); // trash
+        apps.add(new Toaster(8, 8)); // right toaster
+        apps.add(new ServingWindow(9, 8, this.dayState)); // serving windows (2x1)
+        apps.add(new ChoppingBoard(2, 6)); // top cutting board
+        apps.add(new ChoppingBoard(2, 5)); // top cutting board
+        apps.add(new FryingPan(2, 4)); // top frying pan
+        apps.add(new KetchupBottle(7, 2)); // ketchup
+        apps.add(new MustardBottle(8, 2)); // mustard
+        apps.add(new Trash(11, 2)); // trash
 
         return apps;
     }
 
     public Array<Appliance> getDay5Apps() {
-        int tileWidth = 100;
-        int tileHeight = 100;
-
         Array<Appliance> apps = new Array<Appliance>();
 
-        apps.add(new Counter(tileWidth * 10, tileHeight * 7, tileWidth, tileHeight, Appliance.direction.RIGHT)); // top right counter
-        apps.add(new Counter(tileWidth * 10, tileHeight, tileWidth, tileHeight, Appliance.direction.RIGHT)); // bottom right counter
+        apps.add(new Counter(10, 7)); // top right counter
+        apps.add(new Barrier(5, 1)); // bottom counters
+        apps.add(new Barrier(8, 1));
+        apps.add(new Counter(9, 1));
 
-        apps.add(new Crate(tileWidth * 3, tileHeight * 7, tileWidth, tileHeight, Holdable.Type.bread)); // bread container
-        apps.add(new Crate(tileWidth * 4, tileHeight * 7, tileWidth, tileHeight, Holdable.Type.wheatBread)); // wheat bread container
-        apps.add(new Crate(tileWidth * 5, tileHeight * 7, tileWidth, tileHeight, Holdable.Type.sourBread)); // sour bread container
-        apps.add(new Crate(tileWidth * 4, tileHeight * 4, tileWidth, tileHeight, Holdable.Type.ham)); // ham container
-        apps.add(new Crate(tileWidth * 5, tileHeight * 4, tileWidth, tileHeight, Holdable.Type.cheese)); // cheese container
-        apps.add(new Crate(tileWidth * 6, tileHeight * 4, tileWidth, tileHeight, Holdable.Type.lettuce)); // lettuce container
-        apps.add(new Crate(tileWidth * 7, tileHeight * 4, tileWidth, tileHeight, Holdable.Type.tomato)); // tomato container
-        apps.add(new Crate(tileWidth * 8, tileHeight * 4, tileWidth, tileHeight, Holdable.Type.minionBread)); // minion bread container
+        apps.add(new Crate(3, 7, Holdable.Type.bread)); // bread container
+        apps.add(new Crate(4, 7, Holdable.Type.wheatBread)); // wheat bread container
+        apps.add(new Crate(5, 7, Holdable.Type.sourBread)); // sour bread container
+        apps.add(new Crate(4, 4, Holdable.Type.ham)); // ham container
+        apps.add(new Crate(5, 4, Holdable.Type.cheese)); // cheese container
+        apps.add(new Crate(6, 4, Holdable.Type.lettuce)); // lettuce container
+        apps.add(new Crate(7, 4, Holdable.Type.tomato)); // tomato container
+        apps.add(new Crate(8, 4, Holdable.Type.minionBread)); // minion bread container
 
-        apps.add(new Toaster(tileWidth * 7, tileHeight * 7, tileWidth, tileHeight)); // right toaster
-        apps.add(new ServingWindow(tileWidth * 8, tileHeight * 7, tileWidth * 2, tileHeight, this.dayState)); // serving windows (2x1)
-        apps.add(new ChoppingBoard(tileWidth, tileHeight * 4, tileWidth, tileHeight)); // bottom cutting board
-        apps.add(new FryingPan(tileWidth, tileHeight * 3, tileWidth, tileHeight)); // top frying pan
-        apps.add(new KetchupBottle(tileWidth * 7, tileHeight, tileWidth, tileHeight)); // ketchup
-        apps.add(new MustardBottle(tileWidth * 8, tileHeight, tileWidth, tileHeight)); // mustard
-        apps.add(new Trash(tileWidth * 10, tileHeight, tileWidth, tileHeight)); // trash
+        apps.add(new Barrier(6,7)); // left toaster
+        apps.add(new Toaster(7, 7)); // right toaster
+        apps.add(new ServingWindow(8, 7, this.dayState)); // serving windows (2x1)
+        apps.add(new Barrier(1, 5)); // top cutting board
+        apps.add(new ChoppingBoard(1, 4)); // bottom cutting board
+        apps.add(new FryingPan(1, 3)); // top frying pan
+        apps.add(new Barrier(1, 2)); // bottom frying pan
+        apps.add(new KetchupBottle(7, 1)); // ketchup
+        apps.add(new MustardBottle(8, 1)); // mustard
+        apps.add(new Trash(10, 1)); // trash
+
+        // fire
 
         return apps;
     }
