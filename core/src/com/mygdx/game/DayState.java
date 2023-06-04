@@ -128,9 +128,6 @@ public class DayState {
     }
 
     public void nextOrder() {
-        if (orders.isEmpty()) {
-            return;
-        }
         orderIndex++;
     }
 
@@ -139,7 +136,7 @@ public class DayState {
     }
 
     public int ordersCnt() {
-        return orders.size;
+        return orderIndex + 1;
     }
 
     public void grilled(boolean grill) {
@@ -150,7 +147,8 @@ public class DayState {
     }
 
     public int score() {
-        return 1 + (int) ((100 + (maxTime - currentTime) / maxTime * 1000) * (1 + (double) (level - 1) / 2));
+        return 1 + (int) ((100 + ((maxTime - currentTime) / maxTime * 1000)
+                + (ordersCnt() / wantedOrders * 1000)) * (1 + (double) (level - 1) / 2));
     }
 
 }

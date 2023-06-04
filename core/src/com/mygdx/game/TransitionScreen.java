@@ -60,14 +60,20 @@ class TransitionScreen implements Screen {
             String text = "You have completed %d orders out of %d!\nYou have completed the day!\n\nYour score is %d";
             msg = String.format(text, dayState.orderIndex, dayState.wantedOrders, dayState.score());
             if (highScore) {
-                msg += ", a new high score!\nYour past high score was " + oldHighScore + ".";
+                text += ", a new high score!\nYour past high score was " + oldHighScore + ".";
             } else {
-                msg += ".\nYour high score is " + game.highScore + ".";
+                text += ".\nYour high score is " + game.highScore + ".";
             }
+            msg = String.format(text, dayState.ordersCnt(), dayState.wantedOrders, dayState.score());
             msg += "\n\nClick anywhere to continue to the next level.";
         } else {
-            String text = "You have completed %d orders out of %d. You have failed the day.";
-            msg = String.format(text, dayState.ordersCnt(), dayState.wantedOrders);
+            String text = "You have completed %d orders out of %d.\nYou have failed.\n\nYour score is %d";
+            if (highScore) {
+                text += ", a new high score!\nYour past high score was " + oldHighScore + ".";
+            } else {
+                text += ".\nYour high score is " + game.highScore + ".";
+            }
+            msg = String.format(text, dayState.ordersCnt(), dayState.wantedOrders, dayState.score());
             msg += "\n\nClick anywhere to try again";
         }
         return msg;
