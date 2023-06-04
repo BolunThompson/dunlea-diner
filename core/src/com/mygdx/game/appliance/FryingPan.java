@@ -51,8 +51,8 @@ public class FryingPan extends Appliance {
      */
     @Override
     public boolean canInteract(Holdable item) {
-        return (item == null
-                || (item instanceof Sandwich && ((Sandwich) item).isFinished() && !((Sandwich) item).isToasted())
+        return ((item == null
+                || (item instanceof Sandwich && ((Sandwich) item).isFinished() && !((Sandwich) item).isToasted()))
                 && (!doAnimation || animation.isAnimationFinished(elapsedTime)));
     }
 

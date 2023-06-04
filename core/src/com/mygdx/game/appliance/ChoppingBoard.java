@@ -33,8 +33,6 @@ public class ChoppingBoard extends Appliance{
             doAnimation = true;
         }
 
-
-
         return temp;
     }
 
@@ -49,8 +47,8 @@ public class ChoppingBoard extends Appliance{
     @Override
     public boolean canInteract(Holdable item)
     {
-        return (item == null
-                || (item instanceof Ham || item instanceof Cheese || item instanceof Lettuce || item instanceof Tomato && ((Ingredient) item).getCostumeIndex() == 0))
+        return ((item == null
+                || ((item instanceof Ham || item instanceof Cheese || item instanceof Lettuce || item instanceof Tomato) && ((Ingredient) item).getCostumeIndex() == 0)))
                 && (!doAnimation || animation.isAnimationFinished(elapsedTime));
     }
 

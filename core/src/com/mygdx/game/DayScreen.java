@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.appliance.*;
 import com.mygdx.game.holdable.Holdable;
 import com.mygdx.game.holdable.Ingredient;
+import com.mygdx.game.holdable.MinionBread;
 
 /**
  * DayScreen class
@@ -290,8 +291,8 @@ public class DayScreen implements Screen {
         }
 
         // draw hitboxes
-        //hitboxDrawer.drawCollision();
-        //hitboxDrawer.drawInteraction();
+        hitboxDrawer.drawCollision();
+        hitboxDrawer.drawInteraction();
 
         // draw screen
         game.batch.begin();
@@ -383,26 +384,26 @@ public class DayScreen implements Screen {
     public Array<Appliance> getDay1Apps() {
         Array<Appliance> apps = new Array<>();
 
-        apps.add(new Counter(8, 8)); // top counters
-        apps.add(new Counter(11, 8));
-        apps.add(new Counter(3, 6)); // left counters
-        apps.add(new Counter(3, 3));
-        for(int i = 0; i < 5; i++) {      // bottom counters
-            apps.add(new Counter(6 + i, 2));
-        }
-
-        apps.add(new Crate(6, 5, Holdable.Type.bread)); // bread container
-        apps.add(new Crate(7, 5, Holdable.Type.ham)); // ham container
-        apps.add(new Crate(8, 5, Holdable.Type.cheese)); // cheese container
-        apps.add(new Crate(9, 5, Holdable.Type.lettuce)); // lettuce container
-        apps.add(new Crate(10, 5, Holdable.Type.tomato)); // tomato container
-
-        apps.add(new ChoppingBoard(3, 5)); // top cutting board
-        apps.add(new ChoppingBoard(3, 4)); // bottom cutting board
+        apps.add(new ServingWindow(9, 8, this.dayState)); // serving windows (2x1)
         apps.add(new Toaster(6, 8)); // toaster (left)
         apps.add(new Toaster(7, 8)); // toaster (right)
+        apps.add(new ChoppingBoard(7, 2)); // cutting board (left)
+        apps.add(new ChoppingBoard(8, 2)); // cutting board (right)
         apps.add(new Trash(11, 2)); // trash
-        apps.add(new ServingWindow(9, 8, this.dayState)); // serving windows (2x1)
+        apps.add(new Crate(5, 8, Holdable.Type.bread)); // bread container
+        apps.add(new Crate(6, 5, Holdable.Type.ham)); // ham container
+        apps.add(new Crate(7, 5, Holdable.Type.cheese)); // cheese container
+        apps.add(new Crate(8, 5, Holdable.Type.lettuce)); // lettuce container
+        apps.add(new Crate(9, 5, Holdable.Type.tomato)); // tomato container
+
+        apps.add(new Counter(8, 8)); // top counters
+        apps.add(new Counter(11, 8));
+        for (int i = 0; i < 4; i++) {     // left counters
+            apps.add(new Counter(3, 3 + i));
+        }
+        apps.add(new Counter(6, 2)); // bottom counters
+        apps.add(new Counter(9, 2));
+        apps.add(new Counter(10, 2));
 
         return apps;
     }
@@ -410,27 +411,29 @@ public class DayScreen implements Screen {
     public Array<Appliance> getDay2Apps() {
         Array<Appliance> apps = new Array<>();
 
-        apps.add(new Counter(11, 8)); // top counter
-        apps.add(new Counter(3, 5));  // left counter
-        for (int i = 0; i < 5; i++) {      // bottom counters
-            apps.add(new Counter(6 + i, 2));
-        }
-
-        apps.add(new Crate(5, 8, Holdable.Type.bread)); // bread container
-        apps.add(new Crate(6, 8, Holdable.Type.wheatBread)); // wheat bread container
-        apps.add(new Crate(7, 5, Holdable.Type.ham)); // ham container
-        apps.add(new Crate(8, 5, Holdable.Type.cheese)); // cheese container
-        apps.add(new Crate(9, 5, Holdable.Type.lettuce)); // lettuce container
-        apps.add(new Crate(10, 5, Holdable.Type.tomato)); // tomato container
-
-        apps.add(new Toaster(7, 8)); // left toaster
-        apps.add(new Toaster(8, 8)); // right toaster
         apps.add(new ServingWindow(9, 8, this.dayState)); // serving windows (2x1)
-        apps.add(new ChoppingBoard(3, 7)); // top cutting board
-        apps.add(new ChoppingBoard(3, 6)); // top cutting board
-        apps.add(new FryingPan(3, 4)); // top frying pan
-        apps.add(new FryingPan(3, 3)); // bottom frying pan
+        apps.add(new Toaster(6, 8)); // toaster (left)
+        apps.add(new Toaster(7, 8)); // toaster (right)
+        apps.add(new FryingPan(3, 5)); // frying pan (top)
+        apps.add(new FryingPan(3, 4)); // frying pan (bottom)
+        apps.add(new ChoppingBoard(7, 2)); // cutting board (left)
+        apps.add(new ChoppingBoard(8, 2)); // cutting board (right)
         apps.add(new Trash(11, 2)); // trash
+
+        apps.add(new Crate(4, 8, Holdable.Type.wheatBread)); // wheat bread container
+        apps.add(new Crate(5, 8, Holdable.Type.bread)); // bread container
+        apps.add(new Crate(6, 5, Holdable.Type.ham)); // ham container
+        apps.add(new Crate(7, 5, Holdable.Type.cheese)); // cheese container
+        apps.add(new Crate(8, 5, Holdable.Type.lettuce)); // lettuce container
+        apps.add(new Crate(9, 5, Holdable.Type.tomato)); // tomato container
+
+        apps.add(new Counter(8, 8)); // top counters
+        apps.add(new Counter(11, 8));
+        apps.add(new Counter(3, 3)); // left counters
+        apps.add(new Counter(3, 6));
+        apps.add(new Counter(6, 2)); // bottom counters
+        apps.add(new Counter(9, 2));
+        apps.add(new Counter(10, 2));
 
         return apps;
     }
@@ -438,31 +441,29 @@ public class DayScreen implements Screen {
     public Array<Appliance> getDay3Apps() {
         Array<Appliance> apps = new Array<>();
 
-        apps.add(new Counter(11, 8)); // top right counter
-        apps.add(new Counter(3, 4)); // left counter
-        apps.add(new Counter(6, 2)); // bottom counters
-        for (int i = 0; i < 2; i++) {
-            apps.add(new Counter(9 + i, 2));
-        }
+        apps.add(new ServingWindow(9, 8, this.dayState)); // serving windows (2x1)
+        apps.add(new Toaster(7, 8)); // toaster (left)
+        apps.add(new Toaster(8, 8)); // toaster (right)
+        apps.add(new FryingPan(3, 5)); // frying pan (top)
+        apps.add(new FryingPan(3, 4)); // frying pan (bottom)
+        apps.add(new ChoppingBoard(7, 2)); // cutting board (left)
+        apps.add(new ChoppingBoard(8, 2)); // cutting board (right)
+        apps.add(new KetchupBottle(9, 2)); // ketchup bottle
+        apps.add(new MustardBottle(10, 2)); // mustard bottle
+        apps.add(new Trash(11, 2)); // trash
 
-        apps.add(new Crate(4, 8, Holdable.Type.bread)); // bread container
+        apps.add(new Crate(4, 8, Holdable.Type.sourBread)); // sourdough bread container
         apps.add(new Crate(5, 8, Holdable.Type.wheatBread)); // wheat bread container
-        apps.add(new Crate(6, 8, Holdable.Type.sourBread)); // sour bread container
+        apps.add(new Crate(6, 8, Holdable.Type.bread)); // bread container
         apps.add(new Crate(6, 5, Holdable.Type.ham)); // ham container
         apps.add(new Crate(7, 5, Holdable.Type.cheese)); // cheese container
         apps.add(new Crate(8, 5, Holdable.Type.lettuce)); // lettuce container
         apps.add(new Crate(9, 5, Holdable.Type.tomato)); // tomato container
 
-        apps.add(new Toaster(7, 8)); // left toaster
-        apps.add(new Toaster(8, 8)); // right toaster
-        apps.add(new ServingWindow(9, 8, this.dayState)); // serving windows (2x1)
-        apps.add(new ChoppingBoard(3, 6)); // top cutting board
-        apps.add(new ChoppingBoard(3, 5)); // top cutting board
-        apps.add(new FryingPan(3, 3)); // top frying pan
-        apps.add(new FryingPan(3, 2)); // bottom frying pan
-        apps.add(new KetchupBottle(7, 2)); // ketchup
-        apps.add(new MustardBottle(8, 2)); // mustard
-        apps.add(new Trash(11, 2)); // trash
+        apps.add(new Counter(11, 8)); // top counter
+        apps.add(new Counter(3, 6)); // left counters
+        apps.add(new Counter(3, 3));
+        apps.add(new Counter(6, 2)); // bottom counter
 
         return apps;
     }
@@ -470,34 +471,33 @@ public class DayScreen implements Screen {
     public Array<Appliance> getDay4Apps() {
         Array<Appliance> apps = new Array<>();
 
-        apps.add(new Counter(11, 8)); // top right counter
-        apps.add(new Counter(6, 2)); // bottom counters
-        apps.add(new Barrier(9, 2));
-        apps.add(new Counter(10, 2));
-
-        apps.add(new Crate(4, 8, Holdable.Type.bread)); // bread container
-        apps.add(new Crate(5, 8, Holdable.Type.wheatBread)); // wheat bread container
-        apps.add(new Crate(6, 8, Holdable.Type.sourBread)); // sour bread container
-        apps.add(new Crate(5, 5, Holdable.Type.ham)); // ham container
-        apps.add(new Crate(6, 5, Holdable.Type.cheese)); // cheese container
-        apps.add(new Crate(7, 5, Holdable.Type.lettuce)); // lettuce container
-        apps.add(new Crate(8, 5, Holdable.Type.tomato)); // tomato container
-        apps.add(new Crate(9, 5, Holdable.Type.minionBread)); // minion bread container
-
-        apps.add(new Barrier(7, 8)); // left toaster
-        apps.add(new Toaster(8, 8)); // right toaster
         apps.add(new ServingWindow(9, 8, this.dayState)); // serving windows (2x1)
-        apps.add(new ChoppingBoard(2, 6)); // top cutting board
-        apps.add(new ChoppingBoard(2, 5)); // top cutting board
-        apps.add(new FryingPan(2, 4)); // top frying pan
-        apps.add(new Barrier(2, 3)); // bottom frying pan
-        apps.add(new KetchupBottle(7, 2)); // ketchup
-        apps.add(new MustardBottle(8, 2)); // mustard
+        apps.add(new Toaster(7, 8)); // toaster (left)
+        apps.add(new Barrier(8, 8)); // toaster (right)
+        apps.add(new FryingPan(3, 5)); // frying pan (top)
+        apps.add(new Barrier(3, 4)); // frying pan (bottom)
+        apps.add(new ChoppingBoard(7, 2)); // cutting board (left)
+        apps.add(new ChoppingBoard(8, 2)); // cutting board (right)
+        apps.add(new KetchupBottle(9, 2)); // ketchup bottle
+        apps.add(new MustardBottle(10, 2)); // mustard bottle
         apps.add(new Trash(11, 2)); // trash
 
+        apps.add(new Crate(3, 8, Holdable.Type.minionBread)); // minion bread container
+        apps.add(new Crate(4, 8, Holdable.Type.sourBread)); // sourdough bread container
+        apps.add(new Crate(5, 8, Holdable.Type.wheatBread)); // wheat bread container
+        apps.add(new Crate(6, 8, Holdable.Type.bread)); // bread container
+        apps.add(new Crate(6, 5, Holdable.Type.ham)); // ham container
+        apps.add(new Crate(7, 5, Holdable.Type.cheese)); // cheese container
+        apps.add(new Crate(8, 5, Holdable.Type.lettuce)); // lettuce container
+        apps.add(new Crate(9, 5, Holdable.Type.tomato)); // tomato container
+
+        apps.add(new Counter(11, 8)); // top counter
+        apps.add(new Counter(3, 3)); // left counter
+        apps.add(new Counter(6, 2)); // bottom counter
+
+        apps.add(new Barrier(3, 6)); // minion
         apps.add(new Barrier(10, 6)); // banana peels
         apps.add(new Barrier(11, 4));
-        apps.add(new Barrier(9, 2));
 
         return apps;
     }
@@ -505,37 +505,38 @@ public class DayScreen implements Screen {
     public Array<Appliance> getDay5Apps() {
         Array<Appliance> apps = new Array<>();
 
-        apps.add(new Counter(10, 7)); // top right counter
-        apps.add(new Barrier(5, 1)); // bottom counters
-        apps.add(new Barrier(8, 1));
-        apps.add(new Counter(9, 1));
-
-        apps.add(new Crate(3, 7, Holdable.Type.bread)); // bread container
-        apps.add(new Crate(4, 7, Holdable.Type.wheatBread)); // wheat bread container
-        apps.add(new Crate(5, 7, Holdable.Type.sourBread)); // sour bread container
-        apps.add(new Crate(4, 4, Holdable.Type.ham)); // ham container
-        apps.add(new Crate(5, 4, Holdable.Type.cheese)); // cheese container
-        apps.add(new Crate(6, 4, Holdable.Type.lettuce)); // lettuce container
-        apps.add(new Crate(7, 4, Holdable.Type.tomato)); // tomato container
-        apps.add(new Crate(8, 4, Holdable.Type.minionBread)); // minion bread container
-
-        apps.add(new Barrier(6,7)); // left toaster
-        apps.add(new Toaster(7, 7)); // right toaster
         apps.add(new ServingWindow(8, 7, this.dayState)); // serving windows (2x1)
-        apps.add(new Barrier(1, 5)); // top cutting board
-        apps.add(new ChoppingBoard(1, 4)); // bottom cutting board
-        apps.add(new FryingPan(1, 3)); // top frying pan
-        apps.add(new Barrier(1, 2)); // bottom frying pan
-        apps.add(new KetchupBottle(6, 1)); // ketchup
-        apps.add(new MustardBottle(7, 1)); // mustard
+        apps.add(new Barrier(6,7)); // toaster (left)
+        apps.add(new Toaster(7, 7)); // toaster (right)
+        apps.add(new FryingPan(1, 4)); // frying pan (top)
+        apps.add(new Barrier(1, 3)); // frying (bottom)
+        apps.add(new Barrier(6, 1)); // cutting board (left)
+        apps.add(new ChoppingBoard(7, 1)); // cutting board (right)
+        apps.add(new KetchupBottle(8, 1)); // ketchup
+        apps.add(new MustardBottle(9, 1)); // mustard
         apps.add(new Trash(10, 1)); // trash
+
+        apps.add(new Crate(2, 7, Holdable.Type.minionBread)); // minion bread container
+        apps.add(new Crate(3, 7, Holdable.Type.sourBread)); // sour bread container
+        apps.add(new Crate(4, 7, Holdable.Type.wheatBread)); // wheat bread container
+        apps.add(new Crate(5, 7, Holdable.Type.bread)); // bread container
+        apps.add(new Crate(5, 4, Holdable.Type.ham)); // ham container
+        apps.add(new Crate(6, 4, Holdable.Type.cheese)); // cheese container
+        apps.add(new Crate(7, 4, Holdable.Type.lettuce)); // lettuce container
+        apps.add(new Crate(8, 4, Holdable.Type.tomato)); // tomato container
+
+        apps.add(new Counter(10, 7)); // top right counter
+        apps.add(new Barrier(1, 2)); // left counter
+        apps.add(new Counter(5, 1)); // bottom counters
 
         apps.add(new Barrier(0, 8, 12, 1)); // fire border
         apps.add(new Barrier(11, 0, 1, 9));
         apps.add(new Barrier(0, 0, 12, 1));
         apps.add(new Barrier(0, 0, 1, 9));
 
-        apps.add(new Barrier(2, 6)); // fire
+        apps.add(new Barrier(1, 7)); // fire
+        apps.add(new Barrier(1, 5));
+        apps.add(new Barrier(3, 5));
         apps.add(new Barrier(9, 4));
         apps.add(new Barrier(5, 3));
         apps.add(new Barrier(10, 3));

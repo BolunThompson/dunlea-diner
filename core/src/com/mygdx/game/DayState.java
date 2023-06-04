@@ -52,7 +52,7 @@ public class DayState {
     static DayState createLevels() {
         Optional<DayState> dayState = Optional.empty();
         for (int level = 5; level >= 1; level--) {
-            String mapFile = String.format("Maps/day%dMap.tmx", level);
+            String mapFile = String.format("Maps/day%dMap_alt.tmx", level);
             String name = String.format("Day %d", level);
             ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
             ArrayList<Bread> breads = new ArrayList<Bread>();

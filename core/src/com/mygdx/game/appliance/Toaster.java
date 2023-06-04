@@ -61,8 +61,8 @@ public class Toaster extends Appliance {
     @Override
     public boolean canInteract(Holdable item)
     {
-        return (item == null
-                || (item != null && item instanceof Bread && !((Bread) item).edible()))
+        return ((item == null
+                || (item != null && item instanceof Bread && !((Bread) item).edible())))
                 && (!doAnimation || animation.isAnimationFinished(elapsedTime));
     }
 
