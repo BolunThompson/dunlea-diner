@@ -1,6 +1,5 @@
 package com.mygdx.game.holdable;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
 
@@ -53,6 +52,8 @@ public class Sandwich extends Holdable{
 
     /**
      * Returns true if the two sandwiches being compared have the same type & quantity of ingredients
+     *
+     * Note: UNUSED METHOD
      *
      * @param temp - the sandwich being compared to
      */

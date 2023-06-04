@@ -12,7 +12,6 @@ public class Barrier extends Appliance {
 
     public Barrier(int x, int y, int width, int height) {
         super(null, x, y);
-
         this.collisionRegion = new Rectangle(x * this.width, y * this.height, width * this.width, height * this.height);
     }
 

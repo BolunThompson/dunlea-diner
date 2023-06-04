@@ -3,8 +3,6 @@ package com.mygdx.game.appliance;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.holdable.Holdable;
-import com.mygdx.game.holdable.Ingredient;
-import com.badlogic.gdx.audio.Sound;
 
 /**
  * Trash class (extends abstract class Appliance)

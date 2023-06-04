@@ -1,7 +1,10 @@
 package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
-import com.mygdx.game.holdable.*;
+import com.mygdx.game.holdable.Bread;
+import com.mygdx.game.holdable.Holdable;
+import com.mygdx.game.holdable.Mustard;
+import com.mygdx.game.holdable.Sandwich;
 
 /**
  * MustardBottle class (extends abstract class Appliance)
@@ -44,10 +47,7 @@ public class MustardBottle extends Appliance{
      */
     @Override
     public boolean canInteract(Holdable item) {
-        if (item != null && ((item instanceof Sandwich && !((Sandwich) item).isFinished()) || (item instanceof Bread && ((Bread)item).edible())))
-            return true;
-        else
-            return false;
+        return item != null && ((item instanceof Sandwich && !((Sandwich) item).isFinished()) || (item instanceof Bread && ((Bread) item).edible()));
     }
 
 }

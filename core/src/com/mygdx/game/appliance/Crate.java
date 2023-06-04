@@ -1,7 +1,6 @@
 package com.mygdx.game.appliance;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.holdable.*;
 
 /**

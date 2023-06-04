@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -34,12 +33,10 @@ class MainMenu implements Screen {
         title = new Texture(Gdx.files.internal("Misc/menu_sheet.png")); // original screen size: 800 x 480
         TextureRegion[][] temp = TextureRegion.split(title, 1200, 900);
         menuFrames = new TextureRegion[5];
-        for(int i = 0; i < 5; i++) {
-            menuFrames[i] = temp[0][i];
-        }
+        System.arraycopy(temp[0], 0, menuFrames, 0, 5);
         menuIndex = 0;
 
-        /**
+        /*
          * The following music was used for this media project:
          * Music: Airport Lounge by Kevin MacLeod
          * Free download: https://filmmusic.io/song/3347-airport-lounge

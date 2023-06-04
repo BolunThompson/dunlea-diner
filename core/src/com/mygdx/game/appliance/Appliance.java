@@ -80,10 +80,7 @@ public abstract class Appliance {
         TextureRegion[][] tmpFrames = TextureRegion.split(sprite_sheet, 32, 32);
 
         frames = new TextureRegion[numFrames - 1];
-        for(int i = 0; i < numFrames - 1; i ++)
-        {
-            frames[i] = tmpFrames[0][i];
-        }
+        System.arraycopy(tmpFrames[0], 0, frames, 0, numFrames - 1);
         endFrame = tmpFrames[0][numFrames - 1];
 
         animation = new Animation(1f, (Object[])frames);

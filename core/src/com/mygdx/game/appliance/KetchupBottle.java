@@ -47,10 +47,7 @@ public class KetchupBottle extends Appliance {
      */
     @Override
     public boolean canInteract(Holdable item) {
-        if (item != null && ((item instanceof Sandwich && !((Sandwich) item).isFinished()) || (item instanceof Bread && ((Bread)item).edible())))
-            return true;
-        else
-            return false;
+        return item != null && ((item instanceof Sandwich && !((Sandwich) item).isFinished()) || (item instanceof Bread && ((Bread) item).edible()));
     }
 
 }

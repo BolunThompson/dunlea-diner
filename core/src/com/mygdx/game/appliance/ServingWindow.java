@@ -3,8 +3,6 @@ package com.mygdx.game.appliance;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.holdable.Bread;
-import com.mygdx.game.holdable.Cheese;
 import com.mygdx.game.holdable.Holdable;
 import com.mygdx.game.holdable.Ingredient;
 import com.mygdx.game.holdable.Sandwich;
@@ -42,22 +40,20 @@ public class ServingWindow extends Appliance {
      */
     @Override
     public Holdable interact(Holdable item) {
-        if (sound != null)
-            sound.play(1.0f);
-
         // pseudocode: if DayScreen.currentOrder.equals((Sandwich)item)
         // increment number of correct orders
         // currentOrder = (generate a new order)
         // feels like a hack
-        if (item instanceof Sandwich) {
-            Sandwich sandwich = (Sandwich) item;
-            for (Ingredient ingredient : sandwich.getIngredients()) {
-                day.mark(ingredient);
-            }
-            day.grilled(sandwich.isToasted());
-            if (day.orderIsComplete()) {
-                day.nextOrder();
-            }
+        Sandwich sandwich = (Sandwich) item;
+        for (Ingredient ingredient : sandwich.getIngredients()) {
+            day.mark(ingredient);
+        }
+        day.grilled(sandwich.isToasted());
+        if (day.orderIsComplete()) {
+            if (sound != null)
+                sound.play(1.0f);
+
+            day.nextOrder();
             return null;
         }
 
@@ -66,16 +62,12 @@ public class ServingWindow extends Appliance {
 
     /**
      * Returns whether an item can be submitted at the serving window.
-     * TRUE if item is a sandwich. FALSE otherwise. (not functional yet)
+     * TRUE if item is a completed sandwich. FALSE otherwise. (not functional yet)
      *
      * @param item - Item held by the player (null if nothing held)
      */
     @Override
     public boolean canInteract(Holdable item) {
-        if (item instanceof Sandwich)
-            return true;
-        else {
-            return false;
-        }
+        return item instanceof Sandwich && ((Sandwich)item).isFinished();
     }
 }

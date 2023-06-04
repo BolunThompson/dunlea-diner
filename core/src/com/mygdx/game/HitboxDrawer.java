@@ -1,11 +1,20 @@
-package com.mygdx.game.appliance;
+package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Player;
+import com.mygdx.game.appliance.Appliance;
 
+/**
+ * HitboxDrawer class
+ *
+ * Created: June 4, 2023
+ *
+ * Draws collision box / interact boxes for players & appliances
+ * For testing purposes
+ */
 public class HitboxDrawer {
 
     private ShapeRenderer sr;
@@ -13,13 +22,12 @@ public class HitboxDrawer {
     private Player player, playerTwo;
     private Array<Appliance> appliances;
 
-    public HitboxDrawer(Camera camera) {
+    public HitboxDrawer() {
         sr = new ShapeRenderer();
-        //sr.setProjectionMatrix(camera.combined);
     }
 
-    public HitboxDrawer(Camera camera, Player player, Player playerTwo, Array<Appliance> appliances) {
-        this(camera);
+    public HitboxDrawer(Player player, Player playerTwo, Array<Appliance> appliances) {
+        this();
         this.player = player;
         this.playerTwo = playerTwo;
         this.appliances = appliances;

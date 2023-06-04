@@ -24,9 +24,7 @@ public abstract class Ingredient extends Holdable {
         maxIndex = numCostumes - 1;
 
         TextureRegion[][] tmpFrames = TextureRegion.split(texture, 32, 32);
-        for (int i = 0; i < numCostumes; i++) {
-            costumes[i] = tmpFrames[0][i];
-        }
+        System.arraycopy(tmpFrames[0], 0, costumes, 0, numCostumes);
     }
 
     protected Ingredient(Texture texture, int numCostumes, boolean edible) {

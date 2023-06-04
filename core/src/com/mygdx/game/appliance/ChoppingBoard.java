@@ -49,10 +49,9 @@ public class ChoppingBoard extends Appliance{
     @Override
     public boolean canInteract(Holdable item)
     {
-        if((item == null || (item != null && (item instanceof Ham || item instanceof Cheese || item instanceof Lettuce || item instanceof Tomato) && ((Ingredient)item).getCostumeIndex() == 0)) && (!doAnimation || animation.isAnimationFinished(elapsedTime)))
-            return true;
-        else
-            return false;
+        return (item == null
+                || (item instanceof Ham || item instanceof Cheese || item instanceof Lettuce || item instanceof Tomato && ((Ingredient) item).getCostumeIndex() == 0))
+                && (!doAnimation || animation.isAnimationFinished(elapsedTime));
     }
 
     @Override

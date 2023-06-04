@@ -40,6 +40,7 @@ class TransitionScreen implements Screen {
         ScreenUtils.clear(1, 1, 1, 1);
         game.batch.begin();
         game.font.getData().setScale(1.2f);
+        game.font.setColor(0, 0, 0, 1.0f);
         game.font.draw(game.batch, getMsg(), Diner.LENGTH * 0.1f, Diner.WIDTH * 0.9f);
         game.batch.end();
 
@@ -57,7 +58,7 @@ class TransitionScreen implements Screen {
         String msg = "";
         if (dayState.ordersCnt() >= dayState.wantedOrders) {
             String text = "You have completed %d orders out of %d!\nYou have completed the day!\n\nYour score is %d";
-            msg = String.format(text, dayState.ordersCnt(), dayState.wantedOrders, dayState.score());
+            msg = String.format(text, dayState.orderIndex, dayState.wantedOrders, dayState.score());
             if (highScore) {
                 msg += ", a new high score!\nYour past high score was " + oldHighScore + ".";
             } else {

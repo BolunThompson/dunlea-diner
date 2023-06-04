@@ -7,7 +7,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -15,15 +14,10 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.appliance.*;
 import com.mygdx.game.holdable.Holdable;
 import com.mygdx.game.holdable.Ingredient;
-
-import java.awt.*;
-import java.text.DecimalFormat;
-import java.util.Iterator;
 
 /**
  * DayScreen class
@@ -32,8 +26,6 @@ import java.util.Iterator;
  */
 public class DayScreen implements Screen {
     final Diner game;
-
-    private static final DecimalFormat df = new DecimalFormat("0.00");
 
     // screen dimensions in pixels (1200 x 900)
     static final int screenWidth = 100 * 12;
@@ -100,9 +92,9 @@ public class DayScreen implements Screen {
         hamTex = new Texture(Gdx.files.internal("Ingredients/ham.png"));
         cheeseTex = new Texture(Gdx.files.internal("Ingredients/cheese.png"));
         lettuceTex = new Texture(Gdx.files.internal("Ingredients/lettuce.png"));
-        tomatoTex = new Texture(Gdx.files.internal("Ingredients/tomato.png"));;
+        tomatoTex = new Texture(Gdx.files.internal("Ingredients/tomato.png"));
 
-        /**
+        /*
          * The following music was used for this media project:
          * Music: Local Forecast - Slower by Kevin MacLeod
          * Free download: https://filmmusic.io/song/3988-local-forecast-slower
@@ -110,13 +102,13 @@ public class DayScreen implements Screen {
          */
         bgMusic = new exampleMusic(Gdx.audio.newMusic((Gdx.files.internal("Sounds/local-forecast-slower-by-kevin-macleod-from-filmmusic-io.mp3"))));
 
-        /**
+        /*
          * PLAYER & CONTROLS
          */
-        player = new Player(new Texture(Gdx.files.internal("Misc/Sprite-Chef_WalkAll.png")), (int) (tileWidth),
-                (int) (tileHeight));
-        playerTwo = new Player(new Texture(Gdx.files.internal("Misc/Sprite-Chef_WalkAllP2.png")), (int) (tileWidth),
-                (int) (tileHeight));
+        player = new Player(new Texture(Gdx.files.internal("Misc/Sprite-Chef_WalkAll.png")), tileWidth,
+                tileHeight);
+        playerTwo = new Player(new Texture(Gdx.files.internal("Misc/Sprite-Chef_WalkAllP2.png")), tileWidth,
+                tileHeight);
         pressE = false;
         pressShift = false;
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -155,11 +147,14 @@ public class DayScreen implements Screen {
                         break;
 
                         // TEST STUFF (delete later)
-                    case Input.Keys.P: // pause music
+                    case Input.Keys.M: // pause music
                         bgMusic.pause();
                         break;
                     case Input.Keys.Q: // skip day
                         dayState.currentTime = DayState.maxTime;
+                        break;
+                    case Input.Keys.TAB: // skip order
+                        dayState.nextOrder();
                         break;
                 }
                 return true;
@@ -197,7 +192,7 @@ public class DayScreen implements Screen {
             }
         }); // there may be a better way to do input, but this functions
 
-        hitboxDrawer = new HitboxDrawer(camera, player, playerTwo, appliances);
+        hitboxDrawer = new HitboxDrawer(player, playerTwo, appliances);
     }
 
     @Override
@@ -209,10 +204,7 @@ public class DayScreen implements Screen {
         tiledMapRenderer.render();
 
         dayState.currentTime += delta;
-        if (dayState.isOver()) {
-            nextLevel();
-            return;
-        }
+
 
         // save old position in case of collision
         // if collision, player position is set to (oldX, oldY)
@@ -290,6 +282,12 @@ public class DayScreen implements Screen {
         }
         pressE = false;
         pressShift = false;
+
+        // orders finished or timer up
+        if (dayState.isOver()) {
+            nextLevel();
+            return;
+        }
 
         // draw hitboxes
         //hitboxDrawer.drawCollision();
@@ -383,7 +381,7 @@ public class DayScreen implements Screen {
     public void resume() {}
 
     public Array<Appliance> getDay1Apps() {
-        Array<Appliance> apps = new Array<Appliance>();
+        Array<Appliance> apps = new Array<>();
 
         apps.add(new Counter(8, 8)); // top counters
         apps.add(new Counter(11, 8));
@@ -410,7 +408,7 @@ public class DayScreen implements Screen {
     }
 
     public Array<Appliance> getDay2Apps() {
-        Array<Appliance> apps = new Array<Appliance>();
+        Array<Appliance> apps = new Array<>();
 
         apps.add(new Counter(11, 8)); // top counter
         apps.add(new Counter(3, 5));  // left counter
@@ -438,7 +436,7 @@ public class DayScreen implements Screen {
     }
 
     public Array<Appliance> getDay3Apps() {
-        Array<Appliance> apps = new Array<Appliance>();
+        Array<Appliance> apps = new Array<>();
 
         apps.add(new Counter(11, 8)); // top right counter
         apps.add(new Counter(3, 4)); // left counter
@@ -470,7 +468,7 @@ public class DayScreen implements Screen {
     }
 
     public Array<Appliance> getDay4Apps() {
-        Array<Appliance> apps = new Array<Appliance>();
+        Array<Appliance> apps = new Array<>();
 
         apps.add(new Counter(11, 8)); // top right counter
         apps.add(new Counter(6, 2)); // bottom counters
@@ -505,7 +503,7 @@ public class DayScreen implements Screen {
     }
 
     public Array<Appliance> getDay5Apps() {
-        Array<Appliance> apps = new Array<Appliance>();
+        Array<Appliance> apps = new Array<>();
 
         apps.add(new Counter(10, 7)); // top right counter
         apps.add(new Barrier(5, 1)); // bottom counters

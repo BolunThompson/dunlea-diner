@@ -1,8 +1,6 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.DayScreen.*;
-import com.mygdx.game.appliance.*;
 import com.mygdx.game.holdable.*;
 
 import java.util.ArrayList;
@@ -108,7 +106,7 @@ public class DayState {
     }
 
     public boolean isOver() {
-        return orders.isEmpty() || currentTime >= maxTime;
+        return orderIndex == wantedOrders || currentTime >= maxTime;
     }
 
     public boolean isWon() {
