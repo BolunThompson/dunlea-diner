@@ -21,6 +21,7 @@ import com.mygdx.game.appliance.*;
 import com.mygdx.game.holdable.Holdable;
 import com.mygdx.game.holdable.Ingredient;
 
+import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.Iterator;
 
@@ -46,24 +47,21 @@ public class DayScreen implements Screen {
     static final int tileWidth = screenWidth / numWidthTiles;
     static final int tileHeight = screenHeight / numHeightTiles;
 
-    DayState dayState;
+    private DayState dayState;
 
-    OrthographicCamera camera;
+    private OrthographicCamera camera;
     private TiledMap tiledMap;
     private TiledMapRenderer tiledMapRenderer;
 
-    Player player, playerTwo;
+    private Player player, playerTwo;
     private boolean pressE, pressShift;
     private Array<Appliance> appliances;
 
     // for drawing orders
-    Texture breadTex = new Texture(Gdx.files.internal("Ingredients/breadSlice.png"));
-    Texture hamTex = new Texture(Gdx.files.internal("Ingredients/ham.png"));
-    Texture cheeseTex = new Texture(Gdx.files.internal("Ingredients/cheese.png"));
-    Texture lettuceTex = new Texture(Gdx.files.internal("Ingredients/lettuce.png"));
-    Texture tomatoTex = new Texture(Gdx.files.internal("Ingredients/tomato.png"));
+    private Texture orderTex, breadTex, hamTex, cheeseTex, lettuceTex, tomatoTex;
 
-    Texture orderTex;
+    // testing
+    private static HitboxDrawer hitboxDrawer;
 
     exampleMusic bgMusic;
 
@@ -89,14 +87,20 @@ public class DayScreen implements Screen {
                 appliances = getDay5Apps();
                 break;
         }
-        orderTex = new Texture(Gdx.files.internal("Orders/Sprite-Order_Blank.png"));
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, numWidthTiles, numHeightTiles);
         camera.update();
 
         tiledMap = new TmxMapLoader().load(dayState.mapFile);
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1 / 32f); // unit scale is probably wrong
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1 / 32f); // unit scale is probably wrong\
+
+        orderTex = new Texture(Gdx.files.internal("Orders/Sprite-Order_Blank.png"));
+        breadTex = new Texture(Gdx.files.internal("Ingredients/breadSlice.png"));
+        hamTex = new Texture(Gdx.files.internal("Ingredients/ham.png"));
+        cheeseTex = new Texture(Gdx.files.internal("Ingredients/cheese.png"));
+        lettuceTex = new Texture(Gdx.files.internal("Ingredients/lettuce.png"));
+        tomatoTex = new Texture(Gdx.files.internal("Ingredients/tomato.png"));;
 
         /**
          * The following music was used for this media project:
@@ -192,6 +196,8 @@ public class DayScreen implements Screen {
                 return true;
             }
         }); // there may be a better way to do input, but this functions
+
+        hitboxDrawer = new HitboxDrawer(camera, player, playerTwo, appliances);
     }
 
     @Override
@@ -285,13 +291,17 @@ public class DayScreen implements Screen {
         pressE = false;
         pressShift = false;
 
+        // draw hitboxes
+        hitboxDrawer.drawCollision();
+        hitboxDrawer.drawInteraction();
+
         // draw screen
         game.batch.begin();
-        player.draw(game.batch); // player
-        playerTwo.draw(game.batch);
         for (Appliance app : appliances) { // appliances
             app.draw(game.batch);
         }
+        player.draw(game.batch); // player
+        playerTwo.draw(game.batch);
 
         // draw order paper
         drawOrder(game.batch);
@@ -343,12 +353,12 @@ public class DayScreen implements Screen {
             app.dispose();
         }
 
+        orderTex.dispose();
         breadTex.dispose();
         hamTex.dispose();
         cheeseTex.dispose();
         lettuceTex.dispose();
         tomatoTex.dispose();
-        orderTex.dispose();
 
         bgMusic.dispose();
     }
@@ -372,7 +382,6 @@ public class DayScreen implements Screen {
     @Override
     public void resume() {}
 
-    // putting this mess down here
     public Array<Appliance> getDay1Apps() {
         Array<Appliance> apps = new Array<Appliance>();
 
@@ -432,6 +441,7 @@ public class DayScreen implements Screen {
         Array<Appliance> apps = new Array<Appliance>();
 
         apps.add(new Counter(11, 8)); // top right counter
+        apps.add(new Counter(3, 4)); // left counter
         apps.add(new Counter(6, 2)); // bottom counters
         for (int i = 0; i < 2; i++) {
             apps.add(new Counter(9 + i, 2));
@@ -450,8 +460,8 @@ public class DayScreen implements Screen {
         apps.add(new ServingWindow(9, 8, this.dayState)); // serving windows (2x1)
         apps.add(new ChoppingBoard(3, 6)); // top cutting board
         apps.add(new ChoppingBoard(3, 5)); // top cutting board
-        apps.add(new FryingPan(3, 4)); // top frying pan
-        apps.add(new FryingPan(3, 3)); // bottom frying pan
+        apps.add(new FryingPan(3, 3)); // top frying pan
+        apps.add(new FryingPan(3, 2)); // bottom frying pan
         apps.add(new KetchupBottle(7, 2)); // ketchup
         apps.add(new MustardBottle(8, 2)); // mustard
         apps.add(new Trash(11, 2)); // trash
@@ -463,8 +473,9 @@ public class DayScreen implements Screen {
         Array<Appliance> apps = new Array<Appliance>();
 
         apps.add(new Counter(11, 8)); // top right counter
-        apps.add(new Counter(6, 2)); // bottom left counter
-        apps.add(new Counter(10, 2)); // bottom right counter
+        apps.add(new Counter(6, 2)); // bottom counters
+        apps.add(new Barrier(9, 2));
+        apps.add(new Counter(10, 2));
 
         apps.add(new Crate(4, 8, Holdable.Type.bread)); // bread container
         apps.add(new Crate(5, 8, Holdable.Type.wheatBread)); // wheat bread container
@@ -475,14 +486,20 @@ public class DayScreen implements Screen {
         apps.add(new Crate(8, 5, Holdable.Type.tomato)); // tomato container
         apps.add(new Crate(9, 5, Holdable.Type.minionBread)); // minion bread container
 
+        apps.add(new Barrier(7, 8)); // left toaster
         apps.add(new Toaster(8, 8)); // right toaster
         apps.add(new ServingWindow(9, 8, this.dayState)); // serving windows (2x1)
         apps.add(new ChoppingBoard(2, 6)); // top cutting board
         apps.add(new ChoppingBoard(2, 5)); // top cutting board
         apps.add(new FryingPan(2, 4)); // top frying pan
+        apps.add(new Barrier(2, 3)); // bottom frying pan
         apps.add(new KetchupBottle(7, 2)); // ketchup
         apps.add(new MustardBottle(8, 2)); // mustard
         apps.add(new Trash(11, 2)); // trash
+
+        apps.add(new Barrier(10, 6)); // banana peels
+        apps.add(new Barrier(11, 4));
+        apps.add(new Barrier(9, 2));
 
         return apps;
     }
@@ -511,11 +528,20 @@ public class DayScreen implements Screen {
         apps.add(new ChoppingBoard(1, 4)); // bottom cutting board
         apps.add(new FryingPan(1, 3)); // top frying pan
         apps.add(new Barrier(1, 2)); // bottom frying pan
-        apps.add(new KetchupBottle(7, 1)); // ketchup
-        apps.add(new MustardBottle(8, 1)); // mustard
+        apps.add(new KetchupBottle(6, 1)); // ketchup
+        apps.add(new MustardBottle(7, 1)); // mustard
         apps.add(new Trash(10, 1)); // trash
 
-        // fire
+        apps.add(new Barrier(0, 8, 12, 1)); // fire border
+        apps.add(new Barrier(11, 0, 1, 9));
+        apps.add(new Barrier(0, 0, 12, 1));
+        apps.add(new Barrier(0, 0, 1, 9));
+
+        apps.add(new Barrier(2, 6)); // fire
+        apps.add(new Barrier(9, 4));
+        apps.add(new Barrier(5, 3));
+        apps.add(new Barrier(10, 3));
+        apps.add(new Barrier(3, 2));
 
         return apps;
     }

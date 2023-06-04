@@ -25,8 +25,9 @@ public class ServingWindow extends Appliance {
         super(new Texture(Gdx.files.internal("Appliances/ServingWindow.png")), x, y, true);
         this.day = day;
 
-        this.collisionRegion = new Rectangle(x * width, y * height, width * 2, height);
-        this.interactRegion = new Rectangle(x * width + width/4f, y * height - height/2f, width*2f, height*2f); // vert
+        this.collisionRegion = new Rectangle(x * this.width, y * this.height, this.width * 2, this.height);
+        this.interactRegion = new Rectangle(x * this.width + this.width/4f, y * this.height - this.height/2f,
+                this.width*1.5f, this.height*2f); // vert
 
         this.texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
         this.sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Ring.mp3"));

@@ -17,9 +17,9 @@ public class DayState {
 
     final int wantedOrders;
     public Array<Order> orders;
-    public int orderIndex; // current, I think
+    public int orderIndex; // current
 
-    static final float maxTime = 120;
+    static final float maxTime = 150;
     float currentTime;
 
     final Optional<DayState> nextDay;
