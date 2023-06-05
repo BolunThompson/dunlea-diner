@@ -19,7 +19,7 @@ public class Ketchup extends Ingredient {
     }
     @Override
     public TextureRegion getIcon() {
-        return new TextureRegion(new Texture(Gdx.files.internal("Ingredients/Mustard.png")));
+        return new TextureRegion(new Texture(Gdx.files.internal("Ingredients/Ketchup.png")));
     }
 
 }
