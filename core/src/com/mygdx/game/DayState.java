@@ -103,6 +103,7 @@ public class DayState {
 
     void reset() {
         this.currentTime = 0;
+        orderIndex = 0;
     }
 
     public boolean isOver() {

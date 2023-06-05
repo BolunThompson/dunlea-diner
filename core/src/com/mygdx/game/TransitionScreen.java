@@ -29,7 +29,7 @@ class TransitionScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        if (dayState.nextDay.isEmpty()) {
+        if (!dayState.nextDay.isPresent()) {
             game.setScreen(new FinalScreen(game));
             return;
         }
@@ -47,9 +47,15 @@ class TransitionScreen implements Screen {
         if (Gdx.input.isTouched()) {
             dispose();
             dayState.reset();
-            Screen nextScreen = dayState.nextDay
+            Screen nextScreen;
+            if (dayState.ordersCnt() < dayState.wantedOrders) {
+                nextScreen = new DayScreen(game, dayState);
+            }
+            else {
+                nextScreen = dayState.nextDay
                     .<Screen>map(v -> new DayScreen(game, v))
                     .orElseGet(() -> new FinalScreen(game));
+            }
             game.setScreen(nextScreen);
         }
     }
