@@ -46,7 +46,6 @@ class TransitionScreen implements Screen {
 
         if (Gdx.input.isTouched()) {
             dispose();
-            dayState.reset();
             Screen nextScreen;
             if (dayState.ordersCnt() < dayState.wantedOrders) {
                 nextScreen = new DayScreen(game, dayState);
@@ -56,6 +55,7 @@ class TransitionScreen implements Screen {
                     .<Screen>map(v -> new DayScreen(game, v))
                     .orElseGet(() -> new FinalScreen(game));
             }
+            dayState.reset();
             game.setScreen(nextScreen);
         }
     }
