@@ -149,7 +149,7 @@ public class DayState {
 
     public int score() {
         return 1 + (int) ((100 + ((maxTime - currentTime) / maxTime * 1000)
-                + (ordersCnt() / wantedOrders * 1000)) * (1 + (double) (level - 1) / 2));
+                + ((double) ordersCnt() / wantedOrders * 1000)) * (1 + (double) (level - 1) / 2));
     }
 
 }
