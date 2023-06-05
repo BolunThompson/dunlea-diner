@@ -15,7 +15,7 @@ public class Bread extends Ingredient{
     }
 
     public Bread(Texture texture) {
-        super(texture, 2, false);
+        super(texture, 3, false);
     }
 
     @Override
